@@ -10,10 +10,15 @@ import {
     positionToPixel,
 } from './utils'
 import { v4 as uuid } from 'uuid'
+// const supabase = createClient(
+//     'https://fjsbvzuhexwkyyvbicnw.supabase.co',
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqc2J2enVoZXh3a3l5dmJpY253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxMjIwNjksImV4cCI6MjAyMjY5ODA2OX0.GtEKJlUWPCUMuetfOdTlDM0zylkt54-E0Hw5kQ9vMPs'
+// )
 const supabase = createClient(
-    'https://fjsbvzuhexwkyyvbicnw.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqc2J2enVoZXh3a3l5dmJpY253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxMjIwNjksImV4cCI6MjAyMjY5ODA2OX0.GtEKJlUWPCUMuetfOdTlDM0zylkt54-E0Hw5kQ9vMPs'
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_KEY
 )
+console.log(import.meta.env.VITE_SUPABASE_URL)
 let id = 0
 const userId = uuid()
 
