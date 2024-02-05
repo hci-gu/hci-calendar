@@ -3,10 +3,17 @@ import { atomFamily, loadable, unwrap } from 'jotai/utils'
 import { createClient } from '@supabase/supabase-js'
 import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
-import { pixelToPosition, positionToPixel } from './utils'
+import {
+    dateToPosition,
+    dateToWidth,
+    pixelToPosition,
+    positionToPixel,
+} from './utils'
 import { v4 as uuid } from 'uuid'
-const supabase = createClient('REPLACE ME WITH URL', 'REPLACE ME WITH KEY')
-
+const supabase = createClient(
+    'https://fjsbvzuhexwkyyvbicnw.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqc2J2enVoZXh3a3l5dmJpY253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxMjIwNjksImV4cCI6MjAyMjY5ODA2OX0.GtEKJlUWPCUMuetfOdTlDM0zylkt54-E0Hw5kQ9vMPs'
+)
 let id = 0
 const userId = uuid()
 
@@ -64,13 +71,19 @@ export const useEvents = () => {
             setEvents(
                 data.map((event) => ({
                     ...event,
-                    position: positionToPixel(
-                        { x: event.xPos, y: event.yPos },
-                        viewport
+                    position: dateToPosition(
+                        event.start,
+                        event.end,
+                        viewport.width
                     ),
+
                     size: {
-                        width: event.width,
-                        height: event.height,
+                        width: `${dateToWidth(
+                            event.start,
+                            event.end,
+                            viewport.width
+                        )}px`,
+                        height: '65px',
                     },
                 }))
             )
@@ -103,7 +116,7 @@ export const useEvents = () => {
                                       ),
                                       size: {
                                           width: updatedEvent.width,
-                                          height: updatedEvent.height,
+                                          height: '65px',
                                       },
                                   }
                                 : event

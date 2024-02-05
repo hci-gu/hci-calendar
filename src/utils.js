@@ -8,12 +8,32 @@ export const positionToDate = (x, width) => {
     return date
 }
 
-export const dateToPosition = (date, width) => {
-    const startDate = moment().startOf('year')
-    const endDate = moment().endOf('year')
-    const days = moment(endDate).diff(moment(startDate), 'days')
-    const x = (moment(date).diff(moment(startDate), 'days') * width) / days
-    return x
+// export const dateToPosition = (date, width) => {
+//     const startDate = moment().startOf('year')
+//     const endDate = moment().endOf('year')
+//     const days = moment(endDate).diff(moment(startDate), 'days')
+//     const x = (moment(date).diff(moment(startDate), 'days') * width) / days
+//     return x
+// }
+
+export const dateToPosition = (start, end, viewport) => {
+    const yearstartDate = moment().startOf('year')
+    const yearEndDate = moment().endOf('year')
+    const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
+    const x =
+        (moment(start).diff(moment(yearstartDate), 'days') * viewport) / days
+    console.log('X:', x)
+    const y = 90
+    return { x, y }
+}
+
+export const dateToWidth = (start, end, viewport) => {
+    const yearstartDate = moment().startOf('year')
+    const yearEndDate = moment().endOf('year')
+    const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
+    const width = (moment(end).diff(moment(start), 'days') * viewport) / days
+    console.log('card Width:', width)
+    return width
 }
 
 export const gridSizeForWidth = (width) => {
