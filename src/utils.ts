@@ -8,7 +8,14 @@ export const positionToDate = (x: number, width: number) => {
     return date
 }
 
-export const positionToDates = (x, width, viewport) => {
+export const positionToDates = (
+    x: number,
+    width: string,
+    viewport: {
+        width: number
+        height: number
+    }
+) => {
     const YearStartDate = moment().startOf('year')
     const YearEndDate = moment().endOf('year')
     const days = moment(YearEndDate).diff(moment(YearStartDate), 'days')
@@ -30,7 +37,11 @@ export const positionToDates = (x, width, viewport) => {
 //     return x
 // }
 
-export const dateToPosition = (date, viewport, y) => {
+export const dateToPosition = (
+    date: string | null,
+    viewport: number,
+    y: number
+) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
@@ -39,7 +50,11 @@ export const dateToPosition = (date, viewport, y) => {
     return { x, y }
 }
 
-export const dateToWidth = (start: string, end:string, viewport:number) => {
+export const dateToWidth = (
+    start: string | null,
+    end: string | null,
+    viewport: number
+) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
@@ -55,7 +70,10 @@ export const gridSizeForWidth = (width: number) => {
     return Math.max(1, gridSize)
 }
 
-export const positionToPixel = (position: {x: number, y:number}, viewport) => {
+export const positionToPixel = (
+    position: { x: number; y: number },
+    viewport: { width: number; height: number }
+) => {
     console.log('positionToPixel', position, viewport)
     // position.x is value from 0 to 365
     // position.y is value from 0 to 100
@@ -69,7 +87,10 @@ export const positionToPixel = (position: {x: number, y:number}, viewport) => {
     return { x, y }
 }
 
-export const pixelToPosition = (pixel: {x: number, y:number}, viewport: {width: number, height: number}) => {
+export const pixelToPosition = (
+    pixel: { x: number; y: number },
+    viewport: { width: number; height: number }
+) => {
     console.log('pixel', pixel, 'viewport', viewport)
     // pixel.x is value from 0 to width
     // pixel.y is value from 0 to height

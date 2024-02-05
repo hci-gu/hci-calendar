@@ -1,15 +1,9 @@
 import { atom, useAtom } from 'jotai'
-import { atomFamily, loadable, unwrap } from 'jotai/utils'
+import { atomFamily } from 'jotai/utils'
 import { createClient } from '@supabase/supabase-js'
 import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
-import {
-    dateToPosition,
-    dateToWidth,
-    pixelToPosition,
-    positionToDates,
-    positionToPixel,
-} from './utils'
+import { dateToPosition, dateToWidth, positionToDates } from './utils'
 import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 
@@ -35,7 +29,13 @@ const createEvent = () => ({
 
 type Event = Database['public']['Tables']['events']['Row']
 
-export const updateEvent = async (event:Event, viewport) => {
+export const updateEvent = async (
+    event: Event,
+    viewport: {
+        width: number
+        height: number
+    }
+) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
     console.log({
         id: event.id,
@@ -49,11 +49,9 @@ export const updateEvent = async (event:Event, viewport) => {
         title: event.title,
         start: dates.startDate,
         end: dates.endDate,
-        y: parseInt(event.position.y),
+        y: event.y,
     })
 }
-
-
 
 export const eventsAtom = atom<Event[]>([])
 // export const eventsFetcherAtom = atom(async (get) => {
