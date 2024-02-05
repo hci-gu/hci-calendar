@@ -8,6 +8,20 @@ export const positionToDate = (x, width) => {
     return date
 }
 
+export const positionToDates = (x, width, viewport) => {
+    const YearStartDate = moment().startOf('year')
+    const YearEndDate = moment().endOf('year')
+    const days = moment(YearEndDate).diff(moment(YearStartDate), 'days')
+    const startDate = moment(YearStartDate)
+        .add((days * x) / viewport.width, 'days')
+        .toISOString()
+    const endDate = moment(YearStartDate)
+        .add((days * (x + Number.parseInt(width))) / viewport.width, 'days')
+        .toISOString()
+
+    return { startDate, endDate }
+}
+
 // export const dateToPosition = (date, width) => {
 //     const startDate = moment().startOf('year')
 //     const endDate = moment().endOf('year')
@@ -16,14 +30,12 @@ export const positionToDate = (x, width) => {
 //     return x
 // }
 
-export const dateToPosition = (start, end, viewport) => {
+export const dateToPosition = (date, viewport, y) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
     const x =
-        (moment(start).diff(moment(yearstartDate), 'days') * viewport) / days
-    console.log('X:', x)
-    const y = 90
+        (moment(date).diff(moment(yearstartDate), 'days') * viewport) / days
     return { x, y }
 }
 
@@ -32,7 +44,6 @@ export const dateToWidth = (start, end, viewport) => {
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
     const width = (moment(end).diff(moment(start), 'days') * viewport) / days
-    console.log('card Width:', width)
     return width
 }
 

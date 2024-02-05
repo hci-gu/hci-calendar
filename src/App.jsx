@@ -92,7 +92,6 @@ const Event = ({ id }) => {
                 })
             }}
             minHeight={44}
-            minWidth={0}
             bounds="window"
             dragGrid={[gridSize, gridSize]}
             resizeGrid={[gridSize, gridSize]}

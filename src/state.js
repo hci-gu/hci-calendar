@@ -7,6 +7,7 @@ import {
     dateToPosition,
     dateToWidth,
     pixelToPosition,
+    positionToDates,
     positionToPixel,
 } from './utils'
 import { v4 as uuid } from 'uuid'
@@ -14,7 +15,6 @@ const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_KEY
 )
-console.log(import.meta.env.VITE_SUPABASE_URL)
 let id = 0
 const userId = uuid()
 
@@ -32,15 +32,20 @@ const createEvent = () => ({
 })
 
 export const updateEvent = async (event, viewport) => {
-    const position = pixelToPosition(event.position, viewport)
+    const dates = positionToDates(event.position.x, event.size.width, viewport)
+    console.log({
+        id: event.id,
+        title: event.title,
+        start: dates.startDate,
+        end: dates.endDate,
+        y: event.position.y,
+    })
     await supabase.from('events').upsert({
         id: event.id,
         title: event.title,
-        xPos: position.x,
-        yPos: position.y,
-        width: event.size.width,
-        height: event.size.height,
-        lastInteraction: userId,
+        start: dates.startDate,
+        end: dates.endDate,
+        y: parseInt(event.position.y),
     })
 }
 
@@ -74,17 +79,17 @@ export const useEvents = () => {
                     ...event,
                     position: dateToPosition(
                         event.start,
-                        event.end,
-                        viewport.width
+                        viewport.width,
+                        event.y
                     ),
 
                     size: {
-                        width: `${dateToWidth(
+                        width: dateToWidth(
                             event.start,
                             event.end,
                             viewport.width
-                        )}px`,
-                        height: '65px',
+                        ),
+                        height: 65,
                     },
                 }))
             )
@@ -92,41 +97,41 @@ export const useEvents = () => {
         run()
     }, [viewport])
 
-    useEffect(() => {
-        if (!viewport.width) return
+    // useEffect(() => {
+    //     if (!viewport.width) return
 
-        supabase
-            .channel('events')
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'events' },
-                (payload) => {
-                    const updatedEvent = payload.new
-                    if (updateEvent.lastInteraction === userId) return
-                    setEvents((events) =>
-                        events.map((event) =>
-                            event.id === updatedEvent.id
-                                ? {
-                                      ...event,
-                                      position: positionToPixel(
-                                          {
-                                              x: updatedEvent.xPos,
-                                              y: updatedEvent.yPos,
-                                          },
-                                          viewport
-                                      ),
-                                      size: {
-                                          width: updatedEvent.width,
-                                          height: '65px',
-                                      },
-                                  }
-                                : event
-                        )
-                    )
-                }
-            )
-            .subscribe()
-    }, [viewport])
+    //     supabase
+    //         .channel('events')
+    //         .on(
+    //             'postgres_changes',
+    //             { event: 'UPDATE', schema: 'public', table: 'events' },
+    //             (payload) => {
+    //                 const updatedEvent = payload.new
+    //                 if (updateEvent.lastInteraction === userId) return
+    //                 setEvents((events) =>
+    //                     events.map((event) =>
+    //                         event.id === updatedEvent.id
+    //                             ? {
+    //                                   ...event,
+    //                                   position: positionToPixel(
+    //                                       {
+    //                                           x: updatedEvent.xPos,
+    //                                           y: updatedEvent.yPos,
+    //                                       },
+    //                                       viewport
+    //                                   ),
+    //                                   size: {
+    //                                       width: updatedEvent.width,
+    //                                       height: '65px',
+    //                                   },
+    //                               }
+    //                             : event
+    //                     )
+    //                 )
+    //             }
+    //         )
+    //         .subscribe()
+    // }, [viewport])
 
     return events ?? []
 }
