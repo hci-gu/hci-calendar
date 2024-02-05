@@ -10,11 +10,12 @@ import {
     positionToPixel,
 } from './utils'
 import { v4 as uuid } from 'uuid'
-const supabase = createClient(
+import { Database } from '../supabase/supabase'
+
+const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_KEY
 )
-console.log(import.meta.env.VITE_SUPABASE_URL)
 let id = 0
 const userId = uuid()
 
@@ -31,7 +32,9 @@ const createEvent = () => ({
     },
 })
 
-export const updateEvent = async (event, viewport) => {
+type Event = Database['public']['Tables']['events']['Row']
+
+export const updateEvent = async (event:Event, viewport) => {
     const position = pixelToPosition(event.position, viewport)
     await supabase.from('events').upsert({
         id: event.id,
@@ -44,7 +47,9 @@ export const updateEvent = async (event, viewport) => {
     })
 }
 
-export const eventsAtom = atom([])
+
+
+export const eventsAtom = atom<Event[]>([])
 // export const eventsFetcherAtom = atom(async (get) => {
 //     const { data } = await supabase.from('events').select()
 //     return data.map((event) => ({
@@ -69,23 +74,27 @@ export const useEvents = () => {
         const run = async () => {
             const { data } = await supabase.from('events').select()
 
+            if (!data) {
+                return
+            }
+
             setEvents(
                 data.map((event) => ({
                     ...event,
                     position: dateToPosition(
-                        event.start,
-                        event.end,
+                        event.start ?? '',
+                        event.end ?? '',
                         viewport.width
                     ),
 
                     size: {
                         width: `${dateToWidth(
-                            event.start,
-                            event.end,
+                            event.start ?? '',
+                            event.end ?? '',
                             viewport.width
                         )}px`,
                         height: '65px',
-                    },
+                    }
                 }))
             )
         }

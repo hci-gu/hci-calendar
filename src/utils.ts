@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export const positionToDate = (x, width) => {
+export const positionToDate = (x: number, width: number) => {
     const startDate = moment().startOf('year')
     const endDate = moment().endOf('year')
     const days = moment(endDate).diff(moment(startDate), 'days')
@@ -16,7 +16,7 @@ export const positionToDate = (x, width) => {
 //     return x
 // }
 
-export const dateToPosition = (start, end, viewport) => {
+export const dateToPosition = (start: string, end:string, viewport:number) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
@@ -27,7 +27,7 @@ export const dateToPosition = (start, end, viewport) => {
     return { x, y }
 }
 
-export const dateToWidth = (start, end, viewport) => {
+export const dateToWidth = (start: string, end:string, viewport:number) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
@@ -36,7 +36,7 @@ export const dateToWidth = (start, end, viewport) => {
     return width
 }
 
-export const gridSizeForWidth = (width) => {
+export const gridSizeForWidth = (width: number) => {
     const daysInYear = moment()
         .endOf('year')
         .diff(moment().startOf('year'), 'days')
@@ -44,7 +44,7 @@ export const gridSizeForWidth = (width) => {
     return Math.max(1, gridSize)
 }
 
-export const positionToPixel = (position, viewport) => {
+export const positionToPixel = (position: {x: number, y:number}, viewport) => {
     console.log('positionToPixel', position, viewport)
     // position.x is value from 0 to 365
     // position.y is value from 0 to 100
@@ -58,7 +58,7 @@ export const positionToPixel = (position, viewport) => {
     return { x, y }
 }
 
-export const pixelToPosition = (pixel, viewport) => {
+export const pixelToPosition = (pixel: {x: number, y:number}, viewport: {width: number, height: number}) => {
     console.log('pixel', pixel, 'viewport', viewport)
     // pixel.x is value from 0 to width
     // pixel.y is value from 0 to height
