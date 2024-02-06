@@ -13,14 +13,19 @@ import { useMemo } from 'react'
 
 const compare = (objA, objB) => JSON.stringify(objA) === JSON.stringify(objB)
 
+type updateType = {
+    id: number,
+    position: { x: number, y: number },
+    size: { width: number, height: number },
+}
+
 const Event = ({ id }) => {
     const [dragging, setIsDragging] = useState(false)
     const viewport = useViewportSize()
     const gridSize = gridSizeForWidth(viewport.width)
     const setEvents = useSetAtom(eventsAtom)
+    // const { title, size, position } = useAtomValue(eventAtom(id))
     const { title, size, position } = useAtomValue(eventAtom(id))
-
-    // console.log('EVENT', id, position)
 
     const debounce = useMemo(
         () => ({
@@ -32,7 +37,7 @@ const Event = ({ id }) => {
 
     useEffect(() => {
         // if (!dragging) return
-        const update = {
+        const update: updateType = {
             id,
             position,
             size,

@@ -28,47 +28,32 @@ const createEvent = () => ({
 })
 
 type Event = Database['public']['Tables']['events']['Row']
+type updateType = {
+    id: number,
+    position: { x: number, y: number },
+    size: { width: number, height: number },
+}
 
 export const updateEvent = async (
-    event: Event,
+    event: updateType,
     viewport: {
         width: number
         height: number
     }
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
-    console.log({
+    console.log(event);
+
+    await supabase.from('events').upsert({
         id: event.id,
-        title: event.title,
+        title: '',
         start: dates.startDate,
         end: dates.endDate,
         y: event.position.y,
     })
-    await supabase.from('events').upsert({
-        id: event.id,
-        title: event.title,
-        start: dates.startDate,
-        end: dates.endDate,
-        y: event.y,
-    })
 }
 
 export const eventsAtom = atom<Event[]>([])
-// export const eventsFetcherAtom = atom(async (get) => {
-//     const { data } = await supabase.from('events').select()
-//     return data.map((event) => ({
-//         ...event,
-//         position: {
-//             x: event.xPos,
-//             y: event.yPos,
-//         },
-//         size: {
-//             width: event.width,
-//             height: event.height,
-//         },
-//     }))
-// })
-// export const eventsAtom = unwrap(eventsFetcherAtom)
 export const useEvents = () => {
     const viewport = useViewportSize()
     const [events, setEvents] = useAtom(eventsAtom)
@@ -105,45 +90,9 @@ export const useEvents = () => {
         run()
     }, [viewport])
 
-    // useEffect(() => {
-    //     if (!viewport.width) return
-
-    //     supabase
-    //         .channel('events')
-    //         .on(
-    //             'postgres_changes',
-    //             { event: 'UPDATE', schema: 'public', table: 'events' },
-    //             (payload) => {
-    //                 const updatedEvent = payload.new
-    //                 if (updateEvent.lastInteraction === userId) return
-    //                 setEvents((events) =>
-    //                     events.map((event) =>
-    //                         event.id === updatedEvent.id
-    //                             ? {
-    //                                   ...event,
-    //                                   position: positionToPixel(
-    //                                       {
-    //                                           x: updatedEvent.xPos,
-    //                                           y: updatedEvent.yPos,
-    //                                       },
-    //                                       viewport
-    //                                   ),
-    //                                   size: {
-    //                                       width: updatedEvent.width,
-    //                                       height: '65px',
-    //                                   },
-    //                               }
-    //                             : event
-    //                     )
-    //                 )
-    //             }
-    //         )
-    //         .subscribe()
-    // }, [viewport])
-
     return events ?? []
 }
 
-export const eventAtom = atomFamily((id) =>
+export const eventAtom = atomFamily((id: number) =>
     atom((get) => get(eventsAtom).find((event) => event.id === id))
 )

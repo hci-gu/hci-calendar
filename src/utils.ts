@@ -10,7 +10,7 @@ export const positionToDate = (x: number, width: number) => {
 
 export const positionToDates = (
     x: number,
-    width: string,
+    width: number,
     viewport: {
         width: number
         height: number
@@ -23,7 +23,7 @@ export const positionToDates = (
         .add((days * x) / viewport.width, 'days')
         .toISOString()
     const endDate = moment(YearStartDate)
-        .add((days * (x + Number.parseInt(width))) / viewport.width, 'days')
+        .add((days * (x + width)) / viewport.width, 'days')
         .toISOString()
 
     return { startDate, endDate }
