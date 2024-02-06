@@ -34,12 +34,13 @@ const NewEventModal = () => {
             endDate: '',
             description: '',
         })
+        close
     }
 
     return (
         <>
             <Modal title="New Event" opened={opend} onClose={close} centered>
-                <form>
+                <form onSubmit={insertSupabase}>
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <TextInput
                             w="100%"
@@ -94,9 +95,7 @@ const NewEventModal = () => {
                                 })
                             }}
                         />
-                        <Button type="button" onClick={insertSupabase}>
-                            submit
-                        </Button>
+                        <Button type="submit">submit</Button>
                     </Flex>
                 </form>
             </Modal>
