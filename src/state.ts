@@ -4,11 +4,14 @@ import { createClient } from '@supabase/supabase-js'
 import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
 import { dateToPosition, dateToWidth, positionToDates } from './utils'
+//@ts-ignore
 import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 
 const supabase = createClient<Database>(
+    //@ts-ignore
     import.meta.env.VITE_SUPABASE_URL,
+    //@ts-ignore
     import.meta.env.VITE_SUPABASE_KEY
 )
 let id = 0
@@ -29,9 +32,9 @@ const createEvent = () => ({
 
 type Event = Database['public']['Tables']['events']['Row']
 type updateType = {
-    id: number,
-    position: { x: number, y: number },
-    size: { width: number, height: number },
+    id: number
+    position: { x: number; y: number }
+    size: { width: number; height: number }
 }
 
 export const updateEvent = async (
@@ -42,11 +45,10 @@ export const updateEvent = async (
     }
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
-    console.log(event);
+    console.log(event)
 
     await supabase.from('events').upsert({
         id: event.id,
-        title: '',
         start: dates.startDate,
         end: dates.endDate,
         y: event.position.y,

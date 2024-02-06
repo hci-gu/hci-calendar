@@ -11,26 +11,38 @@ import { useCallback } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 
-const compare = (objA, objB) => JSON.stringify(objA) === JSON.stringify(objB)
+const compare = (objA: string, objB: string) =>
+    JSON.stringify(objA) === JSON.stringify(objB)
 
 type updateType = {
-    id: number,
-    position: { x: number, y: number },
-    size: { width: number, height: number },
+    id: number
+    position: { x: number; y: number }
+    size: { width: number; height: number }
 }
 
-const Event = ({ id }) => {
+type asd = {
+    title: string
+    size: {
+        width: number
+        height: number
+    }
+    position: {
+        x: number
+        y: number
+    }
+}
+
+const Event = ({ id }: { id: number }) => {
     const [dragging, setIsDragging] = useState(false)
     const viewport = useViewportSize()
     const gridSize = gridSizeForWidth(viewport.width)
     const setEvents = useSetAtom(eventsAtom)
-    // const { title, size, position } = useAtomValue(eventAtom(id))
-    const { title, size, position } = useAtomValue(eventAtom(id))
+    const { title, size, position } = useAtomValue<asd>(eventAtom(id))
 
     const debounce = useMemo(
         () => ({
             timeout: null,
-            lastUpdate: null,
+            lastUpdate: '',
         }),
         []
     )
