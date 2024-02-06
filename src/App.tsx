@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { use } from 'react'
 import Header from './components/Header'
 import { Rnd } from 'react-rnd'
 import { Card, Flex, Text } from '@mantine/core'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { eventAtom, eventsAtom, updateEvent, useEvents } from './state'
-import { gridSizeForWidth, positionToDate } from './utils'
+import { dateToPosition, gridSizeForWidth, positionToDate } from './utils'
 import { useViewportSize } from '@mantine/hooks'
 import { useState } from 'react'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
+import { Database } from '@/supabase/supabase'
 
-const compare = (objA: string, objB: string) =>
+type EventType = Database['public']['Tables']['events']['Row']
+
+const compare = (objA: any, objB: any) =>
     JSON.stringify(objA) === JSON.stringify(objB)
 
 type updateType = {
@@ -20,35 +23,36 @@ type updateType = {
     size: { width: number; height: number }
 }
 
-type asd = {
-    title: string
-    size: {
-        width: number
-        height: number
-    }
-    position: {
-        x: number
-        y: number
-    }
-}
 
 const Event = ({ id }: { id: number }) => {
     const [dragging, setIsDragging] = useState(false)
     const viewport = useViewportSize()
     const gridSize = gridSizeForWidth(viewport.width)
     const setEvents = useSetAtom(eventsAtom)
-    const { title, size, position } = useAtomValue<asd>(eventAtom(id))
 
-    const debounce = useMemo(
+    // const { title, size, position } = useAtomValue(eventAtom(id))
+    const EventAtomValue = useAtomValue(eventAtom(id))
+
+    if (!EventAtomValue) {
+        return
+    }
+    const { title, start, y } = EventAtomValue
+    const [position, setPositon] = useState<{ x: number, y: number }>(dateToPosition(start, viewport.width, y))
+    // setPositon(dateToPosition(start, viewport.width, y))
+    let size = { width: 100, height: 100 }
+
+    const debounce = useMemo<{ timeout: NodeJS.Timeout | null, lastUpdate: updateType | null }>(
         () => ({
             timeout: null,
-            lastUpdate: '',
+            lastUpdate: null,
         }),
         []
     )
 
     useEffect(() => {
         // if (!dragging) return
+        console.log(position);
+
         const update: updateType = {
             id,
             position,
@@ -82,14 +86,12 @@ const Event = ({ id }: { id: number }) => {
                     const index = events.findIndex((ev) => ev.id === id)
                     const newEvents = [...events]
                     newEvents[index] = {
-                        ...newEvents[index],
-                        position: {
-                            x: d.x,
-                            y: d.y,
-                        },
+                        ...newEvents[index]
+                        
                     }
                     return newEvents
                 })
+                setPositon({ x: d.x, y: d.y })
             }}
             onDragStop={() => {
                 setIsDragging(false)
@@ -100,10 +102,10 @@ const Event = ({ id }: { id: number }) => {
                     const newEvents = [...events]
                     newEvents[index] = {
                         ...newEvents[index],
-                        size: {
-                            width: parseFloat(ref.style.width),
-                            height: parseFloat(ref.style.height),
-                        },
+                    }
+                    size = {
+                        width: parseFloat(ref.style.width),
+                        height: parseFloat(ref.style.height),
                     }
                     return newEvents
                 })
@@ -137,11 +139,11 @@ const Event = ({ id }: { id: number }) => {
     )
 }
 
-const RenderEvents = ({ events }) => {
+const RenderEvents = ({ events }: { events: EventType[] }) => {
     return (
         <>
             {events.map((event) => (
-                <Event key={event.id} {...event} />
+                <Event key={event.id} id={event.id} />
             ))}
         </>
     )

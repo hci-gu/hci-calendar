@@ -50,7 +50,7 @@ export const positionToDates = (
 
 export const dateToPosition = (
     date: string | null,
-    viewport: number,
+    viewportWidth: number,
     y: number
 ) => {
     const yearstartDate = moment().startOf('year')
@@ -59,7 +59,7 @@ export const dateToPosition = (
         moment(yearEndDate).diff(moment(yearstartDate), 'days') + 1
     const dateFromYearStart =
         moment(date).diff(moment(yearstartDate), 'days') + 1
-    const x = dateFromYearStart * (viewport / daysInYear)
+    const x = dateFromYearStart * (viewportWidth / daysInYear)
     console.log(
         'pos:',
         { x, y },

@@ -8,6 +8,13 @@ import { dateToPosition, dateToWidth, positionToDates } from './utils'
 import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 
+type Event = Database['public']['Tables']['events']['Row']
+type updateType = {
+    id: number
+    position: { x: number; y: number }
+    size: { width: number; height: number }
+}
+
 const supabase = createClient<Database>(
     //@ts-ignore
     import.meta.env.VITE_SUPABASE_URL,
@@ -30,12 +37,7 @@ const createEvent = () => ({
     },
 })
 
-type Event = Database['public']['Tables']['events']['Row']
-type updateType = {
-    id: number
-    position: { x: number; y: number }
-    size: { width: number; height: number }
-}
+
 
 export const updateEvent = async (
     event: updateType,
@@ -45,7 +47,6 @@ export const updateEvent = async (
     }
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
-    console.log(event)
 
     await supabase.from('events').upsert({
         id: event.id,
