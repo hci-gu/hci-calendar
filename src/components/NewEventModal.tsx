@@ -1,24 +1,32 @@
 import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { DateInput } from '@mantine/dates'
+import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const NewEventModal = () => {
+    type FromData = {
+        title: string
+        startDate: DateValue
+        endDate: DateValue
+        description: string
+    }
     const [opend, { open, close }] = useDisclosure(false)
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FromData>({
         title: '',
-        startDate: '',
-        endDate: '',
+        startDate: null,
+        endDate: null,
         description: '',
     })
     const supabase = createClient(
+        //@ts-ignore
         import.meta.env.VITE_SUPABASE_URL,
+        //@ts-ignore
         import.meta.env.VITE_SUPABASE_KEY
     )
 
-    const insertSupabase = async (e) => {
+    const insertSupabase = async (e: any) => {
         e.preventDefault()
         const { error } = await supabase.from('events').insert({
             start: formData.startDate,
@@ -31,8 +39,8 @@ const NewEventModal = () => {
         }
         setFormData({
             title: '',
-            startDate: '',
-            endDate: '',
+            startDate: null,
+            endDate: null,
             description: '',
         })
         close
