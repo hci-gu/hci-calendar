@@ -35,10 +35,7 @@ const Event = ({ id }: { id: number }) => {
     if (!EventAtomValue) {
         return
     }
-    const { title, start, y, size } = EventAtomValue
-    const [position, setPositon] = useState<{ x: number; y: number }>(
-        dateToPosition(start, viewport.width, y)
-    )
+    const { title, start, y, size, position } = EventAtomValue
 
     // setPositon(dateToPosition(start, viewport.width, y))
     // let size = { width: 100, height: 100 }
@@ -97,7 +94,6 @@ const Event = ({ id }: { id: number }) => {
                     }
                     return newEvents
                 })
-                setPositon({ x: d.x, y: d.y })
             }}
             onDragStop={() => {
                 setIsDragging(false)

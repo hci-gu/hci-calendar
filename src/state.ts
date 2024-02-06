@@ -9,7 +9,10 @@ import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 
 type Event = Database['public']['Tables']['events']['Row']
-type EventAtom = Event & { position: { x: number; y: number }; size: { width: number; height: number } }
+type EventAtom = Event & {
+    position: { x: number; y: number }
+    size: { width: number; height: number }
+}
 type updateType = {
     id: number
     position: { x: number; y: number }
@@ -38,8 +41,6 @@ const createEvent = () => ({
     },
 })
 
-
-
 export const updateEvent = async (
     event: updateType,
     viewport: {
@@ -49,12 +50,12 @@ export const updateEvent = async (
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
 
-    // await supabase.from('events').upsert({
-    //     id: event.id,
-    //     start: dates.startDate,
-    //     end: dates.endDate,
-    //     y: event.position.y,
-    // })
+    await supabase.from('events').upsert({
+        id: event.id,
+        start: dates.startDate,
+        end: dates.endDate,
+        y: event.position.y,
+    })
 }
 
 export const eventsAtom = atom<EventAtom[]>([])
