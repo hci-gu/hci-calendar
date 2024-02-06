@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 
 type Event = Database['public']['Tables']['events']['Row']
+type EventAtom = Event & { position: { x: number; y: number }; size: { width: number; height: number } }
 type updateType = {
     id: number
     position: { x: number; y: number }
@@ -56,7 +57,7 @@ export const updateEvent = async (
     })
 }
 
-export const eventsAtom = atom<Event[]>([])
+export const eventsAtom = atom<EventAtom[]>([])
 export const useEvents = () => {
     const viewport = useViewportSize()
     const [events, setEvents] = useAtom(eventsAtom)

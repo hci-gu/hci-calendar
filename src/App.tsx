@@ -36,10 +36,11 @@ const Event = ({ id }: { id: number }) => {
     if (!EventAtomValue) {
         return
     }
-    const { title, start, y } = EventAtomValue
+    const { title, start, y, size } = EventAtomValue
     const [position, setPositon] = useState<{ x: number, y: number }>(dateToPosition(start, viewport.width, y))
+    
     // setPositon(dateToPosition(start, viewport.width, y))
-    let size = { width: 100, height: 100 }
+    // let size = { width: 100, height: 100 }
 
     const debounce = useMemo<{ timeout: NodeJS.Timeout | null, lastUpdate: updateType | null }>(
         () => ({
@@ -86,8 +87,9 @@ const Event = ({ id }: { id: number }) => {
                     const index = events.findIndex((ev) => ev.id === id)
                     const newEvents = [...events]
                     newEvents[index] = {
-                        ...newEvents[index]
-                        
+                        ...newEvents[index],
+                        position: { x: d.x, y: d.y },
+                        size,
                     }
                     return newEvents
                 })
@@ -102,11 +104,15 @@ const Event = ({ id }: { id: number }) => {
                     const newEvents = [...events]
                     newEvents[index] = {
                         ...newEvents[index],
+                        size: {
+                            width: parseFloat(ref.style.width),
+                            height: parseFloat(ref.style.height),
+                        },
                     }
-                    size = {
-                        width: parseFloat(ref.style.width),
-                        height: parseFloat(ref.style.height),
-                    }
+                    // size = {
+                    //     width: parseFloat(ref.style.width),
+                    //     height: parseFloat(ref.style.height),
+                    // }
                     return newEvents
                 })
             }}
