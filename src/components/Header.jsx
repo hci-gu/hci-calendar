@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Flex, Text } from '@mantine/core'
 import moment from 'moment'
 import React from 'react'
+import NewEventModal from './NewEventModal'
 
 const Container = styled.div`
     height: 90px;
@@ -96,6 +97,7 @@ const Header = () => {
             <Text size="xl" fw="800" ml="xs">
                 {currentYear}
             </Text>
+            <NewEventModal />
             <Flex justify="space-evenly" align="stretch">
                 {months.map((month) => (
                     <Month key={month} month={month} />
