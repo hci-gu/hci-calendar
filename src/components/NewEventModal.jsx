@@ -18,7 +18,8 @@ const NewEventModal = () => {
         import.meta.env.VITE_SUPABASE_KEY
     )
 
-    const insertSupabase = async () => {
+    const insertSupabase = async (e) => {
+        e.preventDefault()
         const { error } = await supabase.from('events').insert({
             start: formData.startDate,
             end: formData.endDate,
@@ -40,7 +41,7 @@ const NewEventModal = () => {
     return (
         <>
             <Modal title="New Event" opened={opend} onClose={close} centered>
-                <form onSubmit={insertSupabase}>
+                <form onSubmit={(e) => insertSupabase(e)}>
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <TextInput
                             w="100%"
