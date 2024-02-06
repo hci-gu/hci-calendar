@@ -33,16 +33,14 @@ const createEvent = () => ({
 
 export const updateEvent = async (event, viewport) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
-    console.log({
-        id: event.id,
-        title: event.title,
-        start: dates.startDate,
-        end: dates.endDate,
-        y: event.position.y,
-    })
+    // console.log({
+    //     id: event.id,
+    //     start: dates.startDate,
+    //     end: dates.endDate,
+    //     y: event.position.y,
+    // })
     await supabase.from('events').upsert({
         id: event.id,
-        title: event.title,
         start: dates.startDate,
         end: dates.endDate,
         y: parseInt(event.position.y),

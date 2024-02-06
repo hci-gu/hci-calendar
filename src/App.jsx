@@ -20,7 +20,6 @@ const Event = ({ id }) => {
     const setEvents = useSetAtom(eventsAtom)
     const { title, size, position } = useAtomValue(eventAtom(id))
 
-    // console.log('EVENT', id, position)
 
     const debounce = useMemo(
         () => ({
