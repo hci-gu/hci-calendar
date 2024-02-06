@@ -23,7 +23,6 @@ type updateType = {
     size: { width: number; height: number }
 }
 
-
 const Event = ({ id }: { id: number }) => {
     const [dragging, setIsDragging] = useState(false)
     const viewport = useViewportSize()
@@ -37,12 +36,17 @@ const Event = ({ id }: { id: number }) => {
         return
     }
     const { title, start, y, size } = EventAtomValue
-    const [position, setPositon] = useState<{ x: number, y: number }>(dateToPosition(start, viewport.width, y))
-    
+    const [position, setPositon] = useState<{ x: number; y: number }>(
+        dateToPosition(start, viewport.width, y)
+    )
+
     // setPositon(dateToPosition(start, viewport.width, y))
     // let size = { width: 100, height: 100 }
 
-    const debounce = useMemo<{ timeout: NodeJS.Timeout | null, lastUpdate: updateType | null }>(
+    const debounce = useMemo<{
+        timeout: NodeJS.Timeout | null
+        lastUpdate: updateType | null
+    }>(
         () => ({
             timeout: null,
             lastUpdate: null,
@@ -52,7 +56,7 @@ const Event = ({ id }: { id: number }) => {
 
     useEffect(() => {
         // if (!dragging) return
-        console.log(position);
+        // console.log(position);
 
         const update: updateType = {
             id,

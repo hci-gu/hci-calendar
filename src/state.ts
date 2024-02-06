@@ -49,12 +49,12 @@ export const updateEvent = async (
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
 
-    await supabase.from('events').upsert({
-        id: event.id,
-        start: dates.startDate,
-        end: dates.endDate,
-        y: event.position.y,
-    })
+    // await supabase.from('events').upsert({
+    //     id: event.id,
+    //     start: dates.startDate,
+    //     end: dates.endDate,
+    //     y: event.position.y,
+    // })
 }
 
 export const eventsAtom = atom<EventAtom[]>([])
