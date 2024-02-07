@@ -12,9 +12,7 @@ import { EventAtom, updateType } from './typs/typs'
 
 
 const supabase = createClient<Database>(
-    //@ts-ignore
     import.meta.env.VITE_SUPABASE_URL,
-    //@ts-ignore
     import.meta.env.VITE_SUPABASE_KEY
 )
 export default supabase
