@@ -5,8 +5,8 @@ import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
 import { dateToPosition, dateToWidth, positionToDates } from './utils'
 import { v4 as uuid } from 'uuid'
-import { Database } from '../supabase/supabase'
-import { EventAtom, updateType } from './types/types'
+import { Database } from '../../supabase/supabase'
+import { EventAtom, updateType } from '../types/types'
 
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,

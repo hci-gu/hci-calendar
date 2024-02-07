@@ -1,5 +1,5 @@
 import { Card, Flex, Text } from '@mantine/core'
-import { positionToDate } from '../utils'
+import { positionToDate } from '../lib/utils'
 import { EventAtom } from '../types/types'
 import { useViewportSize } from '@mantine/hooks'
 

@@ -3,9 +3,9 @@ import { useDisclosure, useViewportSize } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { FormEvent, useEffect, useState } from 'react'
-import supabase, { eventsAtom, useEvents } from '../state'
+import supabase, { eventsAtom, useEvents } from '../lib/state'
 import { useAtom, useSetAtom } from 'jotai'
-import { dateToPosition, dateToWidth } from '../utils'
+import { dateToPosition, dateToWidth } from '../lib/utils'
 import { z } from 'zod'
 
 const NewEventModal = () => {

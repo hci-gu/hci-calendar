@@ -2,30 +2,31 @@ import React, { memo } from 'react'
 import Header from './components/Header'
 import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { eventAtom, eventsAtom, updateEvent, useEvents } from './state'
-import { gridSizeForWidth } from './utils'
+import { eventAtom, eventsAtom, updateEvent, useEvents } from './lib/state'
+import { gridSizeForWidth } from './lib/utils'
 import { useViewportSize } from '@mantine/hooks'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { EventType, updateType } from './types/types'
 import EventCard from './components/EventCard'
+import { onDrag, onDragStart, onDragStop, onResize } from './lib/eventsEvent'
 
 const compare = (objA: updateType | null, objB: updateType | null) =>
     JSON.stringify(objA) === JSON.stringify(objB)
 
 const Event = ({ id }: { id: number }) => {
+    const setEvents = useSetAtom(eventsAtom)
     const [dragging, setIsDragging] = useState(false)
     const viewport = useViewportSize()
     const gridSize = gridSizeForWidth(viewport.width)
-    const setEvents = useSetAtom(eventsAtom)
 
     const EventAtomValue = useAtomValue(eventAtom(id))
 
     if (!EventAtomValue) {
         return
     }
-    const { title, size, position } = EventAtomValue
+    const { size, position } = EventAtomValue
 
     const debounce = useMemo<{
         timeout: NodeJS.Timeout | null
@@ -63,55 +64,15 @@ const Event = ({ id }: { id: number }) => {
         return () => clearTimeout(newTimeout)
     }, [dragging, viewport, size, position])
 
-    /* Events */
-    const onDrag = (_event: RndDragEvent, dragg: DraggableData) => {
-        setEvents((events) => {
-            const index = events.findIndex((ev) => ev.id === id)
-            const newEvents = [...events]
-            newEvents[index] = {
-                ...newEvents[index],
-                position: { x: dragg.x, y: dragg.y },
-                size,
-            }
-            return newEvents
-        })
-    }
-
-    const onResize = (
-        _event: MouseEvent | TouchEvent,
-        _direction: any,
-        ref: HTMLElement
-    ) => {
-        setEvents((events) => {
-            const index = events.findIndex((ev) => ev.id === id)
-            const newEvents = [...events]
-            newEvents[index] = {
-                ...newEvents[index],
-                size: {
-                    width: parseFloat(ref.style.width),
-                    height: parseFloat(ref.style.height),
-                },
-            }
-            return newEvents
-        })
-    }
-
-    const onDragStop = () => {
-        setIsDragging(false)
-    }
-
-    const onDragStart = () => {
-        setIsDragging(true)
-    }
 
     return (
         <Rnd
             position={position}
             size={size}
-            onDragStart={onDragStart}
-            onDrag={onDrag}
-            onDragStop={onDragStop}
-            onResize={onResize}
+            onDragStart={() => onDragStart(setIsDragging)}
+            onDrag={(_event, dragg) => onDrag(dragg, size, id, setEvents)}
+            onResize={(_event, _direction, ref) => onResize(ref, id, setEvents)}
+            onDragStop={() => onDragStop(setIsDragging)}
             minHeight={44}
             bounds="window"
             dragGrid={[gridSize, gridSize]}
