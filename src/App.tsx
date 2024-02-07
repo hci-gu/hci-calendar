@@ -1,26 +1,19 @@
-import React, { use } from 'react'
+import React, { memo } from 'react'
 import Header from './components/Header'
-import { Rnd } from 'react-rnd'
-import { Card, Flex, Text } from '@mantine/core'
+import { DraggableData, Rnd, RndDragEvent } from 'react-rnd'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { eventAtom, eventsAtom, updateEvent, useEvents } from './state'
-import { dateToPosition, gridSizeForWidth, positionToDate } from './utils'
+import { gridSizeForWidth } from './utils'
 import { useViewportSize } from '@mantine/hooks'
 import { useState } from 'react'
-import { useCallback } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
-import { Database } from '@/supabase/supabase'
-import { EventType } from './typs/typs'
+import { EventType, updateType } from './typs/typs'
+import EventCard from './components/EventCard'
 
-const compare = (objA: any, objB: any) =>
+const compare = (objA: updateType | null, objB: updateType | null) =>
     JSON.stringify(objA) === JSON.stringify(objB)
 
-type updateType = {
-    id: number
-    position: { x: number; y: number }
-    size: { width: number; height: number }
-}
 
 const Event = ({ id }: { id: number }) => {
     const [dragging, setIsDragging] = useState(false)
@@ -28,16 +21,12 @@ const Event = ({ id }: { id: number }) => {
     const gridSize = gridSizeForWidth(viewport.width)
     const setEvents = useSetAtom(eventsAtom)
 
-    // const { title, size, position } = useAtomValue(eventAtom(id))
     const EventAtomValue = useAtomValue(eventAtom(id))
 
     if (!EventAtomValue) {
         return
     }
-    const { title, start, y, size, position } = EventAtomValue
-
-    // setPositon(dateToPosition(start, viewport.width, y))
-    // let size = { width: 100, height: 100 }
+    const { title, size, position } = EventAtomValue
 
     const debounce = useMemo<{
         timeout: NodeJS.Timeout | null
@@ -75,67 +64,58 @@ const Event = ({ id }: { id: number }) => {
         return () => clearTimeout(newTimeout)
     }, [dragging, viewport, size, position])
 
+    /* Events */
+    const onDrag = (_event: RndDragEvent, dragg: DraggableData) => {
+        setEvents((events) => {
+            const index = events.findIndex((ev) => ev.id === id)
+            const newEvents = [...events]
+            newEvents[index] = {
+                ...newEvents[index],
+                position: { x: dragg.x, y: dragg.y },
+                size,
+            }
+            return newEvents
+        })
+    }
+
+    const onResize = (_event: MouseEvent | TouchEvent, _direction: any, ref: HTMLElement) => {
+        setEvents((events) => {
+            const index = events.findIndex((ev) => ev.id === id)
+            const newEvents = [...events]
+            newEvents[index] = {
+                ...newEvents[index],
+                size: {
+                    width: parseFloat(ref.style.width),
+                    height: parseFloat(ref.style.height),
+                },
+            }
+            return newEvents
+        })
+    }
+
+    const onDragStop = () => {
+        setIsDragging(false)
+    }
+
+    const onDragStart = () => {
+        setIsDragging(true)
+    }
+
+
     return (
         <Rnd
             position={position}
             size={size}
-            onDragStart={() => {
-                setIsDragging(true)
-            }}
-            onDrag={(e, d) => {
-                setEvents((events) => {
-                    const index = events.findIndex((ev) => ev.id === id)
-                    const newEvents = [...events]
-                    newEvents[index] = {
-                        ...newEvents[index],
-                        position: { x: d.x, y: d.y },
-                        size,
-                    }
-                    return newEvents
-                })
-            }}
-            onDragStop={() => {
-                setIsDragging(false)
-            }}
-            onResize={(e, direction, ref, delta, position) => {
-                setEvents((events) => {
-                    const index = events.findIndex((ev) => ev.id === id)
-                    const newEvents = [...events]
-                    newEvents[index] = {
-                        ...newEvents[index],
-                        size: {
-                            width: parseFloat(ref.style.width),
-                            height: parseFloat(ref.style.height),
-                        },
-                    }
-                    return newEvents
-                })
-            }}
+            onDragStart={onDragStart}
+            onDrag={onDrag}
+            onDragStop={onDragStop}
+            onResize={onResize}
             minHeight={44}
             bounds="window"
             dragGrid={[gridSize, gridSize]}
             resizeGrid={[gridSize, gridSize]}
         >
-            <Card shadow="sm" withBorder style={{ height: '100%' }} radius="md">
-                <Card.Section p={4} withBorder bg="orange">
-                    <Flex justify="space-between">
-                        <Text size="xs" fw="bold">
-                            {positionToDate(position.x, viewport.width).format(
-                                'MMM DD'
-                            )}
-                        </Text>
-                        <Text size="xs" fw="bold">
-                            {positionToDate(
-                                position.x + size.width,
-                                viewport.width
-                            ).format('MMM DD')}
-                        </Text>
-                    </Flex>
-                </Card.Section>
-                <Card.Section p={8} withBorder bg="red">
-                    <Text size="sm">{title}</Text>
-                </Card.Section>
-            </Card>
+            <EventCard event={EventAtomValue} />
         </Rnd>
     )
 }
@@ -149,7 +129,7 @@ const RenderEvents = ({ events }: { events: EventType[] }) => {
         </>
     )
 }
-const MemoizedRenderEvents = React.memo(RenderEvents, (prev, next) => {
+const MemoizedRenderEvents = memo(RenderEvents, (prev, next) => {
     return prev.events.length === next.events.length
 })
 
