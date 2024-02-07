@@ -88,26 +88,18 @@ const NewEventModal = () => {
                 },
             ])
         } else {
+            const keys = ['title', 'startDate', 'endDate']
             parsedData.error.issues.map((issue) => {
-                if (issue.path[0] === 'title') {
-                    tempErrors = { ...tempErrors, title: issue.message }
-                }
-            })
-            parsedData.error.issues.map((issue) => {
-                if (issue.path[0] === 'startDate') {
-                    tempErrors = { ...tempErrors, startDate: issue.message }
-                }
-            })
-            parsedData.error.issues.map((issue) => {
-                if (issue.path[0] === 'endDate') {
-                    tempErrors = { ...tempErrors, endDate: issue.message }
-                }
+                keys.map((key) => {
+                    if (issue.path[0] === key) {
+                        tempErrors = { ...tempErrors, [key]: issue.message }
+                    }
+                })
             })
 
             setErrors(tempErrors)
         }
     }
-
     useEffect(() => {
         console.log(errors)
     }, [errors])
