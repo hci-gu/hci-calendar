@@ -8,12 +8,11 @@ import { useViewportSize } from '@mantine/hooks'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
-import { EventType, updateType } from './typs/typs'
+import { EventType, updateType } from './types/types'
 import EventCard from './components/EventCard'
 
 const compare = (objA: updateType | null, objB: updateType | null) =>
     JSON.stringify(objA) === JSON.stringify(objB)
-
 
 const Event = ({ id }: { id: number }) => {
     const [dragging, setIsDragging] = useState(false)
@@ -78,7 +77,11 @@ const Event = ({ id }: { id: number }) => {
         })
     }
 
-    const onResize = (_event: MouseEvent | TouchEvent, _direction: any, ref: HTMLElement) => {
+    const onResize = (
+        _event: MouseEvent | TouchEvent,
+        _direction: any,
+        ref: HTMLElement
+    ) => {
         setEvents((events) => {
             const index = events.findIndex((ev) => ev.id === id)
             const newEvents = [...events]
@@ -100,7 +103,6 @@ const Event = ({ id }: { id: number }) => {
     const onDragStart = () => {
         setIsDragging(true)
     }
-
 
     return (
         <Rnd
@@ -135,7 +137,6 @@ const MemoizedRenderEvents = memo(RenderEvents, (prev, next) => {
 
 const Events = () => {
     const events = useEvents()
-
 
     return <MemoizedRenderEvents events={events ?? []} />
 }

@@ -1,7 +1,7 @@
-import { Card, Flex, Text } from "@mantine/core"
-import { positionToDate } from "../utils"
-import { EventAtom } from "../typs/typs"
-import { useViewportSize } from "@mantine/hooks"
+import { Card, Flex, Text } from '@mantine/core'
+import { positionToDate } from '../utils'
+import { EventAtom } from '../types/types'
+import { useViewportSize } from '@mantine/hooks'
 
 const EventCard = ({ event }: { event: EventAtom }) => {
     const viewport = useViewportSize()
@@ -10,9 +10,10 @@ const EventCard = ({ event }: { event: EventAtom }) => {
             <Card.Section p={4} withBorder bg="orange">
                 <Flex justify="space-between">
                     <Text size="xs" fw="bold">
-                        {positionToDate(event.position.x, viewport.width).format(
-                            'MMM DD'
-                        )}
+                        {positionToDate(
+                            event.position.x,
+                            viewport.width
+                        ).format('MMM DD')}
                     </Text>
                     <Text size="xs" fw="bold">
                         {positionToDate(
@@ -29,4 +30,4 @@ const EventCard = ({ event }: { event: EventAtom }) => {
     )
 }
 
-export default EventCard;
+export default EventCard
