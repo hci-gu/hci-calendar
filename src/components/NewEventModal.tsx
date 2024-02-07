@@ -22,9 +22,10 @@ const NewEventModal = () => {
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
         const { error } = await supabase.from('events').insert({
-            start: formData.startDate,
-            end: formData.endDate,
+            start: formData.startDate?.toISOString() ? formData.startDate?.toISOString() : '',
+            end: formData.endDate?.toISOString() ? formData.endDate?.toISOString() : '',
             title: formData.title,
             description: formData.description,
         })
