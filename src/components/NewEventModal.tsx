@@ -2,7 +2,7 @@ import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const NewEventModal = () => {
@@ -26,7 +26,7 @@ const NewEventModal = () => {
         import.meta.env.VITE_SUPABASE_KEY
     )
 
-    const insertSupabase = async (e: any) => {
+    const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const { error } = await supabase.from('events').insert({
             start: formData.startDate,

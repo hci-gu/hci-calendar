@@ -11,8 +11,9 @@ import { useCallback } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { Database } from '@/supabase/supabase'
+import { EventType } from './typs/typs'
 
-type EventType = Database['public']['Tables']['events']['Row']
+
 
 const compare = (objA: any, objB: any) =>
     JSON.stringify(objA) === JSON.stringify(objB)
@@ -109,10 +110,6 @@ const Event = ({ id }: { id: number }) => {
                             height: parseFloat(ref.style.height),
                         },
                     }
-                    // size = {
-                    //     width: parseFloat(ref.style.width),
-                    //     height: parseFloat(ref.style.height),
-                    // }
                     return newEvents
                 })
             }}

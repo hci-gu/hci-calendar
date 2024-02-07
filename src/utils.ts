@@ -26,17 +26,6 @@ export const positionToDates = (
         .add((days * (x + width)) / viewport.width, 'days')
         .toISOString()
 
-    console.log(
-        'dates:',
-        { startDate, endDate },
-        'days in a year:',
-        days,
-        'days from year start',
-        (days * x) / viewport.width,
-        'length in days',
-        moment(endDate).diff(moment(startDate), 'days')
-    )
-
     return { startDate, endDate }
 }
 
@@ -60,14 +49,6 @@ export const dateToPosition = (
     const dateFromYearStart =
         moment(date).diff(moment(yearstartDate), 'days') + 1
     const x = dateFromYearStart * (viewportWidth / daysInYear)
-    console.log(
-        'pos:',
-        { x, y },
-        'date:',
-        { date },
-        'days from year start:',
-        dateFromYearStart
-    )
 
     return { x, y }
 }
@@ -75,12 +56,12 @@ export const dateToPosition = (
 export const dateToWidth = (
     start: string | null,
     end: string | null,
-    viewport: number
+    viewportWidth: number
 ) => {
     const yearstartDate = moment().startOf('year')
     const yearEndDate = moment().endOf('year')
     const days = moment(yearEndDate).diff(moment(yearstartDate), 'days')
-    const width = (moment(end).diff(moment(start), 'days') * viewport) / days
+    const width = (moment(end).diff(moment(start), 'days') * viewportWidth) / days
     return width
 }
 
