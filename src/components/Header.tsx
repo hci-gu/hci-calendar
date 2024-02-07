@@ -41,11 +41,11 @@ const DayContainer = styled.div`
     background-color: rgba(0, 0, 0, 0.25);
 `
 
-const DayTick = ({ month, day }) => {
+const DayTick = ({ month, day }: { month: string, day: number }) => {
     const isToday = moment().format('MMMM') === month && moment().date() === day
 
     return (
-        <DayContainer day={day}>
+        <DayContainer>
             {isToday && (
                 <Text
                     size="xs"
@@ -64,7 +64,7 @@ const DayTick = ({ month, day }) => {
     )
 }
 
-const Month = ({ month }) => {
+const Month = ({ month }: { month: string }) => {
     const days = moment(month, 'MMMM').daysInMonth()
     const isCurrentMonth = moment().format('MMMM') === month
 
@@ -79,7 +79,7 @@ const Month = ({ month }) => {
             </Text>
             <Flex justify="space-evenly" align="stretch">
                 {Array(days)
-                    .fill()
+                    .fill(days)
                     .map((_, i) => (
                         <DayTick key={`${month}_${i}`} month={month} day={i} />
                     ))}
