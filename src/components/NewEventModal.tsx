@@ -2,7 +2,7 @@ import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import supabase from '../state'
 
 const NewEventModal = () => {
