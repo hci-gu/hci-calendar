@@ -4,7 +4,6 @@ import { createClient } from '@supabase/supabase-js'
 import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
 import { dateToPosition, dateToWidth, positionToDates } from './utils'
-//@ts-ignore
 import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 import { EventAtom, updateType } from './typs/typs'
