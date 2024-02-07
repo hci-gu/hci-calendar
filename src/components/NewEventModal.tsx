@@ -39,7 +39,7 @@ const NewEventModal = () => {
                 title: formData.title,
                 description: formData?.description,
             })
-            .select()
+            .select().single()
         if (error) {
             console.log(error)
             return
@@ -54,16 +54,16 @@ const NewEventModal = () => {
         setEvents([
             ...events,
             {
-                ...data[0],
+                ...data,
                 position: dateToPosition(
-                    data[0].start,
+                    data.start,
                     viewport.width,
-                    data[0].y
+                    data.y
                 ),
                 size: {
                     width: dateToWidth(
-                        data[0].start,
-                        data[0].end,
+                        data.start,
+                        data.end,
                         viewport.width
                     ),
                     height: 65,
