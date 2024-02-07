@@ -8,8 +8,6 @@ import { v4 as uuid } from 'uuid'
 import { Database } from '../supabase/supabase'
 import { EventAtom, updateType } from './typs/typs'
 
-
-
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_KEY
