@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import supabase from '../state'
 
 const NewEventModal = () => {
     type FromData = {
@@ -19,12 +19,6 @@ const NewEventModal = () => {
         endDate: null,
         description: '',
     })
-    const supabase = createClient(
-        //@ts-ignore
-        import.meta.env.VITE_SUPABASE_URL,
-        //@ts-ignore
-        import.meta.env.VITE_SUPABASE_KEY
-    )
 
     const insertSupabase = async (e: any) => {
         e.preventDefault()

@@ -25,6 +25,7 @@ const supabase = createClient<Database>(
     //@ts-ignore
     import.meta.env.VITE_SUPABASE_KEY
 )
+export default supabase
 let id = 0
 const userId = uuid()
 
