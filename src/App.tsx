@@ -13,8 +13,6 @@ import { useMemo } from 'react'
 import { Database } from '@/supabase/supabase'
 import { EventType } from './typs/typs'
 
-
-
 const compare = (objA: any, objB: any) =>
     JSON.stringify(objA) === JSON.stringify(objB)
 
@@ -157,6 +155,7 @@ const MemoizedRenderEvents = React.memo(RenderEvents, (prev, next) => {
 
 const Events = () => {
     const events = useEvents()
+
 
     return <MemoizedRenderEvents events={events ?? []} />
 }

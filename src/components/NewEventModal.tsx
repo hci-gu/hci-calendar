@@ -1,48 +1,75 @@
 import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { useDisclosure, useViewportSize } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { FormEvent, useState } from 'react'
-import supabase from '../state'
+import supabase, { eventsAtom, useEvents } from '../state'
+import { useAtom, useSetAtom } from 'jotai'
+import { dateToPosition, dateToWidth } from '../utils'
 
 const NewEventModal = () => {
     type FromData = {
-        title: string | undefined
+        title: string
         startDate: DateValue
         endDate: DateValue
-        description: string | undefined
+        description: string
     }
     const [opend, { open, close }] = useDisclosure(false)
     const [formData, setFormData] = useState<FromData>({
-        title: undefined,
+        title: '',
         startDate: null,
         endDate: null,
-        description: undefined,
+        description: '',
     })
+    const [events, setEvents] = useAtom(eventsAtom)
+    const viewport = useViewportSize()
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const { error } = await supabase.from('events').insert({
-            start: formData.startDate?.toISOString()
-                ? formData.startDate?.toISOString()
-                : null,
-            end: formData.endDate?.toISOString()
-                ? formData.endDate?.toISOString()
-                : null,
-            title: formData.title,
-            description: formData?.description,
-        })
+        const { data, error } = await supabase
+            .from('events')
+            .insert({
+                start: formData.startDate?.toISOString()
+                    ? formData.startDate?.toISOString()
+                    : null,
+                end: formData.endDate?.toISOString()
+                    ? formData.endDate?.toISOString()
+                    : null,
+                title: formData.title,
+                description: formData?.description,
+            })
+            .select()
         if (error) {
             console.log(error)
+            return
         }
         setFormData({
-            title: undefined,
+            title: '',
             startDate: null,
             endDate: null,
-            description: undefined,
+            description: '',
         })
-        close
+        //@ts-ignore
+        setEvents([
+            ...events,
+            {
+                ...data[0],
+                position: dateToPosition(
+                    data[0].start,
+                    viewport.width,
+                    data[0].y
+                ),
+                size: {
+                    width: dateToWidth(
+                        data[0].start,
+                        data[0].end,
+                        viewport.width
+                    ),
+                    height: 65,
+                },
+            },
+        ])
     }
 
     return (
@@ -103,7 +130,9 @@ const NewEventModal = () => {
                                 })
                             }}
                         />
-                        <Button type="submit">submit</Button>
+                        <Button type="submit" onClick={close}>
+                            submit
+                        </Button>
                     </Flex>
                 </form>
             </Modal>
