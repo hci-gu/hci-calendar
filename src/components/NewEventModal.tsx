@@ -67,7 +67,6 @@ const NewEventModal = () => {
                 endDate: null,
                 description: '',
             })
-            //@ts-ignore
             setEvents([
                 ...events,
                 {
