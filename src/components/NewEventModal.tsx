@@ -2,18 +2,26 @@ import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
 import { useDisclosure, useViewportSize } from '@mantine/hooks'
 import { DateInput, DateValue } from '@mantine/dates'
 import '@mantine/dates/styles.css'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import supabase, { eventsAtom, useEvents } from '../state'
 import { useAtom, useSetAtom } from 'jotai'
 import { dateToPosition, dateToWidth } from '../utils'
+import { z } from 'zod'
 
 const NewEventModal = () => {
-    type FromData = {
-        title: string
-        startDate: DateValue
-        endDate: DateValue
-        description: string
-    }
+    const FormDataScheama = z.object({
+        title: z.string().min(3),
+        startDate: z.date(),
+        endDate: z.date(),
+        description: z.string(),
+    })
+
+    const NewScheama = FormDataScheama.extend({
+        startDate: z.date().nullable(),
+        endDate: z.date().nullable(),
+    })
+    type FromData = z.infer<typeof NewScheama>
+
     const [opend, { open, close }] = useDisclosure(false)
     const [formData, setFormData] = useState<FromData>({
         title: '',
@@ -23,54 +31,86 @@ const NewEventModal = () => {
     })
     const [events, setEvents] = useAtom(eventsAtom)
     const viewport = useViewportSize()
+    const [errors, setErrors] = useState({
+        title: '',
+        startDate: '',
+        endDate: '',
+    })
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-        const { data, error } = await supabase
-            .from('events')
-            .insert({
-                start: formData.startDate?.toISOString()
-                    ? formData.startDate?.toISOString()
-                    : null,
-                end: formData.endDate?.toISOString()
-                    ? formData.endDate?.toISOString()
-                    : null,
-                title: formData.title,
-                description: formData?.description,
+        let tempErrors = { title: '', startDate: '', endDate: '' }
+        const parsedData = FormDataScheama.safeParse(formData)
+        if (parsedData.success) {
+            setErrors(tempErrors)
+            const { data, error } = await supabase
+                .from('events')
+                .insert({
+                    start: formData.startDate?.toISOString()
+                        ? formData.startDate?.toISOString()
+                        : null,
+                    end: formData.endDate?.toISOString()
+                        ? formData.endDate?.toISOString()
+                        : null,
+                    title: formData.title,
+                    description: formData?.description,
+                })
+                .select()
+                .single()
+            if (error) {
+                console.log(error)
+                return
+            }
+            setFormData({
+                title: '',
+                startDate: null,
+                endDate: null,
+                description: '',
             })
-            .select().single()
-        if (error) {
-            console.log(error)
-            return
-        }
-        setFormData({
-            title: '',
-            startDate: null,
-            endDate: null,
-            description: '',
-        })
-        //@ts-ignore
-        setEvents([
-            ...events,
-            {
-                ...data,
-                position: dateToPosition(
-                    data.start,
-                    viewport.width,
-                    data.y
-                ),
-                size: {
-                    width: dateToWidth(
+            //@ts-ignore
+            setEvents([
+                ...events,
+                {
+                    ...data,
+                    position: dateToPosition(
                         data.start,
-                        data.end,
-                        viewport.width
+                        viewport.width,
+                        data.y
                     ),
-                    height: 65,
+                    size: {
+                        width: dateToWidth(
+                            data.start,
+                            data.end,
+                            viewport.width
+                        ),
+                        height: 65,
+                    },
                 },
-            },
-        ])
+            ])
+        } else {
+            parsedData.error.issues.map((issue) => {
+                if (issue.path[0] === 'title') {
+                    tempErrors = { ...tempErrors, title: issue.message }
+                }
+            })
+            parsedData.error.issues.map((issue) => {
+                if (issue.path[0] === 'startDate') {
+                    tempErrors = { ...tempErrors, startDate: issue.message }
+                }
+            })
+            parsedData.error.issues.map((issue) => {
+                if (issue.path[0] === 'endDate') {
+                    tempErrors = { ...tempErrors, endDate: issue.message }
+                }
+            })
+
+            setErrors(tempErrors)
+        }
     }
+
+    useEffect(() => {
+        console.log(errors)
+    }, [errors])
 
     return (
         <>
