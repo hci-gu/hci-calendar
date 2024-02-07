@@ -7,36 +7,40 @@ import supabase from '../state'
 
 const NewEventModal = () => {
     type FromData = {
-        title: string
+        title: string | null
         startDate: DateValue
         endDate: DateValue
-        description: string
+        description: string | null
     }
     const [opend, { open, close }] = useDisclosure(false)
     const [formData, setFormData] = useState<FromData>({
-        title: '',
+        title: null,
         startDate: null,
         endDate: null,
-        description: '',
+        description: null,
     })
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const { error } = await supabase.from('events').insert({
-            start: formData.startDate?.toISOString() ? formData.startDate?.toISOString() : '',
-            end: formData.endDate?.toISOString() ? formData.endDate?.toISOString() : '',
+            start: formData.startDate?.toISOString()
+                ? formData.startDate?.toISOString()
+                : null,
+            end: formData.endDate?.toISOString()
+                ? formData.endDate?.toISOString()
+                : null,
             title: formData.title,
-            description: formData.description,
+            description: formData?.description,
         })
         if (error) {
             console.log(error)
         }
         setFormData({
-            title: '',
+            title: null,
             startDate: null,
             endDate: null,
-            description: '',
+            description: null,
         })
         close
     }
