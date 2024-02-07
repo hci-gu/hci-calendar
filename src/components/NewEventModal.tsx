@@ -7,17 +7,17 @@ import supabase from '../state'
 
 const NewEventModal = () => {
     type FromData = {
-        title: string | null
+        title: string | undefined
         startDate: DateValue
         endDate: DateValue
-        description: string | null
+        description: string | undefined
     }
     const [opend, { open, close }] = useDisclosure(false)
     const [formData, setFormData] = useState<FromData>({
-        title: null,
+        title: undefined,
         startDate: null,
         endDate: null,
-        description: null,
+        description: undefined,
     })
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
@@ -37,10 +37,10 @@ const NewEventModal = () => {
             console.log(error)
         }
         setFormData({
-            title: null,
+            title: undefined,
             startDate: null,
             endDate: null,
-            description: null,
+            description: undefined,
         })
         close
     }
