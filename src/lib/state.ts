@@ -55,6 +55,9 @@ export const useEvents = () => {
 
         const run = async () => {
             const { data } = await supabase.from('events').select()
+            const asd = await supabase.from('newEvent').select()
+            //@ts-ignore
+            console.log(JSON.parse(asd.data[1].deadlines))
 
             if (!data) {
                 return

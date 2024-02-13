@@ -1,34 +1,41 @@
-import { Button, Flex, Group, Modal, TextInput, Textarea } from '@mantine/core'
+import {
+    Button,
+    Combobox,
+    Flex,
+    Input,
+    InputBase,
+    Modal,
+    Stack,
+    Text,
+    TextInput,
+    useCombobox,
+} from '@mantine/core'
 import { useDisclosure, useViewportSize } from '@mantine/hooks'
-import { DateInput, DateValue } from '@mantine/dates'
+import { DateInput } from '@mantine/dates'
 import '@mantine/dates/styles.css'
-import { FormEvent, useEffect, useState } from 'react'
-import supabase, { eventsAtom, useEvents } from '../lib/state'
-import { useAtom, useSetAtom } from 'jotai'
+import { FormEvent, useState } from 'react'
+import supabase, { eventsAtom } from '../lib/state'
+import { useAtom } from 'jotai'
 import { dateToPosition, dateToWidth } from '../lib/utils'
 import { z } from 'zod'
 
 const NewEventModal = () => {
     const FormDataScheama = z.object({
         title: z.string().min(3),
-        startDate: z.date(),
-        endDate: z.date(),
-        description: z.string(),
+        type: z.enum(['funding', 'publication']).nullable(),
+        deadlines: z
+            .object({
+                name: z.string().min(3),
+                timestamp: z.date().nullable(),
+            })
+            .array(),
     })
 
-    const NewScheama = FormDataScheama.extend({
-        startDate: z.date().nullable(),
-        endDate: z.date().nullable(),
-    })
-    type FromData = z.infer<typeof NewScheama>
+    type FromData = z.infer<typeof FormDataScheama>
 
     const [opend, { open, close }] = useDisclosure(false)
-    const [formData, setFormData] = useState<FromData>({
-        title: '',
-        startDate: null,
-        endDate: null,
-        description: '',
-    })
+    const emptyForm = { title: '', type: null, deadlines: [] }
+    const [formData, setFormData] = useState<FromData>(emptyForm as FromData)
     const [events, setEvents] = useAtom(eventsAtom)
     const viewport = useViewportSize()
     const [errors, setErrors] = useState({
@@ -36,6 +43,30 @@ const NewEventModal = () => {
         startDate: '',
         endDate: '',
     })
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    })
+    const types = ['funding', 'publication']
+    const options = types.map((item) => (
+        <Combobox.Option value={item} key={item}>
+            {item}
+        </Combobox.Option>
+    ))
+    const [newDeadline, setNewDeadline] = useState({
+        name: '',
+        timestamp: null,
+    })
+
+    const addNewDeadline = () => {
+        setFormData({
+            ...formData,
+            deadlines: [...formData.deadlines, newDeadline],
+        })
+        setNewDeadline({
+            name: '',
+            timestamp: null,
+        })
+    }
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -44,16 +75,11 @@ const NewEventModal = () => {
         if (parsedData.success) {
             setErrors(tempErrors)
             const { data, error } = await supabase
-                .from('events')
+                .from('newEvent')
                 .insert({
-                    start: formData.startDate?.toISOString()
-                        ? formData.startDate?.toISOString()
-                        : null,
-                    end: formData.endDate?.toISOString()
-                        ? formData.endDate?.toISOString()
-                        : null,
                     title: formData.title,
-                    description: formData?.description,
+                    type: formData.type,
+                    deadlines: JSON.stringify(formData.deadlines)
                 })
                 .select()
                 .single()
@@ -61,47 +87,19 @@ const NewEventModal = () => {
                 console.log(error)
                 return
             }
-            setFormData({
-                title: '',
-                startDate: null,
-                endDate: null,
-                description: '',
-            })
-            setEvents([
-                ...events,
-                {
-                    ...data,
-                    position: dateToPosition(
-                        data.start,
-                        viewport.width,
-                        data.y
-                    ),
-                    size: {
-                        width: dateToWidth(
-                            data.start,
-                            data.end,
-                            viewport.width
-                        ),
-                        height: 65,
-                    },
-                },
-            ])
+            setFormData(emptyForm as FromData)
         } else {
-            const keys = ['title', 'startDate', 'endDate']
-            parsedData.error.issues.map((issue) => {
-                keys.map((key) => {
-                    if (issue.path[0] === key) {
-                        tempErrors = { ...tempErrors, [key]: issue.message }
-                    }
-                })
-            })
-
-            setErrors(tempErrors)
+            // const keys = ['title', 'startDate', 'endDate']
+            // parsedData.error.issues.map((issue) => {
+            //     keys.map((key) => {
+            //         if (issue.path[0] === key) {
+            //             tempErrors = { ...tempErrors, [key]: issue.message }
+            //         }
+            //     })
+            // })
+            // setErrors(tempErrors)
         }
     }
-    useEffect(() => {
-        console.log(errors)
-    }, [errors])
 
     return (
         <>
@@ -121,46 +119,72 @@ const NewEventModal = () => {
                                 })
                             }}
                         />
-                        <Group justify="space-between" w="100%">
-                            <DateInput
-                                label="Start date"
-                                placeholder="2024-01-01"
-                                valueFormat="YYYY-MM-DD"
-                                withAsterisk
-                                value={formData.startDate}
-                                onChange={(e) => {
-                                    setFormData({
-                                        ...formData,
-                                        startDate: e,
-                                    })
-                                }}
-                            />
-                            <DateInput
-                                label="End Date"
-                                placeholder="2024-01-01"
-                                valueFormat="YYYY-MM-DD"
-                                withAsterisk
-                                value={formData.endDate}
-                                onChange={(e) => {
-                                    setFormData({
-                                        ...formData,
-                                        endDate: e,
-                                    })
-                                }}
-                            />
-                        </Group>
-                        <Textarea
-                            w="100%"
-                            label="Event Description"
-                            placeholder="Description"
-                            value={formData.description}
-                            onChange={(e) => {
-                                setFormData({
-                                    ...formData,
-                                    description: e.target.value,
-                                })
-                            }}
-                        />
+                        <Stack>
+                            {formData.deadlines.map((deadline) => (
+                                <Flex key={deadline.name}>
+                                    <Text>{deadline.name}</Text>{' '}
+                                    {/* <Text>{deadline.timestamp as string}</Text> */}
+                                </Flex>
+                            ))}
+                            <Flex>
+                                <Combobox
+                                    store={combobox}
+                                    onOptionSubmit={(val) => {
+                                        setFormData({ ...formData, type: val })
+                                        combobox.closeDropdown()
+                                    }}
+                                >
+                                    <Combobox.Target>
+                                        <InputBase
+                                            component="button"
+                                            type="button"
+                                            pointer
+                                            rightSection={<Combobox.Chevron />}
+                                            rightSectionPointerEvents="none"
+                                            onClick={() =>
+                                                combobox.toggleDropdown()
+                                            }
+                                        >
+                                            {formData.type || (
+                                                <Input.Placeholder>
+                                                    pick
+                                                </Input.Placeholder>
+                                            )}
+                                        </InputBase>
+                                    </Combobox.Target>
+                                    <Combobox.Dropdown>
+                                        <Combobox.Options>
+                                            {options}
+                                        </Combobox.Options>
+                                    </Combobox.Dropdown>
+                                </Combobox>
+                                <Flex direction={'column'}>
+                                    <TextInput
+                                        placeholder="Deadline Name"
+                                        value={newDeadline.name}
+                                        onChange={(e) => {
+                                            setNewDeadline({
+                                                ...newDeadline,
+                                                name: e.target.value,
+                                            })
+                                        }}
+                                    />
+                                    <DateInput
+                                        placeholder="2024/01/01 00:00"
+                                        value={newDeadline.timestamp}
+                                        onChange={(e) => {
+                                            setNewDeadline({
+                                                ...newDeadline,
+                                                timestamp: e as Date,
+                                            })
+                                        }}
+                                    />
+                                </Flex>
+                                <Button type="button" onClick={addNewDeadline}>
+                                    +
+                                </Button>
+                            </Flex>
+                        </Stack>
                         <Button type="submit" onClick={close}>
                             submit
                         </Button>
