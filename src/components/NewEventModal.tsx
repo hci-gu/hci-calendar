@@ -13,7 +13,7 @@ import {
 import { useDisclosure, useViewportSize } from '@mantine/hooks'
 import { DateInput, DateTimePicker } from '@mantine/dates'
 import '@mantine/dates/styles.css'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import supabase, { eventsAtom } from '../lib/state'
 import { useAtom } from 'jotai'
 import { dateToPosition, dateToWidth } from '../lib/utils'
@@ -22,16 +22,20 @@ import { z } from 'zod'
 const NewEventModal = () => {
     const FormDataScheama = z.object({
         title: z.string().min(3),
-        type: z.enum(['funding', 'publication']).nullable(),
+        type: z.enum(['funding', 'publication']),
         deadlines: z
             .object({
                 name: z.string().min(3),
                 timestamp: z.date().nullable(),
             })
-            .array(),
+            .array()
+            .min(1),
+    })
+    const newFormDataSheama = FormDataScheama.extend({
+        type: z.enum(['funding', 'publication']).nullable(),
     })
 
-    type FromData = z.infer<typeof FormDataScheama>
+    type FromData = z.infer<typeof newFormDataSheama>
 
     const [opend, { open, close }] = useDisclosure(false)
     const emptyForm = { title: '', type: null, deadlines: [] }
@@ -40,8 +44,12 @@ const NewEventModal = () => {
     const viewport = useViewportSize()
     const [errors, setErrors] = useState({
         title: '',
-        startDate: '',
-        endDate: '',
+        type: '',
+        deadlines: '',
+    })
+    const [newErrors, setNewErrors] = useState({
+        name: '',
+        timestamp: '',
     })
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -52,25 +60,44 @@ const NewEventModal = () => {
             {item}
         </Combobox.Option>
     ))
+    const NewDeadlineScheama = z.object({
+        name: z.string().min(3),
+        timestamp: z.date(),
+    })
     const [newDeadline, setNewDeadline] = useState({
         name: '',
         timestamp: null,
     })
 
     const addNewDeadline = () => {
-        setFormData({
-            ...formData,
-            deadlines: [...formData.deadlines, newDeadline],
-        })
-        setNewDeadline({
-            name: '',
-            timestamp: null,
-        })
+        const parsedData = NewDeadlineScheama.safeParse(newDeadline)
+        let tempErrors = { name: '', timestamp: '' }
+        if (parsedData.success) {
+            setNewErrors(tempErrors)
+            setFormData({
+                ...formData,
+                deadlines: [...formData.deadlines, newDeadline],
+            })
+            setNewDeadline({
+                name: '',
+                timestamp: null,
+            })
+        } else {
+            const keys = ['name', 'timestamp']
+            parsedData.error.issues.map((issue) => {
+                keys.map((key) => {
+                    if (issue.path[0] === key) {
+                        tempErrors = { ...tempErrors, [key]: issue.message }
+                    }
+                })
+            })
+            setNewErrors(tempErrors)
+        }
     }
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        let tempErrors = { title: '', startDate: '', endDate: '' }
+        let tempErrors = { title: '', type: '', deadlines: '' }
         const parsedData = FormDataScheama.safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
@@ -89,17 +116,21 @@ const NewEventModal = () => {
             }
             setFormData(emptyForm as FromData)
         } else {
-            // const keys = ['title', 'startDate', 'endDate']
-            // parsedData.error.issues.map((issue) => {
-            //     keys.map((key) => {
-            //         if (issue.path[0] === key) {
-            //             tempErrors = { ...tempErrors, [key]: issue.message }
-            //         }
-            //     })
-            // })
-            // setErrors(tempErrors)
+            const keys = ['title', 'type', 'deadlines']
+            parsedData.error.issues.map((issue) => {
+                keys.map((key) => {
+                    if (issue.path[0] === key) {
+                        tempErrors = { ...tempErrors, [key]: issue.message }
+                    }
+                })
+            })
+            setErrors(tempErrors)
         }
     }
+
+    useEffect(() => {
+        console.log(errors, newErrors)
+    }, [errors, newErrors])
 
     return (
         <>
