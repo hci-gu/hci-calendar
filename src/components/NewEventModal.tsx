@@ -11,7 +11,7 @@ import {
     useCombobox,
 } from '@mantine/core'
 import { useDisclosure, useViewportSize } from '@mantine/hooks'
-import { DateInput } from '@mantine/dates'
+import { DateInput, DateTimePicker } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { FormEvent, useState } from 'react'
 import supabase, { eventsAtom } from '../lib/state'
@@ -79,7 +79,7 @@ const NewEventModal = () => {
                 .insert({
                     title: formData.title,
                     type: formData.type,
-                    deadlines: JSON.stringify(formData.deadlines)
+                    deadlines: JSON.stringify(formData.deadlines),
                 })
                 .select()
                 .single()
@@ -123,7 +123,9 @@ const NewEventModal = () => {
                             {formData.deadlines.map((deadline) => (
                                 <Flex key={deadline.name}>
                                     <Text>{deadline.name}</Text>{' '}
-                                    {/* <Text>{deadline.timestamp as string}</Text> */}
+                                    <Text>
+                                        {deadline.timestamp?.toLocaleDateString()}
+                                    </Text>
                                 </Flex>
                             ))}
                             <Flex>
@@ -169,7 +171,7 @@ const NewEventModal = () => {
                                             })
                                         }}
                                     />
-                                    <DateInput
+                                    <DateTimePicker
                                         placeholder="2024/01/01 00:00"
                                         value={newDeadline.timestamp}
                                         onChange={(e) => {
