@@ -106,19 +106,52 @@ const NewEventModal = () => {
             <Modal title="New Event" opened={opend} onClose={close} centered>
                 <form onSubmit={(e) => insertSupabase(e)}>
                     <Flex align="center" direction="column" w="100%" gap={16}>
-                        <TextInput
-                            w="100%"
-                            label="Event Title"
-                            withAsterisk
-                            placeholder="Title"
-                            value={formData.title}
-                            onChange={(e) => {
-                                setFormData({
-                                    ...formData,
-                                    title: e.target.value,
-                                })
-                            }}
-                        />
+                        <Flex align="flex-end" gap={16} w="100%">
+                            <TextInput
+                                w="100%"
+                                label="Event Title"
+                                withAsterisk
+                                placeholder="Title"
+                                value={formData.title}
+                                onChange={(e) => {
+                                    setFormData({
+                                        ...formData,
+                                        title: e.target.value,
+                                    })
+                                }}
+                            />
+                            <Combobox
+                                store={combobox}
+                                onOptionSubmit={(val) => {
+                                    setFormData({ ...formData, type: val })
+                                    combobox.closeDropdown()
+                                }}
+                            >
+                                <Combobox.Target>
+                                    <InputBase
+                                        component="button"
+                                        type="button"
+                                        pointer
+                                        rightSection={<Combobox.Chevron />}
+                                        rightSectionPointerEvents="none"
+                                        onClick={() =>
+                                            combobox.toggleDropdown()
+                                        }
+                                    >
+                                        {formData.type || (
+                                            <Input.Placeholder>
+                                                pick
+                                            </Input.Placeholder>
+                                        )}
+                                    </InputBase>
+                                </Combobox.Target>
+                                <Combobox.Dropdown>
+                                    <Combobox.Options>
+                                        {options}
+                                    </Combobox.Options>
+                                </Combobox.Dropdown>
+                            </Combobox>
+                        </Flex>
                         <Stack>
                             {formData.deadlines.map((deadline) => (
                                 <Flex key={deadline.name}>
@@ -129,37 +162,6 @@ const NewEventModal = () => {
                                 </Flex>
                             ))}
                             <Flex>
-                                <Combobox
-                                    store={combobox}
-                                    onOptionSubmit={(val) => {
-                                        setFormData({ ...formData, type: val })
-                                        combobox.closeDropdown()
-                                    }}
-                                >
-                                    <Combobox.Target>
-                                        <InputBase
-                                            component="button"
-                                            type="button"
-                                            pointer
-                                            rightSection={<Combobox.Chevron />}
-                                            rightSectionPointerEvents="none"
-                                            onClick={() =>
-                                                combobox.toggleDropdown()
-                                            }
-                                        >
-                                            {formData.type || (
-                                                <Input.Placeholder>
-                                                    pick
-                                                </Input.Placeholder>
-                                            )}
-                                        </InputBase>
-                                    </Combobox.Target>
-                                    <Combobox.Dropdown>
-                                        <Combobox.Options>
-                                            {options}
-                                        </Combobox.Options>
-                                    </Combobox.Dropdown>
-                                </Combobox>
                                 <Flex direction={'column'}>
                                     <TextInput
                                         placeholder="Deadline Name"
