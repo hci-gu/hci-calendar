@@ -8,7 +8,7 @@ import Deadline from './components/Deadline'
 import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
 import insertSupabase from './utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const NewEventModal = () => {
     const [opend, { open, close }] = useDisclosure(false)

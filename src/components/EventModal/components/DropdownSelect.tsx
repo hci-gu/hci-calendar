@@ -1,9 +1,14 @@
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { formDataAtom } from '../state'
 import { useAtom } from 'jotai'
+import { useState } from 'react'
 
-const DropdownSelect = (onUpdate: (option: string) => void) => {
-    const [formData, setFormData] = useAtom(formDataAtom)
+const DropdownSelect = ({
+    onUpdate,
+}: {
+    onUpdate: (option: string) => void
+}) => {
+    const [dropDownValue, setDropDownValue] = useState('')
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -18,7 +23,7 @@ const DropdownSelect = (onUpdate: (option: string) => void) => {
         <Combobox
             store={combobox}
             onOptionSubmit={(val) => {
-                //@ts-ignore
+                setDropDownValue(val)
                 onUpdate(val)
                 combobox.closeDropdown()
             }}
@@ -32,7 +37,7 @@ const DropdownSelect = (onUpdate: (option: string) => void) => {
                     rightSectionPointerEvents="none"
                     onClick={() => combobox.toggleDropdown()}
                 >
-                    {formData.type || (
+                    {dropDownValue || (
                         <Input.Placeholder>pick</Input.Placeholder>
                     )}
                 </InputBase>
