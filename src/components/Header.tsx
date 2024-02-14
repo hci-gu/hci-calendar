@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Flex, Text } from '@mantine/core'
 import moment from 'moment'
 import React from 'react'
-import NewEventModal from './NewEventModal/NewEventModal'
+import NewEventModal from './EventModal/EventModal'
 
 const Container = styled.div`
     height: 90px;
