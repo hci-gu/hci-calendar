@@ -1,12 +1,19 @@
 import { Button, Divider, Flex, Text } from '@mantine/core'
-import { formDataAtom } from '../state'
+import { DeadlineType, formDataAtom, isEditingAtom } from '../state'
 import { useAtom } from 'jotai'
+import NewDeadline from './NewDeadline'
+import { useState } from 'react'
 
 const Deadline = ({
     deadline,
+    onUpdate,
+    index,
 }: {
     deadline: { name: string; timestamp: Date | null }
+    onUpdate: (deadline: DeadlineType, index: number) => void
+    index: number
 }) => {
+    const [isEditing, setIsEditing] = useState(false)
     const [formData, setFormData] = useAtom(formDataAtom)
 
     const deleteNewDeadline = ({
@@ -20,6 +27,20 @@ const Deadline = ({
         })
     }
 
+    if (isEditing) {
+        //@ts-ignore
+        return (
+            <NewDeadline
+                deadline={deadline}
+                onSave={(updatedDeadline) => {
+                    onUpdate(updatedDeadline, index)
+                    setIsEditing(false)
+                }}
+                onCancel={() => setIsEditing(false)}
+            />
+        )
+    }
+
     return (
         <>
             <Flex key={deadline.name} align={'center'}>
@@ -30,7 +51,13 @@ const Deadline = ({
                     </Text>
                 </Flex>
                 <Flex>
-                    <Button>edit</Button>
+                    <Button
+                        onClick={() => {
+                            setIsEditing(true)
+                        }}
+                    >
+                        edit
+                    </Button>
                     <Button
                         onClick={() => {
                             deleteNewDeadline({ deadline })

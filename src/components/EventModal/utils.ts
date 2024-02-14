@@ -1,13 +1,13 @@
-import { FormEvent } from 'react'
+import { FormEvent, SetStateAction } from 'react'
 import { FormDataValidateschema, FormDataschema } from './schemas'
 import { z } from 'zod'
 import { emptyForm, errorsAtom, formDataAtom } from './state'
 import { useAtom } from 'jotai'
+import { SetAtom } from '@/src/types/types'
 
 type FromData = z.infer<typeof FormDataschema>
 
-const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
-    const [formData, setFormData] = useAtom(formDataAtom)
+const insertSupabase = async (e: FormEvent<HTMLFormElement>, formData: any) => {
     const [errors, setErrors] = useAtom(errorsAtom)
 
     e.preventDefault()
@@ -29,7 +29,6 @@ const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
             console.log(error)
             return
         }
-        setFormData(emptyForm as FromData)
     } else {
         const keys = ['title', 'type', 'deadlines']
         parsedData.error.issues.map((issue) => {
@@ -44,3 +43,40 @@ const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
 }
 
 export default insertSupabase
+
+export const addUpdateDeadline = (
+    newDeadline: any,
+    deadline: any,
+    isEditing: boolean,
+    [formData, setFormData]: [
+        any,
+        SetAtom<
+            [
+                SetStateAction<{
+                    title: string
+                    type: 'funding' | 'publication' | null
+                    deadlines: {
+                        name: string
+                        timestamp: Date | null
+                    }[]
+                }>
+            ],
+            void
+        >
+    ]
+) => {
+    if (isEditing) {
+        let filteredArray = formData.deadlines.filter(
+            (e: any) => e !== deadline
+        )
+        setFormData({
+            ...formData,
+            deadlines: [...filteredArray, newDeadline],
+        })
+        return
+    }
+    setFormData({
+        ...formData,
+        deadlines: [...formData.deadlines, newDeadline],
+    })
+}

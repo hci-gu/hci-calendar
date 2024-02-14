@@ -3,11 +3,17 @@ import { DateTimePicker } from '@mantine/dates'
 import { NewDeadlineValidateschema, NewDeadlineschema } from '../schemas'
 import { useState } from 'react'
 import { z } from 'zod'
-import { formDataAtom } from '../state'
-import { useAtom } from 'jotai'
+import { DeadlineType } from '../state'
 
-const NewDeadline = () => {
-    const [formData, setFormData] = useAtom(formDataAtom)
+const NewDeadline = ({
+    deadline,
+    onSave,
+    onCancel,
+}: {
+    deadline?: DeadlineType
+    onSave: (deadline: DeadlineType) => void
+    onCancel?: () => void
+}) => {
     const [newErrors, setNewErrors] = useState({
         name: '',
         timestamp: '',
@@ -15,8 +21,8 @@ const NewDeadline = () => {
     const [newDeadline, setNewDeadline] = useState<
         z.infer<typeof NewDeadlineschema>
     >({
-        name: '',
-        timestamp: null,
+        name: deadline?.name as string,
+        timestamp: deadline?.timestamp as Date,
     })
 
     const addNewDeadline = () => {
@@ -24,10 +30,7 @@ const NewDeadline = () => {
         let tempErrors = { name: '', timestamp: '' }
         if (parsedData.success) {
             setNewErrors(tempErrors)
-            setFormData({
-                ...formData,
-                deadlines: [...formData.deadlines, newDeadline],
-            })
+            onSave(newDeadline)
             setNewDeadline({
                 name: '',
                 timestamp: null,
@@ -50,7 +53,7 @@ const NewDeadline = () => {
             <Flex direction={'column'} gap={6} w={'100%'}>
                 <TextInput
                     size="sm"
-                    w={'45%'}
+                    // w={'45%'}
                     placeholder="Deadline Name"
                     value={newDeadline.name}
                     onChange={(e) => {
@@ -62,7 +65,7 @@ const NewDeadline = () => {
                     error={newErrors.name !== '' ? newErrors.name : ''}
                 />
                 <DateTimePicker
-                    w={'38%'}
+                    // w={'38%'}
                     size="xs"
                     placeholder="2024/01/01 00:00"
                     value={newDeadline.timestamp}
@@ -77,9 +80,29 @@ const NewDeadline = () => {
                     <Text>{newErrors.timestamp}</Text>
                 )}
             </Flex>
-            <Button type="button" onClick={addNewDeadline}>
-                +
-            </Button>
+            {!!deadline ? (
+                <>
+                    <Flex>
+                        <Button type="button" onClick={addNewDeadline}>
+                            save
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                if (onCancel) {
+                                    onCancel()
+                                }
+                            }}
+                        >
+                            cancel
+                        </Button>
+                    </Flex>
+                </>
+            ) : (
+                <Button type="button" onClick={addNewDeadline}>
+                    +
+                </Button>
+            )}
         </Flex>
     )
 }

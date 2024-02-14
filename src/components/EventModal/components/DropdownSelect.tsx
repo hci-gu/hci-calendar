@@ -2,7 +2,7 @@ import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { formDataAtom } from '../state'
 import { useAtom } from 'jotai'
 
-const DropdownSelect = () => {
+const DropdownSelect = (onUpdate: (option: string) => void) => {
     const [formData, setFormData] = useAtom(formDataAtom)
 
     const combobox = useCombobox({
@@ -19,7 +19,7 @@ const DropdownSelect = () => {
             store={combobox}
             onOptionSubmit={(val) => {
                 //@ts-ignore
-                setFormData({ ...formData, type: val })
+                onUpdate(val)
                 combobox.closeDropdown()
             }}
         >

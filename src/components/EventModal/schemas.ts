@@ -5,7 +5,7 @@ export const FormDataValidateschema = z.object({
     type: z.enum(['funding', 'publication']),
     deadlines: z
         .object({
-            name: z.string().min(3),
+            name: z.string().min(1),
             timestamp: z.date().nullable(),
         })
         .array()
@@ -16,7 +16,7 @@ export const FormDataschema = FormDataValidateschema.extend({
     type: z.enum(['funding', 'publication']).nullable(),
 })
 export const NewDeadlineValidateschema = z.object({
-    name: z.string().min(3),
+    name: z.string().min(1),
     timestamp: z.date(),
 })
 
