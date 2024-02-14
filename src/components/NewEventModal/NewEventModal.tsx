@@ -107,9 +107,9 @@ const NewEventModal = () => {
         }
     }
 
-    // useEffect(() => {
-    //     console.log(errors, newErrors)
-    // }, [errors, newErrors])
+    useEffect(() => {
+        console.log(errors, newErrors)
+    }, [errors, newErrors])
 
     // useEffect(() => {
     //     console.log(formData.deadlines)

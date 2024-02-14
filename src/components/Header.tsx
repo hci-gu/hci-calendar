@@ -72,7 +72,7 @@ const Month = ({ month }: { month: string }) => {
         <MonthContainer>
             <Text
                 p={8}
-                fw={isCurrentMonth ? 500 : 100}
+                fw={isCurrentMonth ? 600 : 400}
                 c={isCurrentMonth ? 'red' : 'black'}
             >
                 {month}
