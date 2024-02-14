@@ -7,6 +7,7 @@ import { dateToPosition, dateToWidth, positionToDates } from './utils'
 import { v4 as uuid } from 'uuid'
 import { Database } from '../../supabase/supabase'
 import { EventAtom, updateType } from '../types/types'
+import { deadlinesZod } from '../types/zod'
 
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
@@ -14,7 +15,6 @@ const supabase = createClient<Database>(
 )
 export default supabase
 let id = 0
-const userId = uuid()
 
 const createEvent = () => ({
     id: id++,
@@ -38,7 +38,7 @@ export const updateEvent = async (
 ) => {
     const dates = positionToDates(event.position.x, event.size.width, viewport)
 
-    await supabase.from('events').upsert({
+    await supabase.from('newEvent').upsert({
         id: event.id,
         start: dates.startDate,
         end: dates.endDate,
@@ -53,34 +53,37 @@ export const useEvents = () => {
     useEffect(() => {
         if (!viewport.width) return
 
-        const run = async () => {
-            const { data } = await supabase.from('events').select()
+        const fetch = async () => {
+            const { data } = await supabase.from('newEvent').select()
 
             if (!data) {
                 return
             }
 
+            
             setEvents(
                 data.map((event) => ({
                     ...event,
+                    // Todo: Fix dateToPosition function
                     position: dateToPosition(
-                        event.start,
+                        event.created_at,
                         viewport.width,
-                        event.y
+                        130
                     ),
 
                     size: {
                         width: dateToWidth(
-                            event.start,
-                            event.end,
+                            event.created_at,
+                            null,
                             viewport.width
                         ),
                         height: 65,
                     },
+                    deadlines: deadlinesZod.array().parse(JSON.parse(event.deadlines as string)),
                 }))
             )
         }
-        run()
+        fetch()
     }, [viewport])
 
     return events ?? []
