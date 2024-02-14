@@ -1,6 +1,6 @@
 import { Database } from "@/supabase/supabase";
 
-export type EventType = Database['public']['Tables']['events']['Row']
+export type EventType = Database['public']['Tables']['newEvent']['Row']
 
 export type sizeType = {
     width: number
