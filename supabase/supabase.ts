@@ -64,6 +64,30 @@ export interface Database {
         }
         Relationships: []
       }
+      newEvent: {
+        Row: {
+          created_at: string
+          deadlines: Json
+          id: number
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          deadlines: Json
+          id?: number
+          title: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          deadlines?: Json
+          id?: number
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -184,6 +208,7 @@ export interface Database {
           {
             foreignKeyName: "objects_bucketId_fkey"
             columns: ["bucket_id"]
+            isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
           }
