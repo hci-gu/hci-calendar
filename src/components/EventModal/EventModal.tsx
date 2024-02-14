@@ -1,14 +1,13 @@
 import { Button, Flex, Modal, Stack, Text, TextInput } from '@mantine/core'
 import '@mantine/dates/styles.css'
-import { useDisclosure, useViewportSize } from '@mantine/hooks'
-import { eventsAtom } from '../../lib/state'
-import { useAtom } from 'jotai'
-import { DeadlineType, FromData, errorsAtom } from './state'
+import { useDisclosure } from '@mantine/hooks'
+import { DeadlineType, FromData } from './state'
 import Deadline from './components/Deadline'
 import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
-import insertSupabase from './utils'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
+import { FormDataValidateschema } from './schemas'
+import supabase from '../../lib/state'
 
 const NewEventModal = () => {
     const [opend, { open, close }] = useDisclosure(false)
@@ -17,10 +16,12 @@ const NewEventModal = () => {
         type: null,
         deadlines: [],
     })
-    const [events, setEvents] = useAtom(eventsAtom)
-    const viewport = useViewportSize()
 
-    const [errors, setErrors] = useAtom(errorsAtom)
+    const [errors, setErrors] = useState({
+        title: '',
+        type: '',
+        deadlines: '',
+    })
 
     const onNewDeadline = (newDeadline: DeadlineType) => {
         setFormData({
@@ -46,6 +47,43 @@ const NewEventModal = () => {
     const onDropdownUpdate = (option: string) => {
         //@ts-ignore
         setFormData({ ...formData, type: option })
+    }
+
+    const insertSupabase = async (
+        e: FormEvent<HTMLFormElement>,
+        formData: FromData
+    ) => {
+        e.preventDefault()
+        let tempErrors = { title: '', type: '', deadlines: '' }
+        const parsedData = FormDataValidateschema.safeParse(formData)
+        if (parsedData.success) {
+            setErrors(tempErrors)
+            //@ts-ignore
+            const { data, error } = await supabase
+                .from('newEvent')
+                .insert({
+                    title: formData.title,
+                    type: formData.type,
+                    deadlines: JSON.stringify(formData.deadlines),
+                })
+                .select()
+                .single()
+            if (error) {
+                console.log(error)
+                close
+                return
+            }
+        } else {
+            const keys = ['title', 'type', 'deadlines']
+            parsedData.error.issues.map((issue) => {
+                keys.map((key) => {
+                    if (issue.path[0] === key) {
+                        tempErrors = { ...tempErrors, [key]: issue.message }
+                    }
+                })
+            })
+            setErrors(tempErrors)
+        }
     }
 
     return (
