@@ -1,46 +1,34 @@
 import {
     Button,
-    Combobox,
-    Divider,
     Flex,
-    Input,
-    InputBase,
     Modal,
     Stack,
     Text,
     TextInput,
     useCombobox,
 } from '@mantine/core'
-import { useDisclosure, useViewportSize } from '@mantine/hooks'
-import { DateInput, DateTimePicker } from '@mantine/dates'
 import '@mantine/dates/styles.css'
+import { useDisclosure, useViewportSize } from '@mantine/hooks'
+import { DateTimePicker } from '@mantine/dates'
 import { FormEvent, useEffect, useState } from 'react'
-import supabase, { eventsAtom } from '../lib/state'
+import supabase, { eventsAtom } from '../../lib/state'
 import { useAtom } from 'jotai'
-import { dateToPosition, dateToWidth } from '../lib/utils'
+import { dateToPosition, dateToWidth } from '../../lib/utils'
 import { z } from 'zod'
+import {
+    FormDataschema,
+    FormDataValidateschema,
+    NewDeadlineschema,
+    NewDeadlineValidateschema,
+} from './schemas'
+import { emptyForm, formDataAtom } from './state'
+import Deadline from './SubComponents/deadline'
+import DropdownSelect from './SubComponents/DropdownSelect'
 
 const NewEventModal = () => {
-    const FormDataValidateScheama = z.object({
-        title: z.string().min(3),
-        type: z.enum(['funding', 'publication']),
-        deadlines: z
-            .object({
-                name: z.string().min(3),
-                timestamp: z.date().nullable(),
-            })
-            .array()
-            .min(1),
-    })
-    const FormDataSheama = FormDataValidateScheama.extend({
-        type: z.enum(['funding', 'publication']).nullable(),
-    })
-
-    type FromData = z.infer<typeof FormDataSheama>
-
+    type FromData = z.infer<typeof FormDataschema>
     const [opend, { open, close }] = useDisclosure(false)
-    const emptyForm = { title: '', type: null, deadlines: [] }
-    const [formData, setFormData] = useState<FromData>(emptyForm as FromData)
+    const [formData, setFormData] = useAtom(formDataAtom)
     const [events, setEvents] = useAtom(eventsAtom)
     const viewport = useViewportSize()
     const [errors, setErrors] = useState({
@@ -52,31 +40,15 @@ const NewEventModal = () => {
         name: '',
         timestamp: '',
     })
-    const combobox = useCombobox({
-        onDropdownClose: () => combobox.resetSelectedOption(),
-    })
-    const types = ['funding', 'publication']
-    const options = types.map((item) => (
-        <Combobox.Option value={item} key={item}>
-            {item}
-        </Combobox.Option>
-    ))
-    const NewDeadlineValidateScheama = z.object({
-        name: z.string().min(3),
-        timestamp: z.date(),
-    })
-    const NewDeadlineScheama = NewDeadlineValidateScheama.extend({
-        timestamp: z.date().nullable(),
-    })
     const [newDeadline, setNewDeadline] = useState<
-        z.infer<typeof NewDeadlineScheama>
+        z.infer<typeof NewDeadlineschema>
     >({
         name: '',
         timestamp: null,
     })
 
     const addNewDeadline = () => {
-        const parsedData = NewDeadlineValidateScheama.safeParse(newDeadline)
+        const parsedData = NewDeadlineValidateschema.safeParse(newDeadline)
         let tempErrors = { name: '', timestamp: '' }
         if (parsedData.success) {
             setNewErrors(tempErrors)
@@ -100,23 +72,14 @@ const NewEventModal = () => {
             setNewErrors(tempErrors)
         }
     }
-    const deleteNewDeadline = ({
-        deadline,
-    }: {
-        deadline: { name: string; timestamp: Date | null }
-    }) => {
-        setFormData({
-            ...formData,
-            deadlines: formData.deadlines.filter((e) => e !== deadline),
-        })
-    }
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let tempErrors = { title: '', type: '', deadlines: '' }
-        const parsedData = FormDataValidateScheama.safeParse(formData)
+        const parsedData = FormDataValidateschema.safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
+            //@ts-ignore
             const { data, error } = await supabase
                 .from('newEvent')
                 .insert({
@@ -148,10 +111,9 @@ const NewEventModal = () => {
     //     console.log(errors, newErrors)
     // }, [errors, newErrors])
 
-    useEffect(() => {
-        console.log(formData.deadlines)
-    }, [formData.deadlines])
-
+    // useEffect(() => {
+    //     console.log(formData.deadlines)
+    // }, [formData.deadlines])
     return (
         <>
             <Modal
@@ -176,61 +138,21 @@ const NewEventModal = () => {
                                         title: e.target.value,
                                     })
                                 }}
+                                error={errors.title !== '' ? errors.title : ''}
                             />
-                            <Combobox
-                                store={combobox}
-                                onOptionSubmit={(val) => {
-                                    setFormData({ ...formData, type: val })
-                                    combobox.closeDropdown()
-                                }}
-                            >
-                                <Combobox.Target>
-                                    <InputBase
-                                        component="button"
-                                        type="button"
-                                        pointer
-                                        rightSection={<Combobox.Chevron />}
-                                        rightSectionPointerEvents="none"
-                                        onClick={() =>
-                                            combobox.toggleDropdown()
-                                        }
-                                    >
-                                        {formData.type || (
-                                            <Input.Placeholder>
-                                                pick
-                                            </Input.Placeholder>
-                                        )}
-                                    </InputBase>
-                                </Combobox.Target>
-                                <Combobox.Dropdown>
-                                    <Combobox.Options>
-                                        {options}
-                                    </Combobox.Options>
-                                </Combobox.Dropdown>
-                            </Combobox>
+                            <DropdownSelect />
                         </Flex>
+                        {errors.type !== '' && <Text>{errors.type}</Text>}
                         <Stack w={'100%'}>
                             {formData.deadlines.map((deadline) => (
-                                <Flex key={deadline.name} align={'center'}>
-                                    <Flex w={'100%'} direction={'column'}>
-                                        <Text>{deadline.name}</Text>
-                                        <Text pb={6}>
-                                            {deadline.timestamp?.toLocaleDateString()}
-                                        </Text>
-                                    </Flex>
-                                    <Flex>
-                                        <Button>edit</Button>
-                                        <Button
-                                            onClick={() => {
-                                                deleteNewDeadline({ deadline })
-                                            }}
-                                        >
-                                            del
-                                        </Button>
-                                    </Flex>
-                                    <Divider />
-                                </Flex>
+                                <Deadline
+                                    key={deadline.name}
+                                    deadline={deadline}
+                                />
                             ))}
+                            {errors.deadlines !== '' && (
+                                <Text>{errors.deadlines}</Text>
+                            )}
                             <Flex align={'center'} w={'100%'}>
                                 <Flex direction={'column'} gap={6} w={'100%'}>
                                     <TextInput
@@ -244,6 +166,11 @@ const NewEventModal = () => {
                                                 name: e.target.value,
                                             })
                                         }}
+                                        error={
+                                            newErrors.name !== ''
+                                                ? newErrors.name
+                                                : ''
+                                        }
                                     />
                                     <DateTimePicker
                                         w={'35%'}
@@ -257,6 +184,9 @@ const NewEventModal = () => {
                                             })
                                         }}
                                     />
+                                    {newErrors.timestamp !== '' && (
+                                        <Text>{newErrors.timestamp}</Text>
+                                    )}
                                 </Flex>
                                 <Button type="button" onClick={addNewDeadline}>
                                     +
@@ -265,7 +195,7 @@ const NewEventModal = () => {
                         </Stack>
                         <Button
                             type="submit"
-                            onClick={close}
+                            // onClick={close}
                             w={'100%'}
                             radius="md"
                         >

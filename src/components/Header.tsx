@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Flex, Text } from '@mantine/core'
 import moment from 'moment'
 import React from 'react'
-import NewEventModal from './NewEventModal'
+import NewEventModal from './NewEventModal/NewEventModal'
 
 const Container = styled.div`
     height: 90px;
@@ -41,7 +41,7 @@ const DayContainer = styled.div`
     background-color: rgba(0, 0, 0, 0.25);
 `
 
-const DayTick = ({ month, day }: { month: string, day: number }) => {
+const DayTick = ({ month, day }: { month: string; day: number }) => {
     const isToday = moment().format('MMMM') === month && moment().date() === day
 
     return (
