@@ -1,6 +1,7 @@
 import {
     Button,
     Combobox,
+    Divider,
     Flex,
     Input,
     InputBase,
@@ -20,7 +21,7 @@ import { dateToPosition, dateToWidth } from '../lib/utils'
 import { z } from 'zod'
 
 const NewEventModal = () => {
-    const FormDataScheama = z.object({
+    const FormDataValidateScheama = z.object({
         title: z.string().min(3),
         type: z.enum(['funding', 'publication']),
         deadlines: z
@@ -31,11 +32,11 @@ const NewEventModal = () => {
             .array()
             .min(1),
     })
-    const newFormDataSheama = FormDataScheama.extend({
+    const FormDataSheama = FormDataValidateScheama.extend({
         type: z.enum(['funding', 'publication']).nullable(),
     })
 
-    type FromData = z.infer<typeof newFormDataSheama>
+    type FromData = z.infer<typeof FormDataSheama>
 
     const [opend, { open, close }] = useDisclosure(false)
     const emptyForm = { title: '', type: null, deadlines: [] }
@@ -60,17 +61,22 @@ const NewEventModal = () => {
             {item}
         </Combobox.Option>
     ))
-    const NewDeadlineScheama = z.object({
+    const NewDeadlineValidateScheama = z.object({
         name: z.string().min(3),
         timestamp: z.date(),
     })
-    const [newDeadline, setNewDeadline] = useState({
+    const NewDeadlineScheama = NewDeadlineValidateScheama.extend({
+        timestamp: z.date().nullable(),
+    })
+    const [newDeadline, setNewDeadline] = useState<
+        z.infer<typeof NewDeadlineScheama>
+    >({
         name: '',
         timestamp: null,
     })
 
     const addNewDeadline = () => {
-        const parsedData = NewDeadlineScheama.safeParse(newDeadline)
+        const parsedData = NewDeadlineValidateScheama.safeParse(newDeadline)
         let tempErrors = { name: '', timestamp: '' }
         if (parsedData.success) {
             setNewErrors(tempErrors)
@@ -94,11 +100,21 @@ const NewEventModal = () => {
             setNewErrors(tempErrors)
         }
     }
+    const deleteNewDeadline = ({
+        deadline,
+    }: {
+        deadline: { name: string; timestamp: Date | null }
+    }) => {
+        setFormData({
+            ...formData,
+            deadlines: formData.deadlines.filter((e) => e !== deadline),
+        })
+    }
 
     const insertSupabase = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let tempErrors = { title: '', type: '', deadlines: '' }
-        const parsedData = FormDataScheama.safeParse(formData)
+        const parsedData = FormDataValidateScheama.safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
             const { data, error } = await supabase
@@ -128,13 +144,23 @@ const NewEventModal = () => {
         }
     }
 
+    // useEffect(() => {
+    //     console.log(errors, newErrors)
+    // }, [errors, newErrors])
+
     useEffect(() => {
-        console.log(errors, newErrors)
-    }, [errors, newErrors])
+        console.log(formData.deadlines)
+    }, [formData.deadlines])
 
     return (
         <>
-            <Modal title="New Event" opened={opend} onClose={close} centered>
+            <Modal
+                title="New Event"
+                opened={opend}
+                onClose={close}
+                centered
+                radius={24}
+            >
                 <form onSubmit={(e) => insertSupabase(e)}>
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <Flex align="flex-end" gap={16} w="100%">
@@ -183,18 +209,33 @@ const NewEventModal = () => {
                                 </Combobox.Dropdown>
                             </Combobox>
                         </Flex>
-                        <Stack>
+                        <Stack w={'100%'}>
                             {formData.deadlines.map((deadline) => (
-                                <Flex key={deadline.name}>
-                                    <Text>{deadline.name}</Text>{' '}
-                                    <Text>
-                                        {deadline.timestamp?.toLocaleDateString()}
-                                    </Text>
+                                <Flex key={deadline.name} align={'center'}>
+                                    <Flex w={'100%'} direction={'column'}>
+                                        <Text>{deadline.name}</Text>
+                                        <Text pb={6}>
+                                            {deadline.timestamp?.toLocaleDateString()}
+                                        </Text>
+                                    </Flex>
+                                    <Flex>
+                                        <Button>edit</Button>
+                                        <Button
+                                            onClick={() => {
+                                                deleteNewDeadline({ deadline })
+                                            }}
+                                        >
+                                            del
+                                        </Button>
+                                    </Flex>
+                                    <Divider />
                                 </Flex>
                             ))}
-                            <Flex>
-                                <Flex direction={'column'}>
+                            <Flex align={'center'} w={'100%'}>
+                                <Flex direction={'column'} gap={6} w={'100%'}>
                                     <TextInput
+                                        size="sm"
+                                        w={'45%'}
                                         placeholder="Deadline Name"
                                         value={newDeadline.name}
                                         onChange={(e) => {
@@ -205,6 +246,8 @@ const NewEventModal = () => {
                                         }}
                                     />
                                     <DateTimePicker
+                                        w={'35%'}
+                                        size="xs"
                                         placeholder="2024/01/01 00:00"
                                         value={newDeadline.timestamp}
                                         onChange={(e) => {
@@ -220,7 +263,12 @@ const NewEventModal = () => {
                                 </Button>
                             </Flex>
                         </Stack>
-                        <Button type="submit" onClick={close}>
+                        <Button
+                            type="submit"
+                            onClick={close}
+                            w={'100%'}
+                            radius="md"
+                        >
                             submit
                         </Button>
                     </Flex>
