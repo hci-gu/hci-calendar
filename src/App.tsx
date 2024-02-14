@@ -12,8 +12,7 @@ import { EventType, updateType } from './types/types'
 import EventCard from './components/EventCard'
 import { onDrag, onDragStart, onDragStop, onResize } from './lib/eventsEvent'
 
-const compare = (objA: updateType | null, objB: updateType | null) =>
-    JSON.stringify(objA) === JSON.stringify(objB)
+const compare = (objA: updateType | null, objB: updateType | null) => JSON.stringify(objA) === JSON.stringify(objB)
 
 const Event = ({ id }: { id: number }) => {
     const setEvents = useSetAtom(eventsAtom)
@@ -40,9 +39,6 @@ const Event = ({ id }: { id: number }) => {
     )
 
     useEffect(() => {
-        // if (!dragging) return
-        // console.log(position);
-
         const update: updateType = {
             id,
             position,
