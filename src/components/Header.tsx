@@ -93,6 +93,17 @@ const Header = () => {
     const currentYear = moment().year()
     const months = moment.months()
 
+    const today = moment().startOf('day').toLocaleString()
+
+    const prevMonth = moment().subtract(1, 'months').toLocaleString()
+
+    const lastMonth = moment().add(10, 'months').toLocaleString()
+    // console.log(
+    //     { today: today },
+    //     { prevMonth: prevMonth },
+    //     { lastMonth: lastMonth }
+    // )
+
     const closeModal = () => {
         setModalOpen(false)
     }
