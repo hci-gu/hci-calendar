@@ -61,27 +61,27 @@ export const useEvents = () => {
                 return
             }
 
-            // setEvents(
-            //     data.map((event) => ({
-            //         ...event,
-            //         // Todo: Fix dateToPosition function
-            //         position: dateToPosition(
-            //             event.created_at,
-            //             viewport.width,
-            //             130
-            //         ),
+            setEvents(
+                data.map((event) => ({
+                    ...event,
+                    // Todo: Fix dateToPosition function
+                    position: dateToPosition(
+                        event.created_at,
+                        viewport.width,
+                        130
+                    ),
 
-            //         size: {
-            //             width: dateToWidth(
-            //                 event.created_at,
-            //                 null,
-            //                 viewport.width
-            //             ),
-            //             height: 65,
-            //         },
-            //         deadlines: deadlinesZod.array().parse(JSON.parse(event.deadlines as string)),
-            //     }))
-            // )
+                    size: {
+                        width: dateToWidth(
+                            event.created_at,
+                            null,
+                            viewport.width
+                        ),
+                        height: 65,
+                    },
+                    deadlines: deadlinesZod.array().parse(JSON.parse(event.deadlines as string)),
+                }))
+            )
         }
         fetch()
     }, [viewport])
