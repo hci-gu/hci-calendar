@@ -84,7 +84,7 @@ export const useEvents = () => {
                     },
                     deadlines: deadlinesZod
                         .array()
-                        .parse(JSON.parse(event.deadlines)),
+                        .parse(JSON.parse(event.deadlines as string)),
                 }))
             )
         }

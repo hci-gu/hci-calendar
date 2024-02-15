@@ -92,17 +92,15 @@ const Header = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const currentYear = moment().year()
     const months = moment.months()
+    console.log(months)
 
-    const today = moment().startOf('day').toLocaleString()
+    const prevMonth = moment().subtract(1, 'months').startOf('month').toDate()
 
-    const prevMonth = moment().subtract(1, 'months').toLocaleString()
+    const lastMonth = moment().add(11, 'months').endOf('month').toDate()
 
-    const lastMonth = moment().add(10, 'months').toLocaleString()
-    // console.log(
-    //     { today: today },
-    //     { prevMonth: prevMonth },
-    //     { lastMonth: lastMonth }
-    // )
+    const days = moment(lastMonth).diff(moment(prevMonth), 'days')
+
+    console.log({ prevMonth: prevMonth }, { lastMonth: lastMonth })
 
     const closeModal = () => {
         setModalOpen(false)
@@ -124,8 +122,8 @@ const Header = () => {
                 </Button>
                 {!!modalOpen && <NewEventModal closeModal={closeModal} />}
                 <Flex justify="space-evenly" align="stretch">
-                    {months.map((month) => (
-                        <Month key={month} month={month} />
+                    {[-1,0,2,3,4,5,6,7,8,9,10,11].map((monthIndex) => (
+                        <Month key={month} index={index} />
                     ))}
                 </Flex>
             </Flex>
