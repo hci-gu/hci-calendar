@@ -9,10 +9,11 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { useMemo } from 'react'
 import { EventType, updateType } from './types/types'
-import EventCard from './components/EventCard'
+import EventCard from './components/EventCard/index'
 import { onDrag, onDragStart, onDragStop, onResize } from './lib/eventsEvent'
 
-const compare = (objA: updateType | null, objB: updateType | null) => JSON.stringify(objA) === JSON.stringify(objB)
+const compare = (objA: updateType | null, objB: updateType | null) =>
+    JSON.stringify(objA) === JSON.stringify(objB)
 
 const Event = ({ id }: { id: number }) => {
     const setEvents = useSetAtom(eventsAtom)
@@ -59,7 +60,6 @@ const Event = ({ id }: { id: number }) => {
         debounce.timeout = newTimeout
         return () => clearTimeout(newTimeout)
     }, [dragging, viewport, size, position])
-
 
     return (
         <Rnd
