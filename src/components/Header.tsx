@@ -13,23 +13,27 @@ const Container = styled.div`
 
 const MonthContainer = styled.div`
     width: 100%;
-    height: 57px;
+    /* height: 57px; */
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-right: 0;
     border-top: 0;
+    padding-top: 8px;
+    padding-left: 8px;
 
     /* position: relative; */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+    /* justify-content: space-between; */
     /* align-items: space-between; */
 
-    > div {
+    /* > div {
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
         padding: 4px 0;
-    }
+    } */
 `
 
 const DayContainer = styled.div`
@@ -64,43 +68,35 @@ const DayTick = ({ month, day }: { month: string; day: number }) => {
     )
 }
 
-const Month = ({ month }: { month: string }) => {
-    const days = moment(month, 'MMMM').daysInMonth()
-    const isCurrentMonth = moment().format('MMMM') === month
+const Month = ({ monthIndex }: { monthIndex: number }) => {
+    const date = moment().add(monthIndex, 'months')
+    // const days = moment(month, 'MMMM').daysInMonth()
+    const isCurrentMonth = moment().month() === date.month()
+    const isFirstMonth = date.month() === 0
+    const year = moment(date).year()
 
     return (
         <MonthContainer>
+            {isFirstMonth && <Text fw="bold">{year}</Text>}
             <Text
-                p={8}
                 fw={isCurrentMonth ? 600 : 400}
                 c={isCurrentMonth ? 'red' : 'black'}
             >
-                {month}
+                {date.format('MMMM')}
             </Text>
-            <Flex justify="space-evenly" align="stretch">
+            {/* <Flex justify="space-evenly" align="stretch">
                 {Array(days)
                     .fill(days)
                     .map((_, i) => (
                         <DayTick key={`${month}_${i}`} month={month} day={i} />
                     ))}
-            </Flex>
+            </Flex> */}
         </MonthContainer>
     )
 }
 
 const Header = () => {
     const [modalOpen, setModalOpen] = useState(false)
-    const currentYear = moment().year()
-    const months = moment.months()
-    console.log(months)
-
-    const prevMonth = moment().subtract(1, 'months').startOf('month').toDate()
-
-    const lastMonth = moment().add(11, 'months').endOf('month').toDate()
-
-    const days = moment(lastMonth).diff(moment(prevMonth), 'days')
-
-    console.log({ prevMonth: prevMonth }, { lastMonth: lastMonth })
 
     const closeModal = () => {
         setModalOpen(false)
@@ -109,21 +105,21 @@ const Header = () => {
     return (
         <>
             <Flex direction="column">
-                <Text size="xl" fw="800" ml="xs">
-                    {currentYear}
-                </Text>
-                <Button
+                {/* <Button
                     variant="filled"
                     onClick={() => {
                         setModalOpen(true)
                     }}
                 >
                     Button
-                </Button>
+                </Button> */}
                 {!!modalOpen && <NewEventModal closeModal={closeModal} />}
                 <Flex justify="space-evenly" align="stretch">
-                    {[-1,0,2,3,4,5,6,7,8,9,10,11].map((monthIndex) => (
-                        <Month key={month} index={index} />
+                    {[-1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((monthIndex) => (
+                        <Month
+                            key={`Month_${monthIndex}`}
+                            monthIndex={monthIndex}
+                        />
                     ))}
                 </Flex>
             </Flex>
