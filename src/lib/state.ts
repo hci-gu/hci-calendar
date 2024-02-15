@@ -3,7 +3,7 @@ import { atomFamily } from 'jotai/utils'
 import { createClient } from '@supabase/supabase-js'
 import { useEffect } from 'react'
 import { useViewportSize } from '@mantine/hooks'
-import { dateToPosition, dateToWidth, positionToDates } from './utils'
+import { positionAndWidthForDates } from './utils'
 import { v4 as uuid } from 'uuid'
 import { Database } from '../../supabase/supabase'
 import { EventAtom, updateType } from '../types/types'
@@ -36,8 +36,7 @@ export const updateEvent = async (
         height: number
     }
 ) => {
-    const dates = positionToDates(event.position.x, event.size.width, viewport)
-
+    // const dates = positionToDates(event.position.x, event.size.width, viewport)
     // await supabase.from('newEvent').upsert({
     //     id: event.id,
     //     start: dates.startDate,
@@ -64,28 +63,37 @@ export const useEvents = () => {
             // data.map((event) => {
             //     console.log(typeof event.deadlines)
             // })
+            let y = 0
             setEvents(
-                data.map((event) => ({
-                    ...event,
-                    // Todo: Fix dateToPosition function
-                    position: dateToPosition(
-                        event.created_at,
-                        viewport.width,
-                        130
-                    ),
-
-                    size: {
-                        width: dateToWidth(
-                            event.created_at,
-                            null,
-                            viewport.width
-                        ),
-                        height: 65,
-                    },
-                    deadlines: deadlinesZod
+                data.map((event) => {
+                    y += 100
+                    const deadlines = deadlinesZod
                         .array()
-                        .parse(JSON.parse(event.deadlines as string)),
-                }))
+                        .parse(JSON.parse(event.deadlines as string))
+
+                    const dates = deadlines.map(
+                        (deadline) => new Date(deadline.timestamp ?? 0)
+                    )
+                    const [x, width] = positionAndWidthForDates(
+                        dates,
+                        viewport.width
+                    )
+
+                    return {
+                        ...event,
+                        // Todo: Fix dateToPosition function
+                        position: {
+                            x,
+                            y,
+                        },
+
+                        size: {
+                            width,
+                            height: 65,
+                        },
+                        deadlines,
+                    }
+                })
             )
         }
         fetch()

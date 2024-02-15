@@ -6,11 +6,6 @@ import moment from 'moment'
 
 type FromData = z.infer<typeof FormDataschema>
 
-export const calendarStart = () =>
-    moment().subtract(1, 'months').startOf('month').toDate()
-export const calendarEnd = () =>
-    moment().add(11, 'months').endOf('month').toDate()
-
 export const addUpdateDeadline = (
     newDeadline: any,
     deadline: any,

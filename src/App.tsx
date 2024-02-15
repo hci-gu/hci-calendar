@@ -28,47 +28,47 @@ const Event = ({ id }: { id: number }) => {
     }
     const { size, position } = EventAtomValue
 
-    const debounce = useMemo<{
-        timeout: NodeJS.Timeout | null
-        lastUpdate: updateType | null
-    }>(
-        () => ({
-            timeout: null,
-            lastUpdate: null,
-        }),
-        []
-    )
+    // const debounce = useMemo<{
+    //     timeout: NodeJS.Timeout | null
+    //     lastUpdate: updateType | null
+    // }>(
+    //     () => ({
+    //         timeout: null,
+    //         lastUpdate: null,
+    //     }),
+    //     []
+    // )
 
-    useEffect(() => {
-        const update: updateType = {
-            id,
-            position,
-            size,
-        }
-        if (debounce.timeout) {
-            clearTimeout(debounce.timeout)
-        }
+    // useEffect(() => {
+    //     const update: updateType = {
+    //         id,
+    //         position,
+    //         size,
+    //     }
+    //     if (debounce.timeout) {
+    //         clearTimeout(debounce.timeout)
+    //     }
 
-        const newTimeout = setTimeout(() => {
-            if (compare(debounce.lastUpdate, update)) {
-                return
-            }
-            debounce.lastUpdate = update
-            updateEvent(update, viewport)
-        }, 500)
+    //     const newTimeout = setTimeout(() => {
+    //         if (compare(debounce.lastUpdate, update)) {
+    //             return
+    //         }
+    //         debounce.lastUpdate = update
+    //         updateEvent(update, viewport)
+    //     }, 500)
 
-        debounce.timeout = newTimeout
-        return () => clearTimeout(newTimeout)
-    }, [dragging, viewport, size, position])
+    //     debounce.timeout = newTimeout
+    //     return () => clearTimeout(newTimeout)
+    // }, [dragging, viewport, size, position])
 
     return (
         <Rnd
             position={position}
             size={size}
-            onDragStart={() => onDragStart(setIsDragging)}
-            onDrag={(_event, dragg) => onDrag(dragg, size, id, setEvents)}
-            onResize={(_event, _direction, ref) => onResize(ref, id, setEvents)}
-            onDragStop={() => onDragStop(setIsDragging)}
+            // onDragStart={() => onDragStart(setIsDragging)}
+            // onDrag={(_event, dragg) => onDrag(dragg, size, id, setEvents)}
+            // onResize={(_event, _direction, ref) => onResize(ref, id, setEvents)}
+            // onDragStop={() => onDragStop(setIsDragging)}
             minHeight={44}
             bounds="window"
             dragGrid={[gridSize, gridSize]}
