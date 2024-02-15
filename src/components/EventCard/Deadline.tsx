@@ -9,6 +9,9 @@ type DeadlineProps = {
 }
 
 const Deadline = ({ deadline, isFirst }: DeadlineProps) => {
+    const timeFromNow = moment(deadline.timestamp).fromNow();
+    console.log(timeFromNow);
+
     return (
         <Flex bg={!isFirst ? 'HCI-Green.4' : ''}>
             <Flex direction="column" align="end" py="lg" px="md">
@@ -17,7 +20,7 @@ const Deadline = ({ deadline, isFirst }: DeadlineProps) => {
                     {` ${deadline.name}`}
                 </Text>
                 <Text c={'HCI-Green.8'} fw="bold">
-                    {moment(deadline.timestamp).fromNow()}
+                    {timeFromNow}
                 </Text>
             </Flex>
 

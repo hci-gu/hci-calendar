@@ -1,8 +1,6 @@
-import { Card, Divider, Flex, Paper, Text, Title } from '@mantine/core'
+import { Flex, Title } from '@mantine/core'
 import { EventAtom } from '../../types/types'
 import { deadlinesZod } from '../../types/zod'
-import { IconAdjustments, IconBell, IconFolder } from '@tabler/icons-react';
-import moment from 'moment';
 import Deadline from './deadline';
 
 const EventCard = ({ event }: { event: EventAtom }) => {
