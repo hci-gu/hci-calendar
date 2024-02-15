@@ -9,8 +9,8 @@ import { FormEvent, useEffect, useState } from 'react'
 import { FormDataValidateschema } from './schemas'
 import supabase from '../../lib/state'
 
-const NewEventModal = () => {
-    const [opend, { open, close }] = useDisclosure(false)
+const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
+    const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<FromData>({
         title: '',
         type: null,
@@ -86,6 +86,12 @@ const NewEventModal = () => {
         }
     }
 
+    useEffect(() => {
+        if (!opend) {
+            closeModal()
+        }
+    }, [opend])
+
     return (
         <>
             <Modal
@@ -141,9 +147,9 @@ const NewEventModal = () => {
                 </form>
             </Modal>
             <div>
-                <Button onClick={open} variant="filled">
+                {/* <Button onClick={open} variant="filled">
                     New Event
-                </Button>
+                </Button> */}
             </div>
         </>
     )

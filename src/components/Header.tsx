@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { Flex, Text } from '@mantine/core'
+import { Button, Flex, Text } from '@mantine/core'
 import moment from 'moment'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
 
 const Container = styled.div`
@@ -89,21 +89,36 @@ const Month = ({ month }: { month: string }) => {
 }
 
 const Header = () => {
+    const [modalOpen, setModalOpen] = useState(false)
     const currentYear = moment().year()
     const months = moment.months()
 
+    const closeModal = () => {
+        setModalOpen(false)
+    }
+
     return (
-        <Container>
-            <Text size="xl" fw="800" ml="xs">
-                {currentYear}
-            </Text>
-            <NewEventModal />
-            <Flex justify="space-evenly" align="stretch">
-                {months.map((month) => (
-                    <Month key={month} month={month} />
-                ))}
+        <>
+            <Flex direction="column">
+                <Text size="xl" fw="800" ml="xs">
+                    {currentYear}
+                </Text>
+                <Button
+                    variant="filled"
+                    onClick={() => {
+                        setModalOpen(true)
+                    }}
+                >
+                    Button
+                </Button>
+                {!!modalOpen && <NewEventModal closeModal={closeModal} />}
+                <Flex justify="space-evenly" align="stretch">
+                    {months.map((month) => (
+                        <Month key={month} month={month} />
+                    ))}
+                </Flex>
             </Flex>
-        </Container>
+        </>
     )
 }
 
