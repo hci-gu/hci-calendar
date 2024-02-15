@@ -8,28 +8,32 @@ import NewDeadline from './components/NewDeadline'
 import { FormEvent, useEffect, useState } from 'react'
 import { FormDataValidateschema } from './schemas'
 import supabase from '../../lib/state'
+import { EventType } from '@/src/types/types'
 
-const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
+const NewEventModal = ({
+    closeModal,
+    editEvent,
+}: {
+    closeModal: () => void
+    editEvent?: EventType
+}) => {
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<FromData>({
         title: '',
         type: null,
         deadlines: [],
     })
-
     const [errors, setErrors] = useState({
         title: '',
         type: '',
         deadlines: '',
     })
-
     const onNewDeadline = (newDeadline: DeadlineType) => {
         setFormData({
             ...formData,
             deadlines: [...formData.deadlines, newDeadline],
         })
     }
-
     const onDeadlineUpdated = (newDeadline: DeadlineType, index: number) => {
         setFormData({
             ...formData,
@@ -49,12 +53,10 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
             deadlines: formData.deadlines.filter((e) => e !== deadline),
         })
     }
-
     const onDropdownUpdate = (option: string) => {
         //@ts-ignore
         setFormData({ ...formData, type: option })
     }
-
     const insertSupabase = async (
         e: FormEvent<HTMLFormElement>,
         formData: FromData
@@ -76,9 +78,10 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
                 .single()
             if (error) {
                 console.log(error)
-                close
-                return
             }
+            close
+            closeModal()
+            return
         } else {
             const keys = ['title', 'type', 'deadlines']
             parsedData.error.issues.map((issue) => {
@@ -90,6 +93,15 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
             })
             setErrors(tempErrors)
         }
+    }
+
+    if (!!editEvent) {
+        setFormData({
+            title: editEvent.title,
+            //@ts-ignore
+            type: editEvent.type,
+            deadlines: JSON.parse(editEvent.deadlines as string),
+        })
     }
 
     useEffect(() => {
