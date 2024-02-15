@@ -43,6 +43,12 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
             ],
         })
     }
+    const onDeadlineDelete = (deadline: DeadlineType) => {
+        setFormData({
+            ...formData,
+            deadlines: formData.deadlines.filter((e) => e !== deadline),
+        })
+    }
 
     const onDropdownUpdate = (option: string) => {
         //@ts-ignore
@@ -133,6 +139,7 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
                                     deadline={deadline}
                                     onUpdate={onDeadlineUpdated}
                                     index={i}
+                                    onDelete={onDeadlineDelete}
                                 />
                             ))}
                             {errors.deadlines !== '' && (
@@ -146,11 +153,6 @@ const NewEventModal = ({ closeModal }: { closeModal: () => void }) => {
                     </Flex>
                 </form>
             </Modal>
-            <div>
-                {/* <Button onClick={open} variant="filled">
-                    New Event
-                </Button> */}
-            </div>
         </>
     )
 }

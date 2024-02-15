@@ -61,6 +61,9 @@ export const useEvents = () => {
                 return
             }
 
+            // data.map((event) => {
+            //     console.log(typeof event.deadlines)
+            // })
             setEvents(
                 data.map((event) => ({
                     ...event,
@@ -79,7 +82,9 @@ export const useEvents = () => {
                         ),
                         height: 65,
                     },
-                    deadlines: deadlinesZod.array().parse(JSON.parse(event.deadlines as string)),
+                    deadlines: deadlinesZod
+                        .array()
+                        .parse(JSON.parse(event.deadlines)),
                 }))
             )
         }

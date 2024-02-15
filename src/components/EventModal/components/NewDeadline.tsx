@@ -21,7 +21,7 @@ const NewDeadline = ({
     const [newDeadline, setNewDeadline] = useState<
         z.infer<typeof NewDeadlineschema>
     >({
-        name: deadline?.name as string,
+        name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp as Date,
     })
 
