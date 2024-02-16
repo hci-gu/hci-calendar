@@ -28,7 +28,7 @@ export const positionAndWidthForDates = (
     viewportWidth: number
 ) => {
     const start = calendarStart()
-    const end = calendarEnd()
+    // const end = calendarEnd()
 
     const lastDate = dates[dates.length - 1]
     const daysFromStartToLast = moment(lastDate).diff(start, 'days')
@@ -41,4 +41,13 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
-export const gridSizeForWidth = (width: number) => Math.max(1, dayWidth(width))
+// export const flexForDeadline = (
+//     deadlineDate,
+//     prevDeadlineDate,
+// ) => {
+//     const days = moment(endDate).diff(startDate, 'days')
+
+//     const x = moment(prevDeadlineDate).diff(deadlineDate, 'days')
+
+//     return x
+// }

@@ -1,19 +1,30 @@
 import { deadlinesType } from '@/src/types/zod'
-import { Divider, Flex, Text } from '@mantine/core'
+import { Divider, Flex, MantineStyleProp, Text } from '@mantine/core'
 import { IconBell } from '@tabler/icons-react'
 import moment from 'moment'
 
 type DeadlineProps = {
     deadline: deadlinesType
     isFirst: boolean
+    flex: number
 }
 
-const Deadline = ({ deadline, isFirst }: DeadlineProps) => {
+const absolutePos: MantineStyleProp = {
+    position: 'absolute',
+    top: 0,
+    left: -100,
+}
+
+const Deadline = ({ deadline, isFirst, flex }: DeadlineProps) => {
     const timeFromNow = moment(deadline.timestamp).fromNow()
-    console.log(timeFromNow)
 
     return (
-        <Flex bg={!isFirst ? 'HCI-Green.4' : ''}>
+        <Flex
+            bg={!isFirst ? 'HCI-Green.4' : ''}
+            flex={flex}
+            justify="end"
+            style={isFirst ? absolutePos : {}}
+        >
             <Flex direction="column" align="end" py="lg" px="md">
                 <Text c={'HCI-Green.8'} fw="bold">
                     <IconBell />

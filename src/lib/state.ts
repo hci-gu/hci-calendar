@@ -86,7 +86,6 @@ export const useEvents = () => {
                             x,
                             y,
                         },
-
                         size: {
                             width,
                             height: 65,
