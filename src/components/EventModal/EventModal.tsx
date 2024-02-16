@@ -11,6 +11,7 @@ import {
     EventFormType,
     formDataSchema,
 } from '../../types/zod'
+import { z } from 'zod'
 
 const NewEventModal = ({
     closeModal,
@@ -68,7 +69,10 @@ const NewEventModal = ({
     ) => {
         e.preventDefault()
         let tempErrors = { title: '', type: '', deadlines: '' }
-        const parsedData = formDataSchema.safeParse(formData)
+
+        const parsedData = formDataSchema
+            .extend({ type: z.enum(['funding', 'publication']) })
+            .safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
             //@ts-ignore
