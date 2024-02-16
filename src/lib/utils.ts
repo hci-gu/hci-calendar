@@ -11,24 +11,14 @@ export const numDays = () => {
 }
 export const dayWidth = (viewportWidth: number) => {
     const days = numDays()
-    console.log('days', days, viewportWidth)
     return viewportWidth / days
 }
-
-// export const dateToPosition = (date, width) => {
-//     const startDate = moment().startOf('year')
-//     const endDate = moment().endOf('year')
-//     const days = moment(endDate).diff(moment(startDate), 'days')
-//     const x = (moment(date).diff(moment(startDate), 'days') * width) / days
-//     return x
-// }
 
 export const positionAndWidthForDates = (
     dates: Date[],
     viewportWidth: number
 ) => {
     const start = calendarStart()
-    // const end = calendarEnd()
 
     const lastDate = dates[dates.length - 1]
     const daysFromStartToLast = moment(lastDate).diff(start, 'days')
@@ -40,14 +30,3 @@ export const positionAndWidthForDates = (
 
     return [xPos - width, width]
 }
-
-// export const flexForDeadline = (
-//     deadlineDate,
-//     prevDeadlineDate,
-// ) => {
-//     const days = moment(endDate).diff(startDate, 'days')
-
-//     const x = moment(prevDeadlineDate).diff(deadlineDate, 'days')
-
-//     return x
-// }

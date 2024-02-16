@@ -1,24 +1,26 @@
 import { Button, Flex, Modal, Stack, Text, TextInput } from '@mantine/core'
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
-import { DeadlineType, FromData } from './state'
 import Deadline from './components/Deadline'
 import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
 import { FormEvent, useEffect, useState } from 'react'
-import { FormDataValidateschema } from './schemas'
-import supabase from '../../lib/state'
-import { EventType } from '@/src/types/types'
+import * as supabase from '../../adapters/supabase'
+import {
+    DeadlineFormType,
+    EventFormType,
+    formDataSchema,
+} from '../../types/zod'
 
 const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
     closeModal: () => void
-    editEvent?: EventType
+    editEvent?: EventFormType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)
-    const [formData, setFormData] = useState<FromData>({
+    const [formData, setFormData] = useState<EventFormType>({
         title: '',
         type: null,
         deadlines: [],
@@ -28,13 +30,16 @@ const NewEventModal = ({
         type: '',
         deadlines: '',
     })
-    const onNewDeadline = (newDeadline: DeadlineType) => {
+    const onNewDeadline = (newDeadline: DeadlineFormType) => {
         setFormData({
             ...formData,
             deadlines: [...formData.deadlines, newDeadline],
         })
     }
-    const onDeadlineUpdated = (newDeadline: DeadlineType, index: number) => {
+    const onDeadlineUpdated = (
+        newDeadline: DeadlineFormType,
+        index: number
+    ) => {
         setFormData({
             ...formData,
             deadlines: [
@@ -47,7 +52,7 @@ const NewEventModal = ({
             ],
         })
     }
-    const onDeadlineDelete = (deadline: DeadlineType) => {
+    const onDeadlineDelete = (deadline: DeadlineFormType) => {
         setFormData({
             ...formData,
             deadlines: formData.deadlines.filter((e) => e !== deadline),
@@ -59,23 +64,15 @@ const NewEventModal = ({
     }
     const insertSupabase = async (
         e: FormEvent<HTMLFormElement>,
-        formData: FromData
+        formData: EventFormType
     ) => {
         e.preventDefault()
         let tempErrors = { title: '', type: '', deadlines: '' }
-        const parsedData = FormDataValidateschema.safeParse(formData)
+        const parsedData = formDataSchema.safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
             //@ts-ignore
-            const { data, error } = await supabase
-                .from('newEvent')
-                .insert({
-                    title: formData.title,
-                    type: formData.type,
-                    deadlines: JSON.stringify(formData.deadlines),
-                })
-                .select()
-                .single()
+            const { data, error } = await supabase.createEvent(formData)
             if (error) {
                 console.log(error)
             }
@@ -100,7 +97,7 @@ const NewEventModal = ({
             title: editEvent.title,
             //@ts-ignore
             type: editEvent.type,
-            deadlines: JSON.parse(editEvent.deadlines as string),
+            deadlines: editEvent.deadlines,
         })
     }
 

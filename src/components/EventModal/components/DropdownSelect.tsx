@@ -1,6 +1,4 @@
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
-import { formDataAtom } from '../state'
-import { useAtom } from 'jotai'
 import { useState } from 'react'
 
 const DropdownSelect = ({

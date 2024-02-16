@@ -1,21 +1,35 @@
-import { Database } from "@/supabase/supabase";
+import { Database } from '@/supabase/supabase'
 
-export type EventType = Database['public']['Tables']['newEvent']['Row']
+export type EventFromSupabaseType =
+    Database['public']['Tables']['newEvent']['Row']
 
-export type sizeType = {
+export type DeadlineType = {
+    name: string
+    timestamp: Date
+}
+
+export type SizeType = {
     width: number
     height: number
 }
 
-export type EventAtom = EventType & {
-    position: { x: number; y: number }
-    size: sizeType
-}
-export type updateType = {
-    id: number
-    position: { x: number; y: number }
-    size: sizeType
+export type PositionType = {
+    x: number
+    y: number
 }
 
+export type EventType = {
+    id: number
+    title: string
+    type: string
+    deadlines: DeadlineType[]
+}
+
+// export type EventUpdateBody = {
+//     id: number
+//     position: { x: number; y: number }
+//     size: Size
+// }
+
 /* https://stackoverflow.com/a/77346296 */
-export type SetAtom<Args extends any[], Result> = (...args: Args) => Result;
+export type SetAtom<Args extends any[], Result> = (...args: Args) => Result

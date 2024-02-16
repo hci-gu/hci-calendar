@@ -1,10 +1,5 @@
 import { SetStateAction } from 'react'
-import { FormDataschema } from './schemas'
-import { z } from 'zod'
 import { SetAtom } from '@/src/types/types'
-import moment from 'moment'
-
-type FromData = z.infer<typeof FormDataschema>
 
 export const addUpdateDeadline = (
     newDeadline: any,

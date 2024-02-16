@@ -1,17 +1,16 @@
 import { Button, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
-import { NewDeadlineValidateschema, NewDeadlineschema } from '../schemas'
 import { useState } from 'react'
 import { z } from 'zod'
-import { DeadlineType } from '../state'
+import { DeadlineFormType, deadlineSchema } from '../../../types/zod'
 
 const NewDeadline = ({
     deadline,
     onSave,
     onCancel,
 }: {
-    deadline?: DeadlineType
-    onSave: (deadline: DeadlineType) => void
+    deadline?: DeadlineFormType
+    onSave: (deadline: DeadlineFormType) => void
     onCancel?: () => void
 }) => {
     const [newErrors, setNewErrors] = useState({
@@ -19,14 +18,14 @@ const NewDeadline = ({
         timestamp: '',
     })
     const [newDeadline, setNewDeadline] = useState<
-        z.infer<typeof NewDeadlineschema>
+        z.infer<typeof deadlineSchema>
     >({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp as Date,
     })
 
     const addNewDeadline = () => {
-        const parsedData = NewDeadlineValidateschema.safeParse(newDeadline)
+        const parsedData = deadlineSchema.safeParse(newDeadline)
         let tempErrors = { name: '', timestamp: '' }
         if (parsedData.success) {
             setNewErrors(tempErrors)

@@ -1,7 +1,7 @@
 import { Button, Divider, Flex, Text } from '@mantine/core'
-import { DeadlineType } from '../state'
 import NewDeadline from './NewDeadline'
 import { useState } from 'react'
+import { DeadlineFormType } from '@/src/types/zod'
 
 const Deadline = ({
     deadline,
@@ -9,15 +9,14 @@ const Deadline = ({
     index,
     onDelete,
 }: {
-    deadline: { name: string; timestamp: Date | null }
-    onUpdate: (deadline: DeadlineType, index: number) => void
+    deadline: DeadlineFormType
+    onUpdate: (deadline: DeadlineFormType, index: number) => void
     index: number
-    onDelete: (deadline: DeadlineType) => void
+    onDelete: (deadline: DeadlineFormType) => void
 }) => {
     const [isEditing, setIsEditing] = useState(false)
 
     if (isEditing) {
-        //@ts-ignore
         return (
             <NewDeadline
                 deadline={deadline}

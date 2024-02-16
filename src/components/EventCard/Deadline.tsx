@@ -1,10 +1,10 @@
-import { deadlinesType } from '@/src/types/zod'
+import { DeadlineType } from '@/src/types/types'
 import { Divider, Flex, MantineStyleProp, Text } from '@mantine/core'
 import { IconBell } from '@tabler/icons-react'
 import moment from 'moment'
 
 type DeadlineProps = {
-    deadline: deadlinesType
+    deadline: DeadlineType
     isFirst: boolean
     flex: number
 }

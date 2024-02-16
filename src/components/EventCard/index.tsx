@@ -1,14 +1,20 @@
 import { Flex, Title } from '@mantine/core'
-import { EventAtom } from '../../types/types'
-import { deadlinesType, deadlinesZod } from '../../types/zod'
 import moment from 'moment'
+import { DeadlineType, EventType } from '../../types/types'
 import Deadline from './Deadline'
 
-const DeadLines = ({ deadlines }: { deadlines: deadlinesType[] }) => {
+const DeadLines = ({
+    deadlines,
+    eventId,
+}: {
+    deadlines: DeadlineType[]
+    eventId: number
+}) => {
     return (
         <Flex pos="relative">
             {deadlines.map((deadline, index) => (
                 <Deadline
+                    key={`Deadline_${eventId}_${deadline.timestamp}`}
                     deadline={deadline}
                     isFirst={index == 0}
                     flex={
@@ -25,15 +31,13 @@ const DeadLines = ({ deadlines }: { deadlines: deadlinesType[] }) => {
     )
 }
 
-const EventCard = ({ event }: { event: EventAtom }) => {
-    const deadlines = deadlinesZod.array().parse(event.deadlines)
-
+const EventCard = ({ event, width }: { event: EventType; width: number }) => {
     return (
-        <Flex direction="column" justify="end" gap="sm">
+        <Flex direction="column" justify="end" gap="sm" w={width}>
             <Title c={'HCI-Green.8'} order={2}>
                 {event.title}
             </Title>
-            <DeadLines deadlines={deadlines} />
+            <DeadLines deadlines={event.deadlines} eventId={event.id} />
         </Flex>
     )
 }
