@@ -12,19 +12,21 @@ import {
     formDataSchema,
 } from '../../types/zod'
 import { z } from 'zod'
+import { EventType } from '../../types/types'
 
 const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
     closeModal: () => void
-    editEvent?: EventFormType
+    editEvent?: EventType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
-        title: '',
-        type: null,
-        deadlines: [],
+        title: editEvent?.title ?? '',
+        //@ts-ignore
+        type: editEvent?.type ?? null,
+        deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({
         title: '',
@@ -75,7 +77,21 @@ const NewEventModal = ({
             .safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
-            //@ts-ignore
+            if (!!editEvent) {
+                const { data, error } = await supabase.updateEvent({
+                    ...editEvent,
+                    title: formData.title,
+                    type: formData.type ?? '',
+                    //@ts-ignore
+                    deadlines: formData.deadlines,
+                })
+                if (error) {
+                    console.log(error)
+                }
+                close
+                closeModal()
+                return
+            }
             const { data, error } = await supabase.createEvent(formData)
             if (error) {
                 console.log(error)
@@ -96,15 +112,6 @@ const NewEventModal = ({
         }
     }
 
-    if (!!editEvent) {
-        setFormData({
-            title: editEvent.title,
-            //@ts-ignore
-            type: editEvent.type,
-            deadlines: editEvent.deadlines,
-        })
-    }
-
     useEffect(() => {
         if (!opend) {
             closeModal()
@@ -114,7 +121,7 @@ const NewEventModal = ({
     return (
         <>
             <Modal
-                title="New Event"
+                title={!!editEvent ? 'Edit Event' : 'New Event'}
                 opened={opend}
                 onClose={close}
                 centered
@@ -142,7 +149,10 @@ const NewEventModal = ({
                                 }}
                                 error={errors.title !== '' ? errors.title : ''}
                             />
-                            <DropdownSelect onUpdate={onDropdownUpdate} />
+                            <DropdownSelect
+                                onUpdate={onDropdownUpdate}
+                                selectedOption={formData.type}
+                            />
                         </Flex>
                         {errors.type !== '' && <Text>{errors.type}</Text>}
                         <Stack w={'100%'}>
