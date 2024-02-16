@@ -31,7 +31,7 @@ const DeadLines = ({
     )
 }
 
-const EventCard = ({ event, width }: { event: EventType; width: number }) => {
+const EventCard = ({ event, width }: { event: EventType; width: number | undefined }) => {
     return (
         <Flex direction="column" justify="end" gap="sm" w={width}>
             <Title c={'HCI-Green.8'} order={2}>

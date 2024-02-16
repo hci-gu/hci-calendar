@@ -1,7 +1,7 @@
 import React from 'react'
 import { Rnd } from 'react-rnd'
 import { useEvents } from '../lib/state'
-import EventCard from './EventCard/index'
+import EventCard from './EventCard'
 import { positionAndWidthForDates } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
 
@@ -29,7 +29,7 @@ const Events = () => {
                         minHeight={44}
                         bounds="window"
                     >
-                        <EventCard event={event} width={width} />
+                        <EventCard event={event} width={i !== 0 ? width : undefined} />
                     </Rnd>
                 )
             })}
