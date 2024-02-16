@@ -17,6 +17,8 @@ const Events = () => {
                     viewport.width
                 )
 
+                const eventWidth = i !== 0 ? width : undefined
+                
                 return (
                     <Rnd
                         key={event.id}
@@ -29,7 +31,7 @@ const Events = () => {
                         minHeight={44}
                         bounds="window"
                     >
-                        <EventCard event={event} width={i !== 0 ? width : undefined} />
+                        <EventCard event={event} width={eventWidth} />
                     </Rnd>
                 )
             })}
