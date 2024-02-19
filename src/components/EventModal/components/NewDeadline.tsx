@@ -1,8 +1,10 @@
-import { Button, Flex, Text, TextInput } from '@mantine/core'
+import { ActionIcon, Button, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { z } from 'zod'
 import { DeadlineFormType, deadlineSchema } from '../../../types/zod'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookmark, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 const NewDeadline = ({
     deadline,
@@ -51,8 +53,8 @@ const NewDeadline = ({
         <Flex align={'center'} w={'100%'}>
             <Flex direction={'column'} gap={6} w={'100%'}>
                 <TextInput
-                    size="sm"
-                    // w={'45%'}
+                    size="lg"
+                    w="8vw"
                     placeholder="Deadline Name"
                     value={newDeadline.name}
                     onChange={(e) => {
@@ -64,8 +66,8 @@ const NewDeadline = ({
                     error={newErrors.name !== '' ? newErrors.name : ''}
                 />
                 <DateTimePicker
-                    // w={'38%'}
-                    size="xs"
+                    w="8vw"
+                    size="md"
                     placeholder="2024/01/01 00:00"
                     value={newDeadline.timestamp}
                     onChange={(e) => {
@@ -81,26 +83,41 @@ const NewDeadline = ({
             </Flex>
             {!!deadline ? (
                 <>
-                    <Flex>
-                        <Button type="button" onClick={addNewDeadline}>
-                            save
-                        </Button>
-                        <Button
-                            type="button"
+                    <Flex gap={16}>
+                        <ActionIcon
+                            variant="outline"
+                            size="xl"
+                            radius="md"
+                            aria-label="Settings"
                             onClick={() => {
                                 if (onCancel) {
                                     onCancel()
                                 }
                             }}
                         >
-                            cancel
-                        </Button>
+                            <FontAwesomeIcon icon={faXmark} />
+                        </ActionIcon>
+                        <ActionIcon
+                            variant="outline"
+                            size="xl"
+                            radius="md"
+                            aria-label="Settings"
+                            onClick={addNewDeadline}
+                        >
+                            <FontAwesomeIcon icon={faBookmark} />
+                        </ActionIcon>
                     </Flex>
                 </>
             ) : (
-                <Button type="button" onClick={addNewDeadline}>
-                    +
-                </Button>
+                <ActionIcon
+                    variant="filled"
+                    size="xl"
+                    radius="md"
+                    aria-label="Settings"
+                    onClick={addNewDeadline}
+                >
+                    <FontAwesomeIcon icon={faPlus} />
+                </ActionIcon>
             )}
         </Flex>
     )

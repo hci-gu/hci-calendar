@@ -1,4 +1,11 @@
-import { Button, Flex, Modal, Stack, Text, TextInput } from '@mantine/core'
+import {
+    Button,
+    Flex,
+    Modal,
+    Stack,
+    Text,
+    TextInput,
+} from '@mantine/core'
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import Deadline from './components/Deadline'
@@ -126,6 +133,7 @@ const NewEventModal = ({
                 onClose={close}
                 centered
                 radius={24}
+                size="25vw"
             >
                 <form
                     onSubmit={(e) => {
@@ -137,6 +145,7 @@ const NewEventModal = ({
                         <Flex align="flex-end" gap={16} w="100%">
                             <TextInput
                                 w="100%"
+                                size="xl"
                                 label="Event Title"
                                 withAsterisk
                                 placeholder="Title"
@@ -155,7 +164,7 @@ const NewEventModal = ({
                             />
                         </Flex>
                         {errors.type !== '' && <Text>{errors.type}</Text>}
-                        <Stack w={'100%'}>
+                        <Stack w={'100%'} pb="18px">
                             {formData.deadlines.map((deadline, i) => (
                                 <Deadline
                                     key={deadline.name}
@@ -170,8 +179,8 @@ const NewEventModal = ({
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>
-                        <Button type="submit" w={'100%'} radius="md">
-                            submit
+                        <Button type="submit" w={'100%'} radius="lg" size="xl">
+                            Save
                         </Button>
                     </Flex>
                 </form>
