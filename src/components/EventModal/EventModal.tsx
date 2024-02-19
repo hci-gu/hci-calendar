@@ -80,7 +80,7 @@ const NewEventModal = ({
         let tempErrors = { title: '', type: '', deadlines: '' }
 
         const parsedData = formDataSchema
-            .extend({ type: z.enum(['funding', 'publication']) })
+            .extend({ type: z.enum(['🔴 funding', '🟢 publication']) })
             .safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)

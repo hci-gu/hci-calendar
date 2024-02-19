@@ -7,7 +7,7 @@ export const deadlineSchema = z.object({
 
 export const formDataSchema = z.object({
     title: z.string().min(3),
-    type: z.enum(['funding', 'publication']).nullable(),
+    type: z.enum(['🔴 funding', '🟢 publication']).nullable(),
     deadlines: deadlineSchema.array().min(1),
 })
 

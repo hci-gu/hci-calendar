@@ -1,6 +1,14 @@
-import { Enums } from '@/supabase/supabase'
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
+
+const processOption = (option: string | null | undefined) => {
+    if (!option) {
+        return
+    }
+    const cleanedString =
+        option.charAt(0) + option.slice(1).replace(/[a-zA-Z]/g, '')
+    return cleanedString
+}
 
 const DropdownSelect = ({
     onUpdate,
@@ -9,15 +17,18 @@ const DropdownSelect = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const [dropDownValue, setDropDownValue] = useState(selectedOption ?? '')
+    const category = ['🔴 funding', '🟢 publication']
+
+    const [dropDownValue, setDropDownValue] = useState(
+        processOption(selectedOption) ?? ''
+    )
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const types = ['funding', 'publication']
-    const options = types.map((item) => (
+    const options = category.map((item) => (
         <Combobox.Option value={item} key={item}>
-            {item}
+            {processOption(item)}
         </Combobox.Option>
     ))
     return (
@@ -38,7 +49,7 @@ const DropdownSelect = ({
                     rightSectionPointerEvents="none"
                     onClick={() => combobox.toggleDropdown()}
                 >
-                    {dropDownValue || (
+                    {processOption(dropDownValue) || (
                         <Input.Placeholder>pick</Input.Placeholder>
                     )}
                 </InputBase>
