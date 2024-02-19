@@ -77,10 +77,41 @@ export const getEvents = (): EventType[] => {
                         .toISOString(),
                 },
                 {
+                    name: 'name 2',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(6, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+            ]),
+            created_at: moment().toISOString(),
+        },
+        {
+            id: 3,
+            title: 'title',
+            type: 'type',
+            deadlines: JSON.stringify([
+                {
                     name: 'name',
                     timestamp: moment()
                         .startOf('month')
-                        .add(3, 'months')
+                        .add(5, 'months')
+                        .toISOString(),
+                },
+                {
+                    name: 'name 2',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(6, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+                {
+                    name: 'name 3',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(8, 'months')
                         .add(1, 'day')
                         .toISOString(),
                 },

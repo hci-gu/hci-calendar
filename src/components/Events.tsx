@@ -4,6 +4,8 @@ import { useEvents } from '../lib/state'
 import EventCard from './EventCard'
 import { positionAndWidthForDates } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
+import { Divider, Flex, Text } from '@mantine/core'
+import moment from 'moment'
 
 const Events = () => {
     const viewport = useViewportSize()
@@ -24,14 +26,51 @@ const Events = () => {
                         key={event.id}
                         position={{
                             x,
-                            y: 100 + 160 * i,
+                            y: 100 + 200 * i,
                         }}
                         disableDragging
                         enableResizing={false}
-                        minHeight={120}
                         bounds="window"
                     >
-                        <EventCard event={event} width={eventWidth} />
+                        {/* <EventCard event={event} width={eventWidth} /> */}
+                        <Flex
+                            w={eventWidth}
+                            h="180px"
+                            direction="column"
+                            align="flex-end"
+                            style={{ border: '1px solid red' }}
+                        >
+                            <Text>asdasd</Text>
+                            <Flex
+                                w="100%"
+                                h="100%"
+                                pos="relative"
+                                style={{ border: '1px solid blue' }}
+                            >
+                                {event.deadlines
+                                    .slice(1, event.deadlines.length)
+                                    .map((d, index) => (
+                                        <Flex
+                                            h="100%"
+                                            justify="flex-end"
+                                            style={{
+                                                background: 'green',
+                                            }}
+                                            key={(event.id + d.name) as string}
+                                            flex={moment(d.timestamp).diff(
+                                                event.deadlines[index]
+                                                    .timestamp,
+                                                'days'
+                                            )}
+                                        >
+                                            <Divider
+                                                orientation="vertical"
+                                                size="xl"
+                                            />
+                                        </Flex>
+                                    ))}
+                            </Flex>
+                        </Flex>
                     </Rnd>
                 )
             })}
