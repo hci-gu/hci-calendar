@@ -1,6 +1,8 @@
 import {
+    ActionIcon,
     Button,
     Flex,
+    Group,
     Modal,
     Stack,
     Text,
@@ -20,6 +22,8 @@ import {
 } from '../../types/zod'
 import { z } from 'zod'
 import { EventType } from '../../types/types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 const NewEventModal = ({
     closeModal,
@@ -128,7 +132,7 @@ const NewEventModal = ({
     return (
         <>
             <Modal
-                title={!!editEvent ? 'Edit Event' : 'New Event'}
+                withCloseButton={false}
                 opened={opend}
                 onClose={close}
                 centered
@@ -142,6 +146,21 @@ const NewEventModal = ({
                     }}
                 >
                     <Flex align="center" direction="column" w="100%" gap={16}>
+                        <Group w="100%" align="center" justify="space-between">
+                            <div></div> {/* hate this just let me felx end the actionicon */}
+                            <Text size='36px' fw={400} c='grey'>
+                                {!!editEvent ? 'Edit Event' : 'New Event'}
+                            </Text>
+                            <ActionIcon
+                                variant="transparent"
+                                size="xl"
+                                radius="md"
+                                aria-label="close modal"
+                                onClick={close}
+                            >
+                                <FontAwesomeIcon color="black" icon={faXmark} />
+                            </ActionIcon>
+                        </Group>
                         <Flex align="flex-end" gap={16} w="100%">
                             <TextInput
                                 w="100%"

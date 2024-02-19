@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Flex, Text, TextInput } from '@mantine/core'
+import { ActionIcon, Button, Divider, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -50,75 +50,78 @@ const NewDeadline = ({
     }
 
     return (
-        <Flex align={'center'} w={'100%'}>
-            <Flex direction={'column'} gap={6} w={'100%'}>
-                <TextInput
-                    size="lg"
-                    w="8vw"
-                    placeholder="Deadline Name"
-                    value={newDeadline.name}
-                    onChange={(e) => {
-                        setNewDeadline({
-                            ...newDeadline,
-                            name: e.target.value,
-                        })
-                    }}
-                    error={newErrors.name !== '' ? newErrors.name : ''}
-                />
-                <DateTimePicker
-                    w="8vw"
-                    size="md"
-                    placeholder="2024/01/01 00:00"
-                    value={newDeadline.timestamp}
-                    onChange={(e) => {
-                        setNewDeadline({
-                            ...newDeadline,
-                            timestamp: e as Date,
-                        })
-                    }}
-                />
-                {newErrors.timestamp !== '' && (
-                    <Text>{newErrors.timestamp}</Text>
+        <Flex w="100%" direction="column">
+            <Flex align={'center'} w={'100%'}>
+                <Flex direction={'column'} gap={6} w={'100%'}>
+                    <TextInput
+                        size="lg"
+                        w="8vw"
+                        placeholder="Deadline Name"
+                        value={newDeadline.name}
+                        onChange={(e) => {
+                            setNewDeadline({
+                                ...newDeadline,
+                                name: e.target.value,
+                            })
+                        }}
+                        error={newErrors.name !== '' ? newErrors.name : ''}
+                    />
+                    <DateTimePicker
+                        w="8vw"
+                        size="md"
+                        placeholder="2024/01/01 00:00"
+                        value={newDeadline.timestamp}
+                        onChange={(e) => {
+                            setNewDeadline({
+                                ...newDeadline,
+                                timestamp: e as Date,
+                            })
+                        }}
+                    />
+                    {newErrors.timestamp !== '' && (
+                        <Text>{newErrors.timestamp}</Text>
+                    )}
+                </Flex>
+                {!!deadline ? (
+                    <>
+                        <Flex gap={16}>
+                            <ActionIcon
+                                variant="outline"
+                                size="xl"
+                                radius="md"
+                                aria-label="cancels the editing of the deadline"
+                                onClick={() => {
+                                    if (onCancel) {
+                                        onCancel()
+                                    }
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faXmark} />
+                            </ActionIcon>
+                            <ActionIcon
+                                variant="outline"
+                                size="xl"
+                                radius="md"
+                                aria-label="saves the edited deadline"
+                                onClick={addNewDeadline}
+                            >
+                                <FontAwesomeIcon icon={faBookmark} />
+                            </ActionIcon>
+                        </Flex>
+                    </>
+                ) : (
+                    <ActionIcon
+                        variant="filled"
+                        size="xl"
+                        radius="md"
+                        aria-label="adds a new deadline"
+                        onClick={addNewDeadline}
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                    </ActionIcon>
                 )}
             </Flex>
-            {!!deadline ? (
-                <>
-                    <Flex gap={16}>
-                        <ActionIcon
-                            variant="outline"
-                            size="xl"
-                            radius="md"
-                            aria-label="Settings"
-                            onClick={() => {
-                                if (onCancel) {
-                                    onCancel()
-                                }
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faXmark} />
-                        </ActionIcon>
-                        <ActionIcon
-                            variant="outline"
-                            size="xl"
-                            radius="md"
-                            aria-label="Settings"
-                            onClick={addNewDeadline}
-                        >
-                            <FontAwesomeIcon icon={faBookmark} />
-                        </ActionIcon>
-                    </Flex>
-                </>
-            ) : (
-                <ActionIcon
-                    variant="filled"
-                    size="xl"
-                    radius="md"
-                    aria-label="Settings"
-                    onClick={addNewDeadline}
-                >
-                    <FontAwesomeIcon icon={faPlus} />
-                </ActionIcon>
-            )}
+            <Divider mt={8} />
         </Flex>
     )
 }
