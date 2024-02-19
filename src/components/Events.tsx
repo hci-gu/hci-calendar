@@ -69,6 +69,26 @@ const Events = () => {
                                             />
                                         </Flex>
                                     ))}
+                                <Flex
+                                    style={{ border: '1px solid yellow' }}
+                                    pos="absolute"
+                                    top={0}
+                                    right={eventWidth - 8}
+                                    h="100%"
+                                    justify="flex-end"
+                                >
+                                    <Divider orientation="vertical" size="xl" />
+                                </Flex>
+                                <Divider
+                                    orientation="vertical"
+                                    size="xs"
+                                    pos="absolute"
+                                    w="3px"
+                                    color="red"
+                                    h="3000px"
+                                    top={-3000}
+                                    right={eventWidth - 4}
+                                />
                             </Flex>
                         </Flex>
                     </Rnd>

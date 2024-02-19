@@ -114,7 +114,7 @@ const Header = () => {
                     Button
                 </Button>
                 {!!modalOpen && <NewEventModal closeModal={closeModal} />}
-                <SimpleGrid cols={12}>
+                <SimpleGrid cols={12} spacing={0}>
                     {[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
                         (monthIndex) => (
                             <Month
