@@ -10,10 +10,9 @@ type DeadlineProps = {
     flex: number
 }
 
-const absolutePos: MantineStyleProp = {
-    // position: 'absolute',
-    top: 0,
-    left: 0,
+const hide: MantineStyleProp = {
+    // visibility: 'hidden'
+    display: 'none'
 }
 
 const Deadline = ({ deadline, isFirst, flex }: DeadlineProps) => {
@@ -27,13 +26,14 @@ const Deadline = ({ deadline, isFirst, flex }: DeadlineProps) => {
 
     useEffect(() => {
         if (dedlineContianer.current && trxtContainer.current) {
-            setDeadlineWidth(dedlineContianer.current?.clientWidth);
+            console.log(dedlineContianer.current);
+
+            setDeadlineWidth(dedlineContianer.current?.clientWidth - 38);
             setTextWidth(trxtContainer.current?.clientWidth);
         }
     }, [])
 
-    console.table({ textWidth, deadlineWidth });
-    console.log(textWidth < deadlineWidth, dedlineContianer.current);
+    const textIsLongerAndFirst = textWidth >= deadlineWidth && !isFirst;
 
 
 
@@ -42,38 +42,39 @@ const Deadline = ({ deadline, isFirst, flex }: DeadlineProps) => {
             {/* <pre>
                 {JSON.stringify({ textWidth, deadlineWidth }, null, 2)}
             </pre> */}
+            {isFirst && (
+                <Divider
+                    color="HCI-Green.8"
+                    mr={textIsLongerAndFirst ? "xs" : undefined}
+                    size="xl"
+                    w={"100%"}
+                    orientation="vertical"
+                />
+            )}
             <Flex
                 bg={!isFirst ? 'HCI-Green.4' : ''}
                 flex={!isFirst ? flex : undefined}
                 justify="end"
-                style={isFirst ? absolutePos : {}}
                 ref={dedlineContianer}
             >
-                {isFirst && (
-                    <Divider
-                        color="HCI-Green.8"
-                        mr="xs"
-                        size="xl"
-                        orientation="vertical"
-                    />
-                )}
-                <Flex direction="column" align="end" py="lg" px="md" ref={trxtContainer} style={textWidth > deadlineWidth ? { display: 'none' } : {}}>
-                    <Text c={'HCI-Green.8'} fw="bold">
+                <Flex direction="column" align="end" py={!isFirst ? 'lg' : undefined} style={isFirst ? { position: 'absolute', left: -textWidth * 2, top: 0 } : {}} ref={trxtContainer}>
+                    <Text c={'HCI-Green.8'} fw="bold" style={textIsLongerAndFirst ? hide : {}}>
                         <IconBell />
                         {` ${deadline.name}`}
                     </Text>
-                    <Text c={'HCI-Green.8'} fw="bold">
+                    <Text c={'HCI-Green.8'} fw="bold" style={textIsLongerAndFirst ? hide : {}}>
                         {moment(deadline.timestamp).format('MM/DD')}
                     </Text>
-                    <Text c={'HCI-Green.8'} fw="bold" >
+                    <Text c={'HCI-Green.8'} fw="bold" style={textIsLongerAndFirst ? hide : {}}>
                         {timeFromNow}
                     </Text>
                 </Flex>
                 {!isFirst && (
                     <Divider
                         color="HCI-Green.8"
-                        ml="xs"
+                        ml={!textIsLongerAndFirst ? "xl" : undefined}
                         size="xl"
+                        w={"100%"}
                         orientation="vertical"
                     />
                 )

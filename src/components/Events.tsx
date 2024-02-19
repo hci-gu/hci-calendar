@@ -28,7 +28,7 @@ const Events = () => {
                         }}
                         disableDragging
                         enableResizing={false}
-                        minHeight={44}
+                        minHeight={120}
                         bounds="window"
                     >
                         <EventCard event={event} width={eventWidth} />
