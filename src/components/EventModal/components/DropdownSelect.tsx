@@ -33,6 +33,7 @@ const DropdownSelect = ({
     ))
     return (
         <Combobox
+            size="xl"
             store={combobox}
             onOptionSubmit={(val) => {
                 setDropDownValue(val)
@@ -42,6 +43,7 @@ const DropdownSelect = ({
         >
             <Combobox.Target>
                 <InputBase
+                    size="xl"
                     component="button"
                     type="button"
                     pointer
