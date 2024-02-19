@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../supabase/supabase'
 import { EventType, EventFromSupabaseType } from '../types/types'
 import { EventFormType } from '../types/zod'
+import moment from 'moment'
 
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
@@ -39,10 +40,54 @@ const parseEvent = (event: EventFromSupabaseType): EventType => {
     }
 }
 
-export const getEvents = async (): Promise<EventType[]> => {
-    const { data } = await supabase.from('newEvent').select()
+// export const getEvents = async (): Promise<EventType[]> => {
+//     const { data } = await supabase.from('newEvent').select()
 
-    if (!data) return []
+//     if (!data) return []
+
+//     return data.map(parseEvent)
+// }
+export const getEvents = (): EventType[] => {
+    const data: EventFromSupabaseType[] = [
+        {
+            id: 1,
+            title: 'title',
+            type: 'type',
+            deadlines: JSON.stringify([
+                {
+                    name: 'name',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(2, 'months')
+                        .toISOString(),
+                },
+            ]),
+            created_at: moment().toISOString(),
+        },
+        {
+            id: 2,
+            title: 'title',
+            type: 'type',
+            deadlines: JSON.stringify([
+                {
+                    name: 'name',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(3, 'months')
+                        .toISOString(),
+                },
+                {
+                    name: 'name',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(5, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+            ]),
+            created_at: moment().toISOString(),
+        },
+    ]
 
     return data.map(parseEvent)
 }
