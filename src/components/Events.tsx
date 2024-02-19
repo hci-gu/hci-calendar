@@ -18,7 +18,7 @@ const Events = () => {
                 )
 
                 const eventWidth = i !== 0 ? width : undefined
-                
+
                 return (
                     <Rnd
                         key={event.id}
