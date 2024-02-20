@@ -9,7 +9,6 @@ import { useViewportSize } from '@mantine/hooks'
 const Events = () => {
     const viewport = useViewportSize()
     const events = useEvents()
-    console.log(events);
 
     return (
         <>
@@ -32,7 +31,7 @@ const Events = () => {
                         enableResizing={false}
                         bounds="window"
                     >
-                        <EventCard event={event} width={eventWidth} />
+                        <EventCard event={event} width={eventWidth} color='HCI-Purple' />
                     </Rnd>
                 )
             })}

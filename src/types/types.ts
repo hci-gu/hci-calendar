@@ -25,6 +25,17 @@ export type EventType = {
     deadlines: DeadlineType[]
 }
 
+const color = {
+    'HCI-Red': 'HCI-Red',
+    'HCI-Purple': 'HCI-Purple',
+    'HCI-Blue': 'HCI-Blue',
+    'HCI-Green': 'HCI-Green',
+} as const
+
+type ObjectValues<T> = T[keyof T]
+
+export type colorType = ObjectValues<typeof color>
+
 // export type EventUpdateBody = {
 //     id: number
 //     position: { x: number; y: number }
