@@ -73,7 +73,7 @@ const Events = () => {
                                     style={{ border: '1px solid yellow' }}
                                     pos="absolute"
                                     top={0}
-                                    right={eventWidth - 8}
+                                    right={eventWidth - 10}
                                     h="100%"
                                     justify="flex-end"
                                 >
@@ -87,7 +87,7 @@ const Events = () => {
                                     color="red"
                                     h="3000px"
                                     top={-3000}
-                                    right={eventWidth - 4}
+                                    right={eventWidth -4.57}
                                 />
                             </Flex>
                         </Flex>

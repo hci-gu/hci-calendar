@@ -82,7 +82,7 @@ export const getEvents = (): EventType[] => {
                     timestamp: moment()
                         .startOf('month')
                         .add(1, 'months')
-                        .add(27, 'day')
+                        .add(3, 'day')
                         .toISOString(),
                 },
             ]),
