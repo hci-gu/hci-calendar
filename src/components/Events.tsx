@@ -6,6 +6,7 @@ import { positionAndWidthForDates } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
 import { Divider, Flex, Stack, Text, Title } from '@mantine/core'
 import moment from 'moment'
+import { IconBell } from '@tabler/icons-react'
 
 const Events = () => {
     const viewport = useViewportSize()
@@ -35,26 +36,26 @@ const Events = () => {
                         {/* <EventCard event={event} width={eventWidth} /> */}
                         <Flex
                             w={eventWidth}
-                            h="180px"
+                            h="130px"
                             direction="column"
                             align="flex-end"
-                            style={{ border: '1px solid red' }}
+                            gap="xs"
                         >
-                            <Title order={2}>{event.title}</Title>
+                            <Title order={2} c={'HCI-Green.8'}>{event.title}</Title>
                             <Flex
                                 w="100%"
                                 h="100%"
                                 pos="relative"
-                                style={{ border: '1px solid blue' }}
                             >
                                 {event.deadlines
                                     .slice(1, event.deadlines.length)
                                     .map((d, index) => (
                                         <Flex
                                             h="100%"
+                                            bg='HCI-Green.4'
                                             justify="flex-end"
                                             style={{
-                                                background: 'green',
+                                                // background: 'green',
                                                 overflow: 'clip',
                                             }}
                                             key={(event.id + d.name) as string}
@@ -64,53 +65,60 @@ const Events = () => {
                                                 'days'
                                             )}
                                         >
-                                            <Stack
+                                            <Flex
                                                 h="100%"
                                                 align="flex-end"
-                                                justify="space-around"
+                                                direction="column"
+                                                p="md"
                                             >
-                                                <Text
-                                                    style={{
-                                                        textWrap: 'nowrap',
-                                                    }}
-                                                >
-                                                    {d.name}
+                                                <Text c={'HCI-Green.8'} fw="bold" style={{ textWrap: 'nowrap' }}>
+                                                    <IconBell />
+                                                    {` ${d.name}`}
                                                 </Text>
-                                                <Text
-                                                    style={{
-                                                        textWrap: 'nowrap',
-                                                    }}
-                                                >
-                                                    {d.timestamp.toDateString()}
+                                                <Text c={'HCI-Green.8'} fw="bold" style={{ textWrap: 'nowrap' }}>
+                                                    {moment(d.timestamp).format('MM/DD')}
                                                 </Text>
-                                            </Stack>
+                                                {/* <Text c={'HCI-Green.8'} fw="bold">
+                                                    {moment(d.timestamp).fromNow()}
+                                                </Text> */}
+                                            </Flex>
                                             <Divider
                                                 orientation="vertical"
                                                 size="xl"
+                                                color="HCI-Green.8"
                                             />
                                         </Flex>
                                     ))}
                                 <Flex
-                                    style={{ border: '1px solid yellow' }}
                                     pos="absolute"
                                     top={0}
                                     right={eventWidth - 10}
                                     h="100%"
                                     justify="flex-end"
                                 >
-                                    <Stack
+                                    <Flex
                                         h="100%"
                                         align="flex-end"
-                                        justify="space-around"
+                                        direction="column"
+                                        p="md"
                                     >
-                                        <Text style={{ textWrap: 'nowrap' }}>
-                                            {event.deadlines[0].name}
+                                        <Text style={{ textWrap: 'nowrap' }} fw="bold" c={'HCI-Green.8'}>
+                                            <IconBell />
+                                            {` ${event.deadlines[0].name}`}
                                         </Text>
-                                        <Text style={{ textWrap: 'nowrap' }}>
-                                            {event.deadlines[0].timestamp.toDateString()}
+                                        <Text style={{ textWrap: 'nowrap' }} fw="bold" c={'HCI-Green.8'}>
+                                            {moment(event.deadlines[0].timestamp).format('MM/DD')}
                                         </Text>
-                                    </Stack>
-                                    <Divider orientation="vertical" size="xl" />
+
+                                        {/* <Text c={'HCI-Green.8'} fw="bold">
+                                            <IconBell />
+                                            {` ${d.name}`}
+                                        </Text>
+                                        <Text c={'HCI-Green.8'} fw="bold">
+                                            {moment(d.timestamp).format('MM/DD')}
+                                        </Text> */}
+                                    </Flex>
+                                    <Divider orientation="vertical" size="xl" color="HCI-Green.8" />
                                 </Flex>
                             </Flex>
                         </Flex>

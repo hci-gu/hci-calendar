@@ -70,7 +70,7 @@ export const getEvents = (): EventType[] => {
             type: 'type',
             deadlines: JSON.stringify([
                 {
-                    name: 'name',
+                    name: 'name 1',
                     timestamp: moment()
                         .startOf('month')
                         .add(1, 'months')
