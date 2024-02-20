@@ -19,7 +19,7 @@ const Events = () => {
                     viewport.width
                 )
 
-                const eventWidth = i !== 0 ? width : undefined
+                const eventWidth = i !== 0 ? width : 0
 
                 return (
                     <Rnd
@@ -38,7 +38,7 @@ const Events = () => {
                             h="180px"
                             direction="column"
                             align="flex-end"
-                            style={{ border: '1px solid red' }}
+                            style={{ border: '1px solid red', }}
                         >
                             <Text>asdasd</Text>
                             <Flex
@@ -55,6 +55,7 @@ const Events = () => {
                                             justify="flex-end"
                                             style={{
                                                 background: 'green',
+                                                overflow: 'clip',
                                             }}
                                             key={(event.id + d.name) as string}
                                             flex={moment(d.timestamp).diff(
@@ -63,6 +64,7 @@ const Events = () => {
                                                 'days'
                                             )}
                                         >
+                                            <Text>asd</Text>
                                             <Divider
                                                 orientation="vertical"
                                                 size="xl"
@@ -77,6 +79,7 @@ const Events = () => {
                                     h="100%"
                                     justify="flex-end"
                                 >
+                                    <Text>first</Text>
                                     <Divider orientation="vertical" size="xl" />
                                 </Flex>
                                 <Divider
@@ -87,7 +90,7 @@ const Events = () => {
                                     color="red"
                                     h="3000px"
                                     top={-3000}
-                                    right={eventWidth -4.57}
+                                    right={eventWidth - 4.57}
                                 />
                             </Flex>
                         </Flex>
