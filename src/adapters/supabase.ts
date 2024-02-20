@@ -51,7 +51,7 @@ export const getEvents = (): EventType[] => {
     const data: EventFromSupabaseType[] = [
         {
             id: 1,
-            title: 'title',
+            title: 'event #1',
             type: 'type',
             deadlines: JSON.stringify([
                 {
@@ -66,7 +66,7 @@ export const getEvents = (): EventType[] => {
         },
         {
             id: 2,
-            title: 'title',
+            title: 'event #2',
             type: 'type',
             deadlines: JSON.stringify([
                 {
@@ -81,8 +81,8 @@ export const getEvents = (): EventType[] => {
                     name: 'name 2',
                     timestamp: moment()
                         .startOf('month')
-                        .add(1, 'months')
-                        .add(3, 'day')
+                        .add(2, 'months')
+                        .add(20, 'day')
                         .toISOString(),
                 },
             ]),
@@ -90,7 +90,7 @@ export const getEvents = (): EventType[] => {
         },
         {
             id: 3,
-            title: 'title',
+            title: 'event #3',
             type: 'type',
             deadlines: JSON.stringify([
                 {
@@ -113,6 +113,45 @@ export const getEvents = (): EventType[] => {
                     timestamp: moment()
                         .startOf('month')
                         .add(8, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+            ]),
+            created_at: moment().toISOString(),
+        },
+        {
+            id: 4,
+            title: 'event #4',
+            type: 'type',
+            deadlines: JSON.stringify([
+                {
+                    name: 'name',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(2, 'months')
+                        .toISOString(),
+                },
+                {
+                    name: 'name 2',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(6, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+                {
+                    name: 'name 3',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(8, 'months')
+                        .add(1, 'day')
+                        .toISOString(),
+                },
+                {
+                    name: 'name 4',
+                    timestamp: moment()
+                        .startOf('month')
+                        .add(9, 'months')
                         .add(1, 'day')
                         .toISOString(),
                 },
