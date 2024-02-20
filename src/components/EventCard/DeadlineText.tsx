@@ -1,4 +1,5 @@
-import { DeadlineType, colorType } from "@/src/types/types";
+import { colorType } from "@/src/lib/mantineConfig";
+import { DeadlineType } from "@/src/types/types";
 import { Flex, Text } from "@mantine/core";
 import { IconBell } from "@tabler/icons-react";
 import moment from "moment";

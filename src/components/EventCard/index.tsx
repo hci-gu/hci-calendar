@@ -1,7 +1,8 @@
 import { Divider, Flex, Title } from '@mantine/core'
 import moment from 'moment'
-import { EventType, colorType } from '../../types/types'
+import { EventType } from '../../types/types'
 import DeadlineText from './DeadlineText'
+import { colorType } from '@/src/lib/mantineConfig'
 
 const EventCard = ({ event, width, color }: { event: EventType, width: number, color: colorType }) => {    
     return (

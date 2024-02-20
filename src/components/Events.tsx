@@ -31,7 +31,7 @@ const Events = () => {
                         enableResizing={false}
                         bounds="window"
                     >
-                        <EventCard event={event} width={eventWidth} color='HCI-Purple' />
+                        <EventCard event={event} width={eventWidth} color='HCI-Red' />
                     </Rnd>
                 )
             })}
