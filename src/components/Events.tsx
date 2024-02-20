@@ -4,7 +4,7 @@ import { useEvents } from '../lib/state'
 import EventCard from './EventCard'
 import { positionAndWidthForDates } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
-import { Divider, Flex, Text } from '@mantine/core'
+import { Divider, Flex, Stack, Text, Title } from '@mantine/core'
 import moment from 'moment'
 
 const Events = () => {
@@ -38,9 +38,9 @@ const Events = () => {
                             h="180px"
                             direction="column"
                             align="flex-end"
-                            style={{ border: '1px solid red', }}
+                            style={{ border: '1px solid red' }}
                         >
-                            <Text>asdasd</Text>
+                            <Title order={2}>{event.title}</Title>
                             <Flex
                                 w="100%"
                                 h="100%"
@@ -64,7 +64,26 @@ const Events = () => {
                                                 'days'
                                             )}
                                         >
-                                            <Text>asd</Text>
+                                            <Stack
+                                                h="100%"
+                                                align="flex-end"
+                                                justify="space-around"
+                                            >
+                                                <Text
+                                                    style={{
+                                                        textWrap: 'nowrap',
+                                                    }}
+                                                >
+                                                    {d.name}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        textWrap: 'nowrap',
+                                                    }}
+                                                >
+                                                    {d.timestamp.toDateString()}
+                                                </Text>
+                                            </Stack>
                                             <Divider
                                                 orientation="vertical"
                                                 size="xl"
@@ -79,19 +98,20 @@ const Events = () => {
                                     h="100%"
                                     justify="flex-end"
                                 >
-                                    <Text>first</Text>
+                                    <Stack
+                                        h="100%"
+                                        align="flex-end"
+                                        justify="space-around"
+                                    >
+                                        <Text style={{ textWrap: 'nowrap' }}>
+                                            {event.deadlines[0].name}
+                                        </Text>
+                                        <Text style={{ textWrap: 'nowrap' }}>
+                                            {event.deadlines[0].timestamp.toDateString()}
+                                        </Text>
+                                    </Stack>
                                     <Divider orientation="vertical" size="xl" />
                                 </Flex>
-                                <Divider
-                                    orientation="vertical"
-                                    size="xs"
-                                    pos="absolute"
-                                    w="3px"
-                                    color="red"
-                                    h="3000px"
-                                    top={-3000}
-                                    right={eventWidth - 4.57}
-                                />
                             </Flex>
                         </Flex>
                     </Rnd>
