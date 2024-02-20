@@ -90,11 +90,11 @@ export const getEvents = (): EventType[] => {
         },
         {
             id: 3,
-            title: 'title',
+            title: 'title #3',
             type: 'type',
             deadlines: JSON.stringify([
                 {
-                    name: 'name',
+                    name: 'name 1',
                     timestamp: moment()
                         .startOf('month')
                         .add(5, 'months')
