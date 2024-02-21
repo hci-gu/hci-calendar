@@ -3,15 +3,18 @@ import { atomFamily } from 'jotai/utils'
 import { useEffect } from 'react'
 import { EventType } from '../types/types'
 import * as supabase from '../adapters/supabase'
+import { sortEventsByFirstDeadlineTimestamp } from './utils'
 
 export const eventsAtom = atom<EventType[]>([])
+
 export const useEvents = () => {
     const [events, setEvents] = useAtom(eventsAtom)
 
     useEffect(() => {
         const fetch = async () => {
             const events = await supabase.getEvents()
-            setEvents(events)
+            const sortedEvents = sortEventsByFirstDeadlineTimestamp(events)
+            setEvents(sortedEvents)
         }
         fetch()
     }, [])

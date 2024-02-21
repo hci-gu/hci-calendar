@@ -3,7 +3,13 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "vite"
+        "dev": "vite",
+        "supabase:start": "supabase start",
+        "supabase:stop": "supabase stop",
+        "supabase:pull": "supabase db pull",
+        "supabase:push": "supabase db push",
+        "supabase:reset": "supabase db reset",
+        "supabase:migrationUp": "supabase migrate up"
     },
     "dependencies": {
         "@emotion/react": "^11.11.3",

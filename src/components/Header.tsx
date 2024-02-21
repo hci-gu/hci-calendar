@@ -3,9 +3,8 @@ import { ActionIcon, Button, Flex, SimpleGrid, Text } from '@mantine/core'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
-import { EventType } from '../types/types'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useViewportSize } from '@mantine/hooks'
+import { dayWidth } from '../lib/utils'
 
 const Container = styled.div`
     height: 90px;
@@ -15,7 +14,7 @@ const Container = styled.div`
 `
 
 const MonthContainer = styled.div`
-    width: 100%;
+    /* width: 100%; */
     /* height: 57px; */
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-right: 0;
@@ -73,13 +72,22 @@ const DayTick = ({ month, day }: { month: string; day: number }) => {
 
 const Month = ({ monthIndex }: { monthIndex: number }) => {
     const date = moment().add(monthIndex, 'months')
-    // const days = moment(month, 'MMMM').daysInMonth()
     const isCurrentMonth = moment().month() === date.month()
     const isFirstMonth = date.month() === 0
     const year = moment(date).year()
+    const firstDayOfMonth = moment().add(monthIndex, 'month').startOf('month')
+    const lastDayOfMonth = moment().add(monthIndex, 'month').endOf('month')
+    const daysInMonth = moment(lastDayOfMonth).diff(
+        moment(firstDayOfMonth),
+        'days'
+    ) + 1
+    const viewport = useViewportSize()
+    const monthWidth = dayWidth(viewport.width) * daysInMonth
+    
+
 
     return (
-        <MonthContainer>
+        <MonthContainer style={{ width: `${monthWidth}px` }}>
             {isFirstMonth && <Text fw="bold">{year}</Text>}
             <Text
                 fw={isCurrentMonth ? 600 : 400}
@@ -87,13 +95,6 @@ const Month = ({ monthIndex }: { monthIndex: number }) => {
             >
                 {date.format('MMMM')}
             </Text>
-            {/* <Flex justify="space-evenly" align="stretch">
-                {Array(days)
-                    .fill(days)
-                    .map((_, i) => (
-                        <DayTick key={`${month}_${i}`} month={month} day={i} />
-                    ))}
-            </Flex> */}
         </MonthContainer>
     )
 }
@@ -102,7 +103,7 @@ const Header = () => {
     return (
         <>
             <Flex direction="column">
-                <SimpleGrid cols={12}>
+                <Flex>
                     {[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
                         (monthIndex) => (
                             <Month
@@ -111,7 +112,7 @@ const Header = () => {
                             />
                         )
                     )}
-                </SimpleGrid>
+                </Flex>
             </Flex>
         </>
     )

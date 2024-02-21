@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../supabase/supabase'
 import { EventType, EventFromSupabaseType } from '../types/types'
 import { EventFormType } from '../types/zod'
+import moment from 'moment'
 
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
