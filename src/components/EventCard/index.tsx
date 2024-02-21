@@ -3,6 +3,8 @@ import moment from 'moment'
 import { EventType } from '../../types/types'
 import DeadlineText from './DeadlineText'
 import { colorType } from '@/src/lib/mantineConfig'
+import { useState } from 'react'
+import NewEventModal from '../EventModal/EventModal'
 
 const EventCard = ({ event, width, color }: { event: EventType, width: number, color: colorType }) => {    
     return (
@@ -42,21 +44,35 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
                                 <Divider orientation="vertical" size="xl" color={color+".8"} />
                             </Flex>)
                     }
-                    )
-                }
-                {/* First Event Content */}
-                <Flex
-                    h="100%"
-                    justify="flex-end"
-                    pos="absolute"
-                    top={0}
-                    right={(width ?? 0) - 10}
-                >
-                    <DeadlineText event={event.deadlines[0]} color={color} />
-                    <Divider orientation="vertical" size="xl" color={color+".8"} />
-                </Flex>
-            </Flex>
+                />
+            ))}
         </Flex>
+    )
+}
+
+const EventCard = ({ event, width }: { event: EventType; width: number }) => {
+    const [modalOpen, setModalOpen] = useState(false)
+    const closeModal = () => {
+        setModalOpen(false)
+    }
+    return (
+        <>
+            <Flex
+                direction="column"
+                justify="end"
+                gap="sm"
+                w={width}
+                onClick={() => setModalOpen(true)}
+            >
+                <Title c={'HCI-Green.8'} order={2}>
+                    {event.title}
+                </Title>
+                <DeadLines deadlines={event.deadlines} eventId={event.id} />
+            </Flex>
+            {!!modalOpen && (
+                <NewEventModal closeModal={closeModal} editEvent={event} />
+            )}
+        </>
     )
 }
 

@@ -3,8 +3,7 @@ import { Button, Flex, SimpleGrid, Text } from '@mantine/core'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
-import { useViewportSize } from '@mantine/hooks'
-import { dayWidth } from '../lib/utils'
+import { EventType } from '../types/types'
 
 const Container = styled.div`
     height: 90px;

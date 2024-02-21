@@ -11,7 +11,16 @@ const supabase = createClient<Database>(
 
 // TODO: acutally implement update
 export const updateEvent = (event: EventType) =>
-    supabase.from('newEvent').update({}).select().single()
+    supabase
+        .from('newEvent')
+        .update({
+            title: event.title,
+            type: event.type,
+            deadlines: JSON.stringify(event.deadlines),
+        })
+        .eq('id', event.id)
+        .select()
+        .single()
 
 export const createEvent = (formData: EventFormType) =>
     supabase
