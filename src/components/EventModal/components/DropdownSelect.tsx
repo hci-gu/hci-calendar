@@ -1,12 +1,15 @@
+import { Enums } from '@/supabase/supabase'
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
 
 const DropdownSelect = ({
     onUpdate,
+    selectedOption,
 }: {
     onUpdate: (option: string) => void
+    selectedOption?: string | null
 }) => {
-    const [dropDownValue, setDropDownValue] = useState('')
+    const [dropDownValue, setDropDownValue] = useState(selectedOption ?? '')
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
