@@ -18,7 +18,7 @@ export const dayWidth = (viewportWidth: number) => {
 }
 
 export const positionAndWidthForDates = (
-    dates: Date[],
+    dates: (Date | null)[],
     viewportWidth: number
 ): [xPos: number, width: number] => {
     const start = calendarStart()

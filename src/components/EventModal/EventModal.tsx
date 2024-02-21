@@ -29,7 +29,7 @@ const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
-    closeModal: () => void
+    closeModal: () => void,
     editEvent?: EventType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)

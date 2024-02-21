@@ -1,13 +1,8 @@
 import { Database } from '@/supabase/supabase'
-import { EventTypeType } from './zod'
+import { DeadlineFormType, EventTypeType } from './zod'
 
 export type EventFromSupabaseType =
     Database['public']['Tables']['newEvent']['Row']
-
-export type DeadlineType = {
-    name: string
-    timestamp: Date
-}
 
 export type SizeType = {
     width: number
@@ -23,7 +18,7 @@ export type EventType = {
     id: number
     title: string
     type: EventTypeType
-    deadlines: DeadlineType[]
+    deadlines: DeadlineFormType[]
 }
 
 // export type EventUpdateBody = {
