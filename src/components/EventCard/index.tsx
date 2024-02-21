@@ -8,7 +8,7 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
     return (
         <Flex
             w={width}
-            h="130px"
+            h="157px"
             direction="column"
             align="flex-end"
             gap="xs"
