@@ -99,28 +99,9 @@ const Month = ({ monthIndex }: { monthIndex: number }) => {
 }
 
 const Header = () => {
-    const [modalOpen, setModalOpen] = useState(false)
-
-    const closeModal = () => {
-        setModalOpen(false)
-    }
-
     return (
         <>
             <Flex direction="column">
-                <ActionIcon
-                    pos="absolute"
-                    bottom={100}
-                    right={100}
-                    variant="outline"
-                    onClick={() => {
-                        setModalOpen(true)
-                    }}
-                    size={50}
-                >
-                    <FontAwesomeIcon icon={faPlus} />
-                </ActionIcon>
-                {!!modalOpen && <NewEventModal closeModal={closeModal} />}
                 <SimpleGrid cols={12}>
                     {[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
                         (monthIndex) => (
