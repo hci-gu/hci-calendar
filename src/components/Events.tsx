@@ -2,9 +2,8 @@ import React from 'react'
 import { Rnd } from 'react-rnd'
 import { useEvents } from '../lib/state'
 import EventCard from './EventCard'
-import { positionAndWidthForDates } from '../lib/utils'
+import { getColor, positionAndWidthForDates } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
-
 
 const Events = () => {
     const viewport = useViewportSize()
@@ -20,6 +19,8 @@ const Events = () => {
 
                 const eventWidth = i !== 0 ? width : 0
 
+
+
                 return (
                     <Rnd
                         key={event.id}
@@ -31,7 +32,7 @@ const Events = () => {
                         enableResizing={false}
                         bounds="window"
                     >
-                        <EventCard event={event} width={eventWidth} color='HCI-Red' />
+                        <EventCard event={event} width={eventWidth} color={getColor(event)} />
                     </Rnd>
                 )
             })}

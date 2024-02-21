@@ -1,4 +1,6 @@
 import moment from 'moment'
+import { EventType } from '../types/types'
+import { colorType } from './mantineConfig'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -17,7 +19,7 @@ export const dayWidth = (viewportWidth: number) => {
 export const positionAndWidthForDates = (
     dates: Date[],
     viewportWidth: number
-) => {
+): [xPos: number, width: number] => {
     const start = calendarStart()
 
     const lastDate = dates[dates.length - 1]
@@ -29,4 +31,15 @@ export const positionAndWidthForDates = (
     const width = daysFromStartToFirst * dayWidth(viewportWidth)
 
     return [xPos - width, width]
+}
+
+export const getColor = (event: EventType): colorType => {
+    switch (event.type) {
+        case 'funding':
+            return 'HCI-Blue'
+        case 'publication':
+            return 'HCI-Green'
+        default:
+            return 'HCI-Red'
+    }
 }
