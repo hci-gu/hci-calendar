@@ -6,7 +6,15 @@ import { colorType } from '@/src/lib/mantineConfig'
 import { useState } from 'react'
 import NewEventModal from '../EventModal/EventModal'
 
-const EventCard = ({ event, width, color }: { event: EventType, width: number, color: colorType }) => {
+const EventCard = ({
+    event,
+    width,
+    color,
+}: {
+    event: EventType
+    width: number
+    color: colorType
+}) => {
     const [modalOpen, setModalOpen] = useState(false)
     const closeModal = () => {
         setModalOpen(false)
@@ -18,26 +26,26 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
             direction="column"
             align="flex-end"
             gap="xs"
-            onClick={() => setModalOpen(true)}
+            // onClick={() => setModalOpen(true)}
         >
-            <Title order={2} c={color + ".8"}>{event.title}</Title>
-            <Flex
-                w="100%"
-                h="100%"
-                pos="relative"
-            >
+            <Title order={2} c={color + '.8'}>
+                {event.title}
+            </Title>
+            <Flex w="100%" h="100%" pos="relative">
                 {/* Events after first event */}
+
                 {event.deadlines
                     .slice(1, event.deadlines.length)
                     .map((deadline, index) => {
-                        const flexWidth = moment(deadline.timestamp)
-                            .diff(event.deadlines[index].timestamp, 'days')
-
+                        const flexWidth = moment(deadline.timestamp).diff(
+                            event.deadlines[index].timestamp,
+                            'days'
+                        )
 
                         return (
                             <Flex
                                 h="100%"
-                                bg={color + ".4"}
+                                bg={color + '.4'}
                                 justify="flex-end"
                                 style={{
                                     overflow: 'clip',
@@ -46,16 +54,55 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
                                 flex={flexWidth}
                             >
                                 <DeadlineText event={deadline} color={color} />
-                                <Divider orientation="vertical" size="xl" color={color + ".8"} />
+                                <Divider
+                                    orientation="vertical"
+                                    size="xl"
+                                    color={color + '.8'}
+                                />
                                 {modalOpen && (
-                                    <NewEventModal closeModal={closeModal} editEvent={event} />
+                                    <NewEventModal
+                                        closeModal={closeModal}
+                                        editEvent={event}
+                                    />
                                 )}
                             </Flex>
                         )
-                    })
-                }
+                    })}
+                <Flex
+                    pos="absolute"
+                    top={0}
+                    right={width - 4.57}
+                    h="100%"
+                    justify="flex-end"
+                >
+                    <DeadlineText event={event.deadlines[0]} color={color} />
+                    <Divider
+                        orientation="vertical"
+                        size="xl"
+                        color={color + '.8'}
+                    />
+                </Flex>
+                {modalOpen && (
+                    <NewEventModal closeModal={closeModal} editEvent={event} />
+                )}
             </Flex>
         </Flex>
     )
 }
 export default EventCard
+
+// <Flex
+//                     pos="absolute"
+//                     top={0}
+//                     right={4.57}
+//                     h="100%"
+//                     justify="flex-end"
+//                     key={(event.id + event.deadlines[0].name) as string}
+//                 >
+//                     <DeadlineText event={event.deadlines[0]} color={color} />
+//                     <Divider
+//                         orientation="vertical"
+//                         size="xl"
+//                         color={color + '.8'}
+//                     />
+//                 </Flex>
