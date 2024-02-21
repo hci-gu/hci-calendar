@@ -8,7 +8,6 @@ const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_KEY
 )
 
-// TODO: acutally implement update
 export const updateEvent = (event: EventType) =>
     supabase
         .from('newEvent')
