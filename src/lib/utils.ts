@@ -58,11 +58,6 @@ const eventsDontOverlap = (eventA: EventType, eventB: EventType) => {
     const startB = moment(startOfEvent(eventB))
     const endB = moment(endOfEvent(eventB))
 
-    // console.log(
-    //     eventA.title + ' and ' + eventB.title + ' dont overlap',
-    //     startA.isAfter(endB) && isSameDay(startA, startB)
-    // )
-
     return startA.isAfter(endB) && isSameDay(startA, startB)
 }
 
