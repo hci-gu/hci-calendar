@@ -25,6 +25,11 @@ export type EventType = {
     deadlines: DeadlineType[]
 }
 
+export type Row = {
+    y: number
+    eventsInRow: EventType[]
+}
+
 // export type EventUpdateBody = {
 //     id: number
 //     position: { x: number; y: number }

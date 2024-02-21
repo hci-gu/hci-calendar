@@ -1,26 +1,26 @@
 import React from 'react'
 import { Rnd } from 'react-rnd'
-import { sortEventsIntoRows, useEvents } from '../lib/state'
 import EventCard from './EventCard'
-import { positionAndWidthForDates } from '../lib/utils'
+import { positionAndWidthForDates, sortEventsIntoRows } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
 import { Divider, Flex, Stack, Text, Title } from '@mantine/core'
 import moment from 'moment'
+import { useEvents } from '../lib/state'
+import { DeadlineType, EventType, Row } from '../types/types'
 
 const Events = () => {
     const viewport = useViewportSize()
     const events = useEvents()
-    const rows = sortEventsIntoRows({ events, veiwportHeight: 2073 })
+    const rows = sortEventsIntoRows({ events, viewportHeight: 2073 })
 
     return (
         <>
-            {rows.map((row: any, i) => {
-                return row.eventsInRow.map((event: any) => {
+            {rows.map((row: Row, i) => {
+                return row.eventsInRow.map((event: EventType) => {
                     const [x, width] = positionAndWidthForDates(
-                        event.deadlines.map((d) => d.timestamp),
+                        event.deadlines.map((d: DeadlineType) => d.timestamp),
                         viewport.width
                     )
-                    console.log(event.title, width)
 
                     return (
                         <Rnd
