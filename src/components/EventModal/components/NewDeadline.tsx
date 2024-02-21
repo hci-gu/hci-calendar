@@ -59,7 +59,7 @@ const NewDeadline = ({
                 <Flex direction={'column'} gap={6} w={'100%'}>
                     <TextInput
                         size="lg"
-                        w="45%"
+                        w="310px"
                         placeholder="Deadline Name"
                         value={newDeadline.name}
                         onChange={(e) => {
@@ -71,7 +71,7 @@ const NewDeadline = ({
                         error={newErrors.name !== '' ? newErrors.name : ''}
                     />
                     <DateTimePicker
-                        w="45%"
+                        w="310px"
                         size="md"
                         placeholder="2024/01/01 00:00"
                         value={newDeadline.timestamp}
