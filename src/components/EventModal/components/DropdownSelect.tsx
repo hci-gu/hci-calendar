@@ -1,3 +1,4 @@
+import { EventTypeType } from '@/src/types/types'
 import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
 
@@ -11,7 +12,7 @@ const DropdownSelect = ({
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const types = ['funding', 'publication']
+    const types: EventTypeType[] = ['funding', 'publication']
     const options = types.map((item) => (
         <Combobox.Option value={item} key={item}>
             {item}

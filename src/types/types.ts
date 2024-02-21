@@ -1,5 +1,8 @@
 import { Database } from '@/supabase/supabase'
 
+const types = {'funding': 'funding', 'publication': 'publication'}
+export type EventTypeType =  keyof typeof types
+
 export type EventFromSupabaseType =
     Database['public']['Tables']['newEvent']['Row']
 
@@ -21,7 +24,7 @@ export type PositionType = {
 export type EventType = {
     id: number
     title: string
-    type: string
+    type: EventTypeType
     deadlines: DeadlineType[]
 }
 
