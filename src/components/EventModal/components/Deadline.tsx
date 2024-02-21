@@ -3,7 +3,11 @@ import NewDeadline from './NewDeadline'
 import { useState } from 'react'
 import { DeadlineFormType } from '@/src/types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+    faBookmark,
+    faPenToSquare,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 
 const Deadline = ({
     deadline,
@@ -33,11 +37,20 @@ const Deadline = ({
 
     return (
         <>
-            <Flex key={deadline.name} align={'center'} justify={'Center'} direction="column" h={107}>
-                <Flex w="100%" align={'center'} h='100%'>
+            <Flex
+                key={deadline.name}
+                align={'center'}
+                justify={'Center'}
+                direction="column"
+                h={107}
+                w="100%"
+            >
+                <Flex w="100%" align={'center'} h="100%">
                     <Flex w={'100%'} direction={'column'} gap={8}>
-                        <Text size="24px" fw={700}>{deadline.name}</Text>
-                        <Text pb={6} size="18px" fw={300} c='grey'>
+                        <Text size="24px" fw={700}>
+                            {deadline.name}
+                        </Text>
+                        <Text pb={6} size="18px" fw={300} c="grey">
                             {deadline.timestamp?.toLocaleDateString()}
                         </Text>
                     </Flex>
@@ -58,7 +71,7 @@ const Deadline = ({
                             size="xl"
                             radius="md"
                             aria-label="remove deadline"
-                            color='red'
+                            color="red"
                             onClick={() => {
                                 onDelete(deadline)
                             }}

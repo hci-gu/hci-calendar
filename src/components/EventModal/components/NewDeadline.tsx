@@ -1,4 +1,11 @@
-import { ActionIcon, Button, Divider, Flex, Text, TextInput } from '@mantine/core'
+import {
+    ActionIcon,
+    Button,
+    Divider,
+    Flex,
+    Text,
+    TextInput,
+} from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -79,7 +86,7 @@ const NewDeadline = ({
                         }}
                     />
                     {newErrors.timestamp !== '' && (
-                        <Text>{newErrors.timestamp}</Text>
+                        <Text c="red">{newErrors.timestamp}</Text>
                     )}
                 </Flex>
                 {!!deadline ? (

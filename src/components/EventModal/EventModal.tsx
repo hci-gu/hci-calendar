@@ -84,7 +84,11 @@ const NewEventModal = ({
         let tempErrors = { title: '', type: '', deadlines: '' }
 
         const parsedData = formDataSchema
-            .extend({ type: z.enum(['🔴 funding', '🟢 publication']) })
+            .extend({
+                type: z.enum(['🔴 funding', '🟢 publication'], {
+                    invalid_type_error: 'Color is required',
+                }),
+            })
             .safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
@@ -147,8 +151,9 @@ const NewEventModal = ({
                 >
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <Group w="100%" align="center" justify="space-between">
-                            <div></div> {/* hate this just let me felx end the actionicon */}
-                            <Text size='36px' fw={400} c='grey'>
+                            <div></div>
+                            {/* hate this just let me felx end the actionicon */}
+                            <Text size="36px" fw={400} c="grey">
                                 {!!editEvent ? 'Edit Event' : 'New Event'}
                             </Text>
                             <ActionIcon
@@ -163,7 +168,7 @@ const NewEventModal = ({
                         </Group>
                         <Flex align="flex-end" gap={16} w="100%">
                             <TextInput
-                                w="100%"
+                                w="65%"
                                 size="xl"
                                 label="Event Title"
                                 withAsterisk
@@ -177,13 +182,17 @@ const NewEventModal = ({
                                 }}
                                 error={errors.title !== '' ? errors.title : ''}
                             />
-                            <DropdownSelect
-                                onUpdate={onDropdownUpdate}
-                                selectedOption={formData.type}
-                            />
+                            <div style={{ width: '35%' }}>
+                                <DropdownSelect // cant find a way to turn the selector box red if error
+                                    onUpdate={onDropdownUpdate}
+                                    selectedOption={formData.type}
+                                />
+                                {errors.type !== '' && (
+                                    <Text c={'red'}>{errors.type}</Text>
+                                )}
+                            </div>
                         </Flex>
-                        {errors.type !== '' && <Text>{errors.type}</Text>}
-                        <Stack w={'100%'} pb="18px">
+                        <Stack w={'100%'} pb="18px" align="center">
                             {formData.deadlines.map((deadline, i) => (
                                 <Deadline
                                     key={deadline.name}
@@ -194,7 +203,7 @@ const NewEventModal = ({
                                 />
                             ))}
                             {errors.deadlines !== '' && (
-                                <Text>{errors.deadlines}</Text>
+                                <Text c='red'>{errors.deadlines}</Text>
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>

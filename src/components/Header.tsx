@@ -1,9 +1,11 @@
 import styled from '@emotion/styled'
-import { Button, Flex, SimpleGrid, Text } from '@mantine/core'
+import { ActionIcon, Button, Flex, SimpleGrid, Text } from '@mantine/core'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
 import { EventType } from '../types/types'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Container = styled.div`
     height: 90px;
@@ -106,14 +108,18 @@ const Header = () => {
     return (
         <>
             <Flex direction="column">
-                <Button
-                    variant="filled"
+                <ActionIcon
+                    pos="absolute"
+                    bottom={100}
+                    right={100}
+                    variant="outline"
                     onClick={() => {
                         setModalOpen(true)
                     }}
+                    size={50}
                 >
-                    Button
-                </Button>
+                    <FontAwesomeIcon icon={faPlus} />
+                </ActionIcon>
                 {!!modalOpen && <NewEventModal closeModal={closeModal} />}
                 <SimpleGrid cols={12}>
                     {[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
