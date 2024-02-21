@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, Flex, SimpleGrid, Text } from '@mantine/core'
+import { ActionIcon, Button, Flex, SimpleGrid, Text } from '@mantine/core'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
@@ -100,24 +100,9 @@ const Month = ({ monthIndex }: { monthIndex: number }) => {
 }
 
 const Header = () => {
-    const [modalOpen, setModalOpen] = useState(false)
-
-    const closeModal = () => {
-        setModalOpen(false)
-    }
-
     return (
         <>
             <Flex direction="column">
-                <Button
-                    variant="filled"
-                    onClick={() => {
-                        setModalOpen(true)
-                    }}
-                >
-                    Button
-                </Button>
-                {!!modalOpen && <NewEventModal closeModal={closeModal} />}
                 <Flex>
                     {[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
                         (monthIndex) => (
