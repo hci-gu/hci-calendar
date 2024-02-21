@@ -1,4 +1,13 @@
-import { Button, Flex, Modal, Stack, Text, TextInput } from '@mantine/core'
+import {
+    ActionIcon,
+    Button,
+    Flex,
+    Group,
+    Modal,
+    Stack,
+    Text,
+    TextInput,
+} from '@mantine/core'
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import Deadline from './components/Deadline'
@@ -13,6 +22,8 @@ import {
 } from '../../types/zod'
 import { z } from 'zod'
 import { EventType } from '../../types/types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 const NewEventModal = ({
     closeModal,
@@ -73,7 +84,11 @@ const NewEventModal = ({
         let tempErrors = { title: '', type: '', deadlines: '' }
 
         const parsedData = formDataSchema
-            .extend({ type: z.enum(['funding', 'publication']) })
+            .extend({
+                type: z.enum(['🔴 funding', '🟢 publication'], {
+                    invalid_type_error: 'Color is required',
+                }),
+            })
             .safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
@@ -121,11 +136,12 @@ const NewEventModal = ({
     return (
         <>
             <Modal
-                title={!!editEvent ? 'Edit Event' : 'New Event'}
+                withCloseButton={false}
                 opened={opend}
                 onClose={close}
                 centered
                 radius={24}
+                size="670px"
             >
                 <form
                     onSubmit={(e) => {
@@ -134,9 +150,26 @@ const NewEventModal = ({
                     }}
                 >
                     <Flex align="center" direction="column" w="100%" gap={16}>
+                        <Group w="100%" align="center" justify="space-between">
+                            <div></div>
+                            {/* hate this just let me felx end the actionicon */}
+                            <Text size="36px" fw={400} c="grey">
+                                {!!editEvent ? 'Edit Event' : 'New Event'}
+                            </Text>
+                            <ActionIcon
+                                variant="transparent"
+                                size="xl"
+                                radius="md"
+                                aria-label="close modal"
+                                onClick={close}
+                            >
+                                <FontAwesomeIcon color="black" icon={faXmark} />
+                            </ActionIcon>
+                        </Group>
                         <Flex align="flex-end" gap={16} w="100%">
                             <TextInput
-                                w="100%"
+                                w="70%"
+                                size="xl"
                                 label="Event Title"
                                 withAsterisk
                                 placeholder="Title"
@@ -149,13 +182,17 @@ const NewEventModal = ({
                                 }}
                                 error={errors.title !== '' ? errors.title : ''}
                             />
-                            <DropdownSelect
-                                onUpdate={onDropdownUpdate}
-                                selectedOption={formData.type}
-                            />
+                            <div style={{ width: '30%' }}>
+                                <DropdownSelect // cant find a way to turn the selector box red if error
+                                    onUpdate={onDropdownUpdate}
+                                    selectedOption={formData.type}
+                                />
+                                {errors.type !== '' && (
+                                    <Text c={'red'}>{errors.type}</Text>
+                                )}
+                            </div>
                         </Flex>
-                        {errors.type !== '' && <Text>{errors.type}</Text>}
-                        <Stack w={'100%'}>
+                        <Stack w={'100%'} pb="18px" align="center">
                             {formData.deadlines.map((deadline, i) => (
                                 <Deadline
                                     key={deadline.name}
@@ -166,12 +203,12 @@ const NewEventModal = ({
                                 />
                             ))}
                             {errors.deadlines !== '' && (
-                                <Text>{errors.deadlines}</Text>
+                                <Text c="red">{errors.deadlines}</Text>
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>
-                        <Button type="submit" w={'100%'} radius="md">
-                            submit
+                        <Button type="submit" w={'100%'} radius="lg" size="xl">
+                            Save
                         </Button>
                     </Flex>
                 </form>
