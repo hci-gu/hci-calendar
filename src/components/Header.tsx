@@ -4,6 +4,8 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
 import { EventType } from '../types/types'
+import { useViewportSize } from '@mantine/hooks'
+import { dayWidth } from '../lib/utils'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

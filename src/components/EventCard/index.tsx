@@ -6,7 +6,11 @@ import { colorType } from '@/src/lib/mantineConfig'
 import { useState } from 'react'
 import NewEventModal from '../EventModal/EventModal'
 
-const EventCard = ({ event, width, color }: { event: EventType, width: number, color: colorType }) => {    
+const EventCard = ({ event, width, color }: { event: EventType, width: number, color: colorType }) => {
+    const [modalOpen, setModalOpen] = useState(false)
+    const closeModal = () => {
+        setModalOpen(false)
+    }
     return (
         <Flex
             w={width}
@@ -14,8 +18,9 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
             direction="column"
             align="flex-end"
             gap="xs"
+            onClick={() => setModalOpen(true)}
         >
-            <Title order={2} c={color+".8"}>{event.title}</Title>
+            <Title order={2} c={color + ".8"}>{event.title}</Title>
             <Flex
                 w="100%"
                 h="100%"
@@ -32,7 +37,7 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
                         return (
                             <Flex
                                 h="100%"
-                                bg={color+".4"}
+                                bg={color + ".4"}
                                 justify="flex-end"
                                 style={{
                                     overflow: 'clip',
@@ -41,39 +46,16 @@ const EventCard = ({ event, width, color }: { event: EventType, width: number, c
                                 flex={flexWidth}
                             >
                                 <DeadlineText event={deadline} color={color} />
-                                <Divider orientation="vertical" size="xl" color={color+".8"} />
-                            </Flex>)
-                    }
-                />
-            ))}
+                                <Divider orientation="vertical" size="xl" color={color + ".8"} />
+                                {modalOpen && (
+                                    <NewEventModal closeModal={closeModal} editEvent={event} />
+                                )}
+                            </Flex>
+                        )
+                    })
+                }
+            </Flex>
         </Flex>
     )
 }
-
-const EventCard = ({ event, width }: { event: EventType; width: number }) => {
-    const [modalOpen, setModalOpen] = useState(false)
-    const closeModal = () => {
-        setModalOpen(false)
-    }
-    return (
-        <>
-            <Flex
-                direction="column"
-                justify="end"
-                gap="sm"
-                w={width}
-                onClick={() => setModalOpen(true)}
-            >
-                <Title c={'HCI-Green.8'} order={2}>
-                    {event.title}
-                </Title>
-                <DeadLines deadlines={event.deadlines} eventId={event.id} />
-            </Flex>
-            {!!modalOpen && (
-                <NewEventModal closeModal={closeModal} editEvent={event} />
-            )}
-        </>
-    )
-}
-
 export default EventCard

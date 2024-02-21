@@ -1,7 +1,5 @@
 import { Database } from '@/supabase/supabase'
-
-const types = {'funding': 'funding', 'publication': 'publication'}
-export type EventTypeType =  keyof typeof types
+import { EventTypeType } from './zod'
 
 export type EventFromSupabaseType =
     Database['public']['Tables']['newEvent']['Row']

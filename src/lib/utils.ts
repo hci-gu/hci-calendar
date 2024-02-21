@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { EventType } from '../types/types'
 import { colorType } from './mantineConfig'
+import { EventTypeType } from '../types/zod'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -33,8 +34,8 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
-export const getColor = (event: EventType): colorType => {
-    switch (event.type) {
+export const getColor = (type: EventTypeType): colorType => {
+    switch (type) {
         case 'funding':
             return 'HCI-Blue'
         case 'publication':

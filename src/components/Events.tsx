@@ -32,7 +32,7 @@ const Events = () => {
                         enableResizing={false}
                         bounds="window"
                     >
-                        <EventCard event={event} width={eventWidth} color={getColor(event)} />
+                        <EventCard event={event} width={eventWidth} color={getColor(event.type)} />
                     </Rnd>
                 )
             })}

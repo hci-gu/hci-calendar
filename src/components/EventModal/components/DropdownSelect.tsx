@@ -1,15 +1,7 @@
-import { EventTypeType } from '@/src/types/types'
-import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
+import { getColor } from '../../../lib/utils'
+import { EventTypeType } from '@/src/types/zod'
+import { Combobox, Flex, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
-
-const processOption = (option: string | null | undefined) => {
-    if (!option) {
-        return
-    }
-    const cleanedString =
-        option.charAt(0) + option.slice(1).replace(/[a-zA-Z]/g, '')
-    return cleanedString
-}
 
 const DropdownSelect = ({
     onUpdate,
@@ -18,20 +10,28 @@ const DropdownSelect = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const category = ['🔴 funding', '🟢 publication']
+    const category: EventTypeType[] = ['funding', 'publication']
 
     const [dropDownValue, setDropDownValue] = useState(
-        processOption(selectedOption) ?? ''
+        selectedOption
     )
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const options = category.map((item) => (
-        <Combobox.Option value={item} key={item}>
-            {processOption(item)}
-        </Combobox.Option>
-    ))
+    const options = category.map((item) => {
+        if (!item) {
+            return
+        }
+        return (
+            <Combobox.Option value={item} key={item}>
+                <Flex align="center" gap="sm">
+                    <div style={{ contain: '', width: '1.5rem', height: "1.5rem", borderRadius: "50%", backgroundColor: `var(--mantine-color-${getColor(item)}-4)` }}></div>
+                    {item}
+                </Flex>
+            </Combobox.Option>
+        )
+    })
     return (
         <Combobox
             size="xl"
@@ -52,7 +52,7 @@ const DropdownSelect = ({
                     rightSectionPointerEvents="none"
                     onClick={() => combobox.toggleDropdown()}
                 >
-                    {processOption(dropDownValue) || (
+                    {dropDownValue || (
                         <Input.Placeholder>pick</Input.Placeholder>
                     )}
                 </InputBase>
