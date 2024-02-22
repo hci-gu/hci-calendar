@@ -7,11 +7,16 @@ import { Divider, Flex, Stack, Text, Title } from '@mantine/core'
 import moment from 'moment'
 import { useEvents } from '../lib/state'
 import { DeadlineType, EventType, Row } from '../types/types'
+import { createEvent } from '../adapters/pocketbase'
 
 const Events = () => {
     const viewport = useViewportSize()
     const events = useEvents()
     const rows = sortEventsIntoRows({ events, viewportHeight: 2073 })
+
+    events.map((event) => {
+        // createEvent(event)
+    })
 
     return (
         <>
