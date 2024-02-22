@@ -1,0 +1,1 @@
+INSERT INTO "newEvent" ("title", "type", "deadlines") VALUES ('title #3', 'publication', '"[{\"name\":\"first\",\"timestamp\":\"2024-03-04T23:00:00.000Z\"},{\"name\":\"second\",\"timestamp\":\"2024-05-08T22:00:00.000Z\"},{\"name\":\"last\",\"timestamp\":\"2024-10-09T22:00:00.000Z\"}]"');

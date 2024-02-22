@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
-import { ActionIcon, Button, Flex, SimpleGrid, Text } from '@mantine/core'
+import { ActionIcon, Flex, Text } from '@mantine/core'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import NewEventModal from './EventModal/EventModal'
 import { useViewportSize } from '@mantine/hooks'
 import { dayWidth } from '../lib/utils'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Container = styled.div`
     height: 90px;
@@ -83,7 +85,7 @@ const Month = ({ monthIndex }: { monthIndex: number }) => {
     ) + 1
     const viewport = useViewportSize()
     const monthWidth = dayWidth(viewport.width) * daysInMonth
-    
+
 
 
     return (

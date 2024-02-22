@@ -1,10 +1,9 @@
-import { ActionIcon, Button, Center, Divider, Flex, Text } from '@mantine/core'
+import { ActionIcon, Divider, Flex, Text } from '@mantine/core'
 import NewDeadline from './NewDeadline'
 import { useState } from 'react'
 import { DeadlineFormType } from '@/src/types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-    faBookmark,
     faPenToSquare,
     faTrash,
 } from '@fortawesome/free-solid-svg-icons'

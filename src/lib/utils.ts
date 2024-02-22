@@ -1,4 +1,6 @@
 import moment from 'moment'
+import { colorType } from './mantineConfig'
+import { EventTypeType } from '../types/zod'
 import { EventType, Row } from '../types/types'
 
 export const calendarStart = () =>
@@ -16,9 +18,9 @@ export const dayWidth = (viewportWidth: number) => {
 }
 
 export const positionAndWidthForDates = (
-    dates: Date[],
+    dates: (Date | null)[],
     viewportWidth: number
-) => {
+): [xPos: number, width: number] => {
     const start = calendarStart()
 
     const lastDate = dates[dates.length - 1]
@@ -32,16 +34,31 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
+export const getColor = (type: EventTypeType): colorType => {
+    switch (type) {
+        case 'funding':
+            return 'HCI-Blue'
+        case 'publication':
+            return 'HCI-Green'
+        default:
+            return 'HCI-Red'
+    }
+}
+
+
 export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
     return events.sort((a, b) => {
-        const deadlineA = a.deadlines[0].timestamp.getTime()
-        const deadlineB = b.deadlines[0].timestamp.getTime()
-        return deadlineA - deadlineB
+        if (a.deadlines[0].timestamp && b.deadlines[0].timestamp) {
+            const deadlineA = a.deadlines[0].timestamp.getTime()
+            const deadlineB = b.deadlines[0].timestamp.getTime()
+            return deadlineA - deadlineB
+        }
+        return 0
     })
 }
 
-const startOfEvent = (event: any) => event.deadlines[0].timestamp
-const endOfEvent = (event: any) =>
+const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
+const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: any, b: any) => {
     const dateA = moment(a)
