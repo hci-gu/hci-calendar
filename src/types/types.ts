@@ -21,11 +21,5 @@ export type EventType = {
     deadlines: DeadlineFormType[]
 }
 
-// export type EventUpdateBody = {
-//     id: number
-//     position: { x: number; y: number }
-//     size: Size
-// }
-
 /* https://stackoverflow.com/a/77346296 */
 export type SetAtom<Args extends any[], Result> = (...args: Args) => Result

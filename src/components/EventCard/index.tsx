@@ -90,19 +90,3 @@ const EventCard = ({
     )
 }
 export default EventCard
-
-// <Flex
-//                     pos="absolute"
-//                     top={0}
-//                     right={4.57}
-//                     h="100%"
-//                     justify="flex-end"
-//                     key={(event.id + event.deadlines[0].name) as string}
-//                 >
-//                     <DeadlineText event={event.deadlines[0]} color={color} />
-//                     <Divider
-//                         orientation="vertical"
-//                         size="xl"
-//                         color={color + '.8'}
-//                     />
-//                 </Flex>

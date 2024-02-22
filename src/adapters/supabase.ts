@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../supabase/supabase'
 import { EventType, EventFromSupabaseType } from '../types/types'
 import { EventFormType, EventTypeType } from '../types/zod'
-import moment from 'moment'
 
 const supabase = createClient<Database>(
     import.meta.env.VITE_SUPABASE_URL,
@@ -50,8 +49,7 @@ const parseEvent = (event: EventFromSupabaseType): EventType => {
 }
 
 export const getEvents = async (): Promise<EventType[]> => {
-    const { data, error } = await supabase.from('newEvent').select()
-    console.log(error);
+    const { data } = await supabase.from('newEvent').select()
     
     if (!data) return []
 

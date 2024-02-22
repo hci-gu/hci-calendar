@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { EventType } from '../types/types'
 import { colorType } from './mantineConfig'
 import { EventTypeType } from '../types/zod'
 
