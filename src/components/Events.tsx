@@ -3,8 +3,9 @@ import { Rnd } from 'react-rnd'
 import EventCard from './EventCard'
 import { positionAndWidthForDates, sortEventsIntoRows, getColor } from '../lib/utils'
 import { useViewportSize } from '@mantine/hooks'
-import { Divider, Flex, Stack, Text, Title } from '@mantine/core'
-import moment from 'moment'
+import { useEvents } from '../lib/state'
+import { EventType, Row } from '../types/types'
+import { DeadlineFormType } from '../types/zod'
 
 const Events = () => {
     const viewport = useViewportSize()
@@ -16,27 +17,29 @@ const Events = () => {
             {rows.map((row: Row, i) => {
                 return row.eventsInRow.map((event: EventType) => {
                     const [x, width] = positionAndWidthForDates(
-                        event.deadlines.map((d: DeadlineType) => d.timestamp),
+                        event.deadlines.map((d: DeadlineFormType) => d.timestamp),
                         viewport.width
                     )
 
-                return (
-                    <Rnd
-                        key={event.id}
-                        position={{
-                            x,
-                            y: 100 + 200 * i,
-                        }}
-                        disableDragging
-                        enableResizing={false}
-                        bounds="window"
-                    >
-                        <EventCard event={event} width={eventWidth} color={getColor(event.type)} />
-                    </Rnd>
-                )
-            })}
+                    return (
+                        <Rnd
+                            key={event.id}
+                            position={{
+                                x,
+                                y: 100 + 200 * i,
+                            }}
+                            disableDragging
+                            enableResizing={false}
+                            bounds="window"
+                        >
+                            <EventCard event={event} width={width} color={getColor(event.type)} />
+                        </Rnd>
+                    )
+                })
+            }
+            )
+            }
         </>
     )
 }
-
 export default Events
