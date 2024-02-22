@@ -49,86 +49,87 @@ const parseEvent = (event: EventFromSupabaseType): EventType => {
     }
 }
 
-// export const getEvents = async (): Promise<EventType[]> => {
-//     const { data } = await supabase.from('newEvent').select()
-
-//     if (!data) return []
-
-//     return data.map(parseEvent)
-// }
-export const getEvents = (): EventType[] => {
-    const data: EventFromSupabaseType[] = [
-        {
-            id: 1,
-            title: 'title',
-            type: 'funding',
-            deadlines: JSON.stringify([
-                {
-                    name: 'name',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(2, 'months')
-                        .toISOString(),
-                },
-            ]),
-            created_at: moment().toISOString(),
-        },
-        {
-            id: 2,
-            title: 'title',
-            type: 'funding',
-            deadlines: JSON.stringify([
-                {
-                    name: 'name 1',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(1, 'months')
-                        .add(2, 'day')
-                        .toISOString(),
-                },
-                {
-                    name: 'name 2',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(1, 'months')
-                        .add(10, 'day')
-                        .toISOString(),
-                },
-            ]),
-            created_at: moment().toISOString(),
-        },
-        {
-            id: 3,
-            title: 'title #3',
-            type: 'publication',
-            deadlines: JSON.stringify([
-                {
-                    name: 'name 1',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(5, 'months')
-                        .toISOString(),
-                },
-                {
-                    name: 'name 2',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(6, 'months')
-                        .add(1, 'day')
-                        .toISOString(),
-                },
-                {
-                    name: 'name 3',
-                    timestamp: moment()
-                        .startOf('month')
-                        .add(8, 'months')
-                        .add(1, 'day')
-                        .toISOString(),
-                },
-            ]),
-            created_at: moment().toISOString(),
-        },
-    ]
+export const getEvents = async (): Promise<EventType[]> => {
+    const { data, error } = await supabase.from('newEvent').select()
+    console.log(error);
+    
+    if (!data) return []
 
     return data.map(parseEvent)
 }
+// export const getEvents = (): EventType[] => {
+//     const data: EventFromSupabaseType[] = [
+//         {
+//             id: 1,
+//             title: 'title',
+//             type: 'funding',
+//             deadlines: JSON.stringify([
+//                 {
+//                     name: 'name',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(2, 'months')
+//                         .toISOString(),
+//                 },
+//             ]),
+//             created_at: moment().toISOString(),
+//         },
+//         {
+//             id: 2,
+//             title: 'title',
+//             type: 'funding',
+//             deadlines: JSON.stringify([
+//                 {
+//                     name: 'name 1',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(1, 'months')
+//                         .add(2, 'day')
+//                         .toISOString(),
+//                 },
+//                 {
+//                     name: 'name 2',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(1, 'months')
+//                         .add(10, 'day')
+//                         .toISOString(),
+//                 },
+//             ]),
+//             created_at: moment().toISOString(),
+//         },
+//         {
+//             id: 3,
+//             title: 'title #3',
+//             type: 'publication',
+//             deadlines: JSON.stringify([
+//                 {
+//                     name: 'name 1',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(5, 'months')
+//                         .toISOString(),
+//                 },
+//                 {
+//                     name: 'name 2',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(6, 'months')
+//                         .add(1, 'day')
+//                         .toISOString(),
+//                 },
+//                 {
+//                     name: 'name 3',
+//                     timestamp: moment()
+//                         .startOf('month')
+//                         .add(8, 'months')
+//                         .add(1, 'day')
+//                         .toISOString(),
+//                 },
+//             ]),
+//             created_at: moment().toISOString(),
+//         },
+//     ]
+
+//     return data.map(parseEvent)
+// }
