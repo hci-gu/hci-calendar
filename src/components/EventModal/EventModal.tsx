@@ -2,8 +2,10 @@ import {
     ActionIcon,
     Button,
     Flex,
+    Grid,
     Group,
     Modal,
+    SimpleGrid,
     Stack,
     Text,
     TextInput,
@@ -132,7 +134,7 @@ const NewEventModal = ({
                 onClose={close}
                 centered
                 radius={24}
-                size="670px"
+                size="780px"
             >
                 <form
                     onSubmit={(e) => {
@@ -157,23 +159,24 @@ const NewEventModal = ({
                                 <FontAwesomeIcon color="black" icon={faXmark} />
                             </ActionIcon>
                         </Group>
-                        <Flex align="flex-end" gap={16} w="100%">
-                            <TextInput
-                                w="70%"
-                                size="xl"
-                                label="Event Title"
-                                withAsterisk
-                                placeholder="Title"
-                                value={formData.title}
-                                onChange={(e) => {
-                                    setFormData({
-                                        ...formData,
-                                        title: e.target.value,
-                                    })
-                                }}
-                                error={errors.title !== '' ? errors.title : ''}
-                            />
-                            <div style={{ width: '30%' }}>
+                        <Grid align='end' w="100%">
+                            <Grid.Col span={8}>
+                                <TextInput
+                                    size="xl"
+                                    label="Event Title"
+                                    withAsterisk
+                                    placeholder="Title"
+                                    value={formData.title}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            title: e.target.value,
+                                        })
+                                    }}
+                                    error={errors.title !== '' ? errors.title : ''}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span="auto">
                                 <DropdownSelect // cant find a way to turn the selector box red if error
                                     onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}
                                     selectedOption={formData.type}
@@ -181,8 +184,8 @@ const NewEventModal = ({
                                 {errors.type !== '' && (
                                     <Text c={'red'}>{errors.type}</Text>
                                 )}
-                            </div>
-                        </Flex>
+                            </Grid.Col>
+                        </Grid>
                         <Stack w={'100%'} pb="18px" align="center">
                             {formData.deadlines.map((deadline, i) => (
                                 <Deadline
