@@ -14,7 +14,7 @@ const Events = () => {
 
     return (
         <>
-            {rows.map((row: Row, i) => {
+            {rows.map((row: Row) => {
                 return row.eventsInRow.map((event: EventType) => {
                     const [x, width] = positionAndWidthForDates(
                         event.deadlines.map((d: DeadlineFormType) => d.timestamp),
@@ -26,7 +26,7 @@ const Events = () => {
                             key={event.id}
                             position={{
                                 x,
-                                y: 100 + 200 * i,
+                                y: row.y,
                             }}
                             disableDragging
                             enableResizing={false}
