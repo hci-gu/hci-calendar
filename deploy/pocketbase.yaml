@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hci-calendar-pocketbase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hci-calendar-pocketbase
+  template:
+    metadata:
+      labels:
+        app: hci-calendar-pocketbase
+    spec:
+      volumes:
+      - name: hci-calendar-pocketbase-persistent-storage
+        persistentVolumeClaim:
+          claimName: hci-calendar-pocketbase-pv-claim
+      containers:
+        - name: hci-calendar-pocketbase
+          image: 'appademin/hci-calendar-pocketbase:0.0.1'
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /pb/pb_data
+            name: hci-calendar-pocketbase-persistent-storage
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hci-calendar-pocketbase-service
+spec:
+  selector:
+    app: hci-calendar-pocketbase
+  ports:
+    - protocol: TCP
+      port: 8080
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hci-calendar-pocketbase-route
+  annotations:
+    kubernetes.io/tls-acme: 'true'
+spec:
+  host: hci-calendar-pb.prod.appadem.in
+  to:
+    kind: Service
+    name: hci-calendar-pocketbase-service
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

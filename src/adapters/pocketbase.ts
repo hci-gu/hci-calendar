@@ -50,3 +50,19 @@ export const updateEvent = async (event: EventType) =>
 
 export const deleteEvent = async (event: EventType) =>
     await pocketbase.collection('events').delete(event.id)
+
+type SubscribeCallback = (payload: { action: string; event: EventType }) => void
+export const subscribe = (
+    collection: string,
+    event: string,
+    callback: SubscribeCallback
+) => {
+    pocketbase.collection(collection).subscribe(event, (e: any) => {
+        callback({
+            action: e.action,
+            event: parseEvent(e.record),
+        })
+    })
+
+    return () => pocketbase.collection(collection).unsubscribe([event])
+}
