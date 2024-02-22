@@ -14,7 +14,6 @@ import Deadline from './components/Deadline'
 import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
 import { FormEvent, useEffect, useState } from 'react'
-import * as supabase from '../../adapters/supabase'
 import {
     DeadlineFormType,
     EventFormType,
@@ -24,7 +23,7 @@ import {
 import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { createEvent, updateEvent } from '../../adapters/pocketbase'
+import * as pocketbase from '../../adapters/pocketbase'
 
 const NewEventModal = ({
     closeModal,
@@ -86,7 +85,7 @@ const NewEventModal = ({
         if (parsedData.success) {
             setErrors(tempErrors)
             if (!!editEvent) {
-                const data = updateEvent({
+                const data = pocketbase.updateEvent({
                     ...editEvent,
                     title: formData.title,
                     type: formData.type,
@@ -96,7 +95,7 @@ const NewEventModal = ({
                 closeModal()
                 return
             }
-            const data = createEvent({
+            const data = pocketbase.createEvent({
                 title: formData.title,
                 type: formData.type,
                 deadlines: formData.deadlines,
@@ -117,7 +116,17 @@ const NewEventModal = ({
         }
     }
 
+    const deleteCurrentEvent = () => {
+        if (!editEvent) {
+            return
+        }
+        pocketbase.deleteEvent(editEvent)
+        closeModal()
+    }
+
     useEffect(() => {
+        console.log(opend)
+
         if (!opend) {
             closeModal()
         }
@@ -201,9 +210,31 @@ const NewEventModal = ({
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>
-                        <Button type="submit" w={'100%'} radius="lg" size="xl">
-                            Save
-                        </Button>
+                        <Flex w="100%" gap={24}>
+                            <Button
+                                type="submit"
+                                w={'100%'}
+                                radius="lg"
+                                size="xl"
+                            >
+                                Save
+                            </Button>
+                            {!!editEvent && (
+                                <Button
+                                    type="button"
+                                    radius="lg"
+                                    size="xl"
+                                    variant="outline"
+                                    w="27%"
+                                    onClick={() => {
+                                        deleteCurrentEvent()
+                                        close
+                                    }}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </Flex>
                     </Flex>
                 </form>
             </Modal>

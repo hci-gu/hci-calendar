@@ -1,17 +1,17 @@
 import PocketBase from 'pocketbase'
 import { EventType } from '../types/types'
-import {
-    EventFormType,
-    formDataSchema,
-} from '../types/zod'
+import { EventFormType, formDataSchema } from '../types/zod'
 import { z } from 'zod'
 import moment from 'moment'
 
 const pocketbase = new PocketBase(import.meta.env.VITE_POCKETBASE)
 
 const parseEvent = (event: any): EventType => {
-    const deadlines = event.deadlines.map((deadline: any)=>{
-        return {name: deadline.name, timestamp: moment(deadline.timestamp).toDate() }
+    const deadlines = event.deadlines.map((deadline: any) => {
+        return {
+            name: deadline.name,
+            timestamp: moment(deadline.timestamp).toDate(),
+        }
     })
     const body = {
         id: event.id,
@@ -47,3 +47,6 @@ export const createEvent = async (FormData: EventFormType) => {
 
 export const updateEvent = async (event: EventType) =>
     await pocketbase.collection('events').update(event.id, event)
+
+export const deleteEvent = async (event: EventType) =>
+    await pocketbase.collection('events').delete(event.id)
