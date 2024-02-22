@@ -1,5 +1,4 @@
 import { colorType } from "@/src/lib/mantineConfig";
-import { getColor } from "@/src/lib/utils";
 import { DeadlineFormType } from "@/src/types/zod";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,9 +17,9 @@ export default function DeadlineText({ event, color }: { event: DeadlineFormType
                         {event.name}
                     </Title>
                 </Flex>
-                <Text style={{ textWrap: 'nowrap' }} size="lg" c={color + ".8"}>
+                {!is14DaysFromNow && <Text style={{ textWrap: 'nowrap' }} size="lg" c={color + ".8"}>
                     {moment(event.timestamp).format('MM/DD')}
-                </Text>
+                </Text>}
 
                 {is14DaysFromNow &&
                     <Text style={{ textWrap: 'nowrap' }} size="lg" c={color + ".8"}>
