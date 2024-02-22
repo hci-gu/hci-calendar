@@ -57,8 +57,8 @@ export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
     })
 }
 
-const startOfEvent = (event: any) => event.deadlines[0].timestamp
-const endOfEvent = (event: any) =>
+const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
+const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: any, b: any) => {
     const dateA = moment(a)
