@@ -1,17 +1,14 @@
-import {
-    ActionIcon,
-    Button,
-    Divider,
-    Flex,
-    Text,
-    TextInput,
-} from '@mantine/core'
+import { ActionIcon, Divider, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { z } from 'zod'
 import { DeadlineFormType, deadlineSchema } from '../../../types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+    faFloppyDisk,
+    faPlus,
+    faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 
 const NewDeadline = ({
     deadline,
@@ -62,7 +59,7 @@ const NewDeadline = ({
                 <Flex direction={'column'} gap={6} w={'100%'}>
                     <TextInput
                         size="lg"
-                        w="8vw"
+                        w="310px"
                         placeholder="Deadline Name"
                         value={newDeadline.name}
                         onChange={(e) => {
@@ -74,7 +71,7 @@ const NewDeadline = ({
                         error={newErrors.name !== '' ? newErrors.name : ''}
                     />
                     <DateTimePicker
-                        w="8vw"
+                        w="310px"
                         size="md"
                         placeholder="2024/01/01 00:00"
                         value={newDeadline.timestamp}
@@ -112,7 +109,7 @@ const NewDeadline = ({
                                 aria-label="saves the edited deadline"
                                 onClick={addNewDeadline}
                             >
-                                <FontAwesomeIcon icon={faBookmark} />
+                                <FontAwesomeIcon icon={faFloppyDisk} />
                             </ActionIcon>
                         </Flex>
                     </>

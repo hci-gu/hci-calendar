@@ -21,5 +21,10 @@ export type EventType = {
     deadlines: DeadlineFormType[]
 }
 
+export type Row = {
+    y: number
+    eventsInRow: EventType[]
+}
+
 /* https://stackoverflow.com/a/77346296 */
 export type SetAtom<Args extends any[], Result> = (...args: Args) => Result

@@ -132,7 +132,7 @@ const NewEventModal = ({
                 onClose={close}
                 centered
                 radius={24}
-                size="25vw"
+                size="670px"
             >
                 <form
                     onSubmit={(e) => {
@@ -159,7 +159,7 @@ const NewEventModal = ({
                         </Group>
                         <Flex align="flex-end" gap={16} w="100%">
                             <TextInput
-                                w="65%"
+                                w="70%"
                                 size="xl"
                                 label="Event Title"
                                 withAsterisk
@@ -173,7 +173,7 @@ const NewEventModal = ({
                                 }}
                                 error={errors.title !== '' ? errors.title : ''}
                             />
-                            <div style={{ width: '35%' }}>
+                            <div style={{ width: '30%' }}>
                                 <DropdownSelect // cant find a way to turn the selector box red if error
                                     onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}
                                     selectedOption={formData.type}
@@ -194,7 +194,7 @@ const NewEventModal = ({
                                 />
                             ))}
                             {errors.deadlines !== '' && (
-                                <Text c='red'>{errors.deadlines}</Text>
+                                <Text c="red">{errors.deadlines}</Text>
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>
