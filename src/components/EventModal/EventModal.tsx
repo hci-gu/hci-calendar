@@ -125,8 +125,6 @@ const NewEventModal = ({
     }
 
     useEffect(() => {
-        console.log(opend)
-
         if (!opend) {
             closeModal()
         }
