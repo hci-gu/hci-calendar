@@ -2,8 +2,10 @@ import {
     ActionIcon,
     Button,
     Flex,
+    Grid,
     Group,
     Modal,
+    SimpleGrid,
     Stack,
     Text,
     TextInput,
@@ -18,9 +20,9 @@ import * as supabase from '../../adapters/supabase'
 import {
     DeadlineFormType,
     EventFormType,
+    EventTypeType,
     formDataSchema,
 } from '../../types/zod'
-import { z } from 'zod'
 import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -29,13 +31,12 @@ const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
-    closeModal: () => void
+    closeModal: () => void,
     editEvent?: EventType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
-        //@ts-ignore
         type: editEvent?.type ?? null,
         deadlines: editEvent?.deadlines ?? [],
     })
@@ -72,8 +73,7 @@ const NewEventModal = ({
             deadlines: formData.deadlines.filter((e) => e !== deadline),
         })
     }
-    const onDropdownUpdate = (option: string) => {
-        //@ts-ignore
+    const onDropdownUpdate = (option: EventTypeType) => {
         setFormData({ ...formData, type: option })
     }
     const insertSupabase = async (
@@ -83,21 +83,14 @@ const NewEventModal = ({
         e.preventDefault()
         let tempErrors = { title: '', type: '', deadlines: '' }
 
-        const parsedData = formDataSchema
-            .extend({
-                type: z.enum(['🔴 funding', '🟢 publication'], {
-                    invalid_type_error: 'Color is required',
-                }),
-            })
-            .safeParse(formData)
+        const parsedData = formDataSchema.safeParse(formData)
         if (parsedData.success) {
             setErrors(tempErrors)
             if (!!editEvent) {
                 const { data, error } = await supabase.updateEvent({
                     ...editEvent,
                     title: formData.title,
-                    type: formData.type ?? '',
-                    //@ts-ignore
+                    type: formData.type,
                     deadlines: formData.deadlines,
                 })
                 if (error) {
@@ -141,7 +134,7 @@ const NewEventModal = ({
                 onClose={close}
                 centered
                 radius={24}
-                size="670px"
+                size="780px"
             >
                 <form
                     onSubmit={(e) => {
@@ -166,32 +159,33 @@ const NewEventModal = ({
                                 <FontAwesomeIcon color="black" icon={faXmark} />
                             </ActionIcon>
                         </Group>
-                        <Flex align="flex-end" gap={16} w="100%">
-                            <TextInput
-                                w="70%"
-                                size="xl"
-                                label="Event Title"
-                                withAsterisk
-                                placeholder="Title"
-                                value={formData.title}
-                                onChange={(e) => {
-                                    setFormData({
-                                        ...formData,
-                                        title: e.target.value,
-                                    })
-                                }}
-                                error={errors.title !== '' ? errors.title : ''}
-                            />
-                            <div style={{ width: '30%' }}>
+                        <Grid align='end' w="100%">
+                            <Grid.Col span={8}>
+                                <TextInput
+                                    size="xl"
+                                    label="Event Title"
+                                    withAsterisk
+                                    placeholder="Title"
+                                    value={formData.title}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            title: e.target.value,
+                                        })
+                                    }}
+                                    error={errors.title !== '' ? errors.title : ''}
+                                />
+                            </Grid.Col>
+                            <Grid.Col span="auto">
                                 <DropdownSelect // cant find a way to turn the selector box red if error
-                                    onUpdate={onDropdownUpdate}
+                                    onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}
                                     selectedOption={formData.type}
                                 />
                                 {errors.type !== '' && (
                                     <Text c={'red'}>{errors.type}</Text>
                                 )}
-                            </div>
-                        </Flex>
+                            </Grid.Col>
+                        </Grid>
                         <Stack w={'100%'} pb="18px" align="center">
                             {formData.deadlines.map((deadline, i) => (
                                 <Deadline

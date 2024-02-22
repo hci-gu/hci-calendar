@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { Database } from '../../supabase/supabase'
 import { EventType, EventFromSupabaseType } from '../types/types'
-import { EventFormType } from '../types/zod'
+import { EventFormType, EventTypeType } from '../types/zod'
 import moment from 'moment'
 
 const supabase = createClient<Database>(
@@ -14,7 +14,7 @@ export const updateEvent = (event: EventType) =>
         .from('newEvent')
         .update({
             title: event.title,
-            type: event.type,
+            type: event.type ?? undefined,
             deadlines: JSON.stringify(event.deadlines),
         })
         .eq('id', event.id)
@@ -42,8 +42,8 @@ const parseEvent = (event: EventFromSupabaseType): EventType => {
 
     return {
         id: event.id,
-        title: event.title,
-        type: event.type,
+        title: event.title ,
+        type: event.type as EventTypeType,
         deadlines,
     }
 }
