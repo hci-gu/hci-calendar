@@ -24,7 +24,6 @@ const EventCard = ({
 
             <Flex
                 w={width}
-                h="157px"
                 direction="column"
                 align="flex-end"
                 gap="xs"
@@ -33,7 +32,7 @@ const EventCard = ({
                 <Title order={2} c={color + '.8'}>
                     {event.title}
                 </Title>
-                <Flex w="100%" h="100%" pos="relative">
+                <Flex w="100%" mih={80} pos="relative">
                     {/* Events after first event */}
 
                     {event.deadlines
