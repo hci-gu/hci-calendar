@@ -12,10 +12,6 @@ const Events = () => {
     const events = useEvents()
     const rows = sortEventsIntoRows({ events, viewportHeight: 2073 })
 
-    events.map((event) => {
-        // createEvent(event)
-    })
-
     return (
         <>
             {rows.map((row: Row, i) => {

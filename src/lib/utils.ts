@@ -45,7 +45,6 @@ export const getColor = (type: EventTypeType): colorType => {
     }
 }
 
-
 export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
     return events.sort((a, b) => {
         if (a.deadlines[0].timestamp && b.deadlines[0].timestamp) {

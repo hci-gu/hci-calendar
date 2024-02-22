@@ -15,7 +15,7 @@ export type PositionType = {
 }
 
 export type EventType = {
-    id: number
+    id: string
     title: string
     type: EventTypeType
     deadlines: DeadlineFormType[]

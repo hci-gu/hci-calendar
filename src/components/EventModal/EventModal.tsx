@@ -24,12 +24,13 @@ import {
 import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { createEvent, updateEvent } from '../../adapters/pocketbase'
 
 const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
-    closeModal: () => void,
+    closeModal: () => void
     editEvent?: EventType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)
@@ -85,23 +86,21 @@ const NewEventModal = ({
         if (parsedData.success) {
             setErrors(tempErrors)
             if (!!editEvent) {
-                const { data, error } = await supabase.updateEvent({
+                const data = updateEvent({
                     ...editEvent,
                     title: formData.title,
                     type: formData.type,
                     deadlines: formData.deadlines,
                 })
-                if (error) {
-                    console.log(error)
-                }
                 close
                 closeModal()
                 return
             }
-            const { data, error } = await supabase.createEvent(formData)
-            if (error) {
-                console.log(error)
-            }
+            const data = createEvent({
+                title: formData.title,
+                type: formData.type,
+                deadlines: formData.deadlines,
+            })
             close
             closeModal()
             return
@@ -175,7 +174,11 @@ const NewEventModal = ({
                             />
                             <div style={{ width: '30%' }}>
                                 <DropdownSelect // cant find a way to turn the selector box red if error
-                                    onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}
+                                    onUpdate={(option) =>
+                                        onDropdownUpdate(
+                                            option as EventTypeType
+                                        )
+                                    }
                                     selectedOption={formData.type}
                                 />
                                 {errors.type !== '' && (
