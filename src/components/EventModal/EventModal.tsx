@@ -5,7 +5,6 @@ import {
     Grid,
     Group,
     Modal,
-    SimpleGrid,
     Stack,
     Text,
     TextInput,
@@ -26,6 +25,9 @@ import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import * as pocketbase from '../../adapters/pocketbase'
+import { atom, useAtomValue } from 'jotai'
+
+export const isEditingAtom = atom(false)
 
 const NewEventModal = ({
     closeModal,
@@ -126,11 +128,32 @@ const NewEventModal = ({
         closeModal()
     }
 
+    const [isDisabled, setIsDisabled] = useState(true)
+    const isEditing = useAtomValue(isEditingAtom)
+
     useEffect(() => {
         if (!opend) {
             closeModal()
         }
     }, [opend])
+
+    useEffect(() => {
+        const editEventBody = {
+            title: editEvent?.title ?? '',
+            type: editEvent?.type ?? null,
+            deadlines: editEvent?.deadlines ?? [],
+        }
+        console.log('is editing',isEditing);
+        
+        if (
+            JSON.stringify(editEventBody) !== JSON.stringify(formData) &&
+            !isEditing
+        ) {
+            setIsDisabled(false)
+        } else {
+            setIsDisabled(true)
+        }
+    }, [formData, isEditing])
 
     return (
         <>
@@ -165,7 +188,7 @@ const NewEventModal = ({
                                 <FontAwesomeIcon color="black" icon={faXmark} />
                             </ActionIcon>
                         </Group>
-                        <Grid align='end' w="100%">
+                        <Grid align="end" w="100%">
                             <Grid.Col span={8}>
                                 <TextInput
                                     size="xl"
@@ -179,7 +202,9 @@ const NewEventModal = ({
                                             title: e.target.value,
                                         })
                                     }}
-                                    error={errors.title !== '' ? errors.title : ''}
+                                    error={
+                                        errors.title !== '' ? errors.title : ''
+                                    }
                                 />
                             </Grid.Col>
                             <Grid.Col span="auto">
@@ -217,6 +242,7 @@ const NewEventModal = ({
                                 w={'100%'}
                                 radius="lg"
                                 size="xl"
+                                disabled={isDisabled}
                             >
                                 Save
                             </Button>

@@ -3,10 +3,9 @@ import NewDeadline from './NewDeadline'
 import { useState } from 'react'
 import { DeadlineFormType } from '@/src/types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faPenToSquare,
-    faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { isEditingAtom } from '../EventModal'
+import { useSetAtom } from 'jotai'
 
 const Deadline = ({
     deadline,
@@ -20,6 +19,7 @@ const Deadline = ({
     onDelete: (deadline: DeadlineFormType) => void
 }) => {
     const [isEditing, setIsEditing] = useState(false)
+    const setIsEditingAtom = useSetAtom(isEditingAtom)
 
     if (isEditing) {
         return (
@@ -61,6 +61,7 @@ const Deadline = ({
                             aria-label="edit deadline"
                             onClick={() => {
                                 setIsEditing(true)
+                                setIsEditingAtom(true)
                             }}
                         >
                             <FontAwesomeIcon icon={faPenToSquare} />

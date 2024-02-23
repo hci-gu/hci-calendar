@@ -9,6 +9,8 @@ import {
     faPlus,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+import { useSetAtom } from 'jotai'
+import { isEditingAtom } from '../EventModal'
 
 const NewDeadline = ({
     deadline,
@@ -29,6 +31,7 @@ const NewDeadline = ({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp as Date,
     })
+    const setIsEditingAtom = useSetAtom(isEditingAtom)
 
     const addNewDeadline = () => {
         const parsedData = deadlineSchema.safeParse(newDeadline)
@@ -107,7 +110,10 @@ const NewDeadline = ({
                                 size="xl"
                                 radius="md"
                                 aria-label="saves the edited deadline"
-                                onClick={addNewDeadline}
+                                onClick={() => {
+                                    addNewDeadline()
+                                    setIsEditingAtom(false)
+                                }}
                             >
                                 <FontAwesomeIcon icon={faFloppyDisk} />
                             </ActionIcon>
