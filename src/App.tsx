@@ -4,6 +4,7 @@ import Events from './components/Events'
 import AddEventButton from './components/AddEventButton/AddEventButton'
 
 const App = () => {
+
     return (
         <>
             <Header />
