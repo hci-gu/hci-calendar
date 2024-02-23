@@ -64,5 +64,5 @@ export const subscribe = (
         })
     })
 
-    return () => pocketbase.collection(collection).unsubscribe([event])
+    return () => pocketbase.collection(collection).unsubscribe(event)
 }
