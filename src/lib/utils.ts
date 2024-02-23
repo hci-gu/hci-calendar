@@ -45,7 +45,6 @@ export const getColor = (type: EventTypeType): colorType => {
     }
 }
 
-
 export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
     return events.sort((a, b) => {
         if (a.deadlines[0].timestamp && b.deadlines[0].timestamp) {
@@ -60,13 +59,11 @@ export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
 const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
 const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
-const isSameDay = (a: any, b: any) => {
-    const dateA = moment(a)
-    const dateB = moment(b)
+const isSameDay = (a: moment.Moment, b: moment.Moment) => {
     return (
-        dateA.year == dateB.year &&
-        dateA.month == dateB.month &&
-        dateA.day == dateB.day
+        a.year == b.year &&
+        a.month == b.month &&
+        a.day == b.day
     )
 }
 

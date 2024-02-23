@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hci-calendar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hci-calendar
+  template:
+    metadata:
+      labels:
+        app: hci-calendar
+    spec:
+      containers:
+        - name: hci-calendar
+          image: 'appademin/hci-calendar:0.0.1'
+          ports:
+            - containerPort: 8080
+              name: web
+              protocol: TCP
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hci-calendar-service
+spec:
+  selector:
+    app: hci-calendar
+  ports:
+    - protocol: TCP
+      port: 8080
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: hci-calendar-route
+  annotations:
+    kubernetes.io/tls-acme: 'true'
+spec:
+  host: hci-calendar.prod.appadem.in
+  to:
+    kind: Service
+    name: hci-calendar-service
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
