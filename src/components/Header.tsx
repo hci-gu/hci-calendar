@@ -1,12 +1,10 @@
 import styled from '@emotion/styled'
-import { ActionIcon, Flex, Text } from '@mantine/core'
+import { Flex, Text } from '@mantine/core'
 import moment from 'moment'
-import { useState } from 'react'
-import NewEventModal from './EventModal/EventModal'
+
 import { useViewportSize } from '@mantine/hooks'
 import { dayWidth } from '../lib/utils'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 const Container = styled.div`
     height: 90px;
