@@ -10,7 +10,7 @@ const DropdownSelect = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const category: EventTypeType[] = ['funding', 'publication']
+    const category: EventTypeType[] = ['funding', 'publication', 'conference']
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
