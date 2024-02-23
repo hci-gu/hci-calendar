@@ -16,7 +16,6 @@ import Deadline from './components/Deadline'
 import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
 import { FormEvent, useEffect, useState } from 'react'
-import * as supabase from '../../adapters/supabase'
 import {
     DeadlineFormType,
     EventFormType,
@@ -26,12 +25,13 @@ import {
 import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import * as pocketbase from '../../adapters/pocketbase'
 
 const NewEventModal = ({
     closeModal,
     editEvent,
 }: {
-    closeModal: () => void,
+    closeModal: () => void
     editEvent?: EventType
 }) => {
     const [opend, { open, close }] = useDisclosure(true)
@@ -87,23 +87,21 @@ const NewEventModal = ({
         if (parsedData.success) {
             setErrors(tempErrors)
             if (!!editEvent) {
-                const { data, error } = await supabase.updateEvent({
+                const data = pocketbase.updateEvent({
                     ...editEvent,
                     title: formData.title,
                     type: formData.type,
                     deadlines: formData.deadlines,
                 })
-                if (error) {
-                    console.log(error)
-                }
                 close
                 closeModal()
                 return
             }
-            const { data, error } = await supabase.createEvent(formData)
-            if (error) {
-                console.log(error)
-            }
+            const data = pocketbase.createEvent({
+                title: formData.title,
+                type: formData.type,
+                deadlines: formData.deadlines,
+            })
             close
             closeModal()
             return
@@ -118,6 +116,14 @@ const NewEventModal = ({
             })
             setErrors(tempErrors)
         }
+    }
+
+    const deleteCurrentEvent = () => {
+        if (!editEvent) {
+            return
+        }
+        pocketbase.deleteEvent(editEvent)
+        closeModal()
     }
 
     useEffect(() => {
@@ -178,7 +184,11 @@ const NewEventModal = ({
                             </Grid.Col>
                             <Grid.Col span="auto">
                                 <DropdownSelect // cant find a way to turn the selector box red if error
-                                    onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}
+                                    onUpdate={(option) =>
+                                        onDropdownUpdate(
+                                            option as EventTypeType
+                                        )
+                                    }
                                     selectedOption={formData.type}
                                 />
                                 {errors.type !== '' && (
@@ -201,9 +211,31 @@ const NewEventModal = ({
                             )}
                             <NewDeadline onSave={onNewDeadline} />
                         </Stack>
-                        <Button type="submit" w={'100%'} radius="lg" size="xl">
-                            Save
-                        </Button>
+                        <Flex w="100%" gap={24}>
+                            <Button
+                                type="submit"
+                                w={'100%'}
+                                radius="lg"
+                                size="xl"
+                            >
+                                Save
+                            </Button>
+                            {!!editEvent && (
+                                <Button
+                                    type="button"
+                                    radius="lg"
+                                    size="xl"
+                                    variant="outline"
+                                    w="27%"
+                                    onClick={() => {
+                                        deleteCurrentEvent()
+                                        close
+                                    }}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </Flex>
                     </Flex>
                 </form>
             </Modal>
