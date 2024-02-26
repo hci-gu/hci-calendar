@@ -6,6 +6,7 @@ import {
     IconDefinition,
     faBell,
     faFile,
+    faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const calendarStart = () =>
@@ -58,6 +59,8 @@ export const getIcon = (type: IconType): IconDefinition => {
             return faBell
         case 'Paper Icon':
             return faFile
+        case 'User In Tie Icon':
+            return faUserTie
         default:
             return faBell
     }

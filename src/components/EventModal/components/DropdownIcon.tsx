@@ -1,6 +1,6 @@
 import { getIcon } from '../../../lib/utils'
-import { IconType } from '@/src/types/zod'
-import { Combobox, Flex, Input, InputBase, useCombobox , Text} from '@mantine/core'
+import { IconType } from '../../../types/zod'
+import { Combobox, Flex, Input, InputBase, useCombobox, Text } from '@mantine/core'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -11,7 +11,7 @@ const DropdownIcon = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const category: IconType[] = ['Bell Icon', 'Paper Icon']
+    const icons: IconType[] = Object.values(IconType.Values)
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
@@ -20,7 +20,7 @@ const DropdownIcon = ({
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const options = category.map((item) => {
+    const options = icons.map((item) => {
         return (
             <Combobox.Option value={item} key={item}>
                 <Flex align="center" gap="sm">

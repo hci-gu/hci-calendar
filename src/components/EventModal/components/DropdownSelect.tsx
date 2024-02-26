@@ -1,5 +1,5 @@
+import { EventTypeType } from '../../../types/zod'
 import { getColor } from '../../../lib/utils'
-import { EventTypeType } from '@/src/types/zod'
 import { Combobox, Flex, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
 
@@ -10,7 +10,7 @@ const DropdownSelect = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const category: EventTypeType[] = ['funding', 'publication', 'conference']
+    const category: EventTypeType[] = Object.values(EventTypeType.Values)
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
