@@ -12,9 +12,9 @@ import { DeadlineFormType } from '../types/zod'
 
 const Events = () => {
     const viewport = useViewportSize()
-    const events = useEvents()
+    const events = useEvents()    
 
-    const rows = sortEventsIntoRows({ events, viewportHeight: 2073 })
+    const rows = sortEventsIntoRows({ events, viewportHeight: viewport.height })
 
     return (
         <>
