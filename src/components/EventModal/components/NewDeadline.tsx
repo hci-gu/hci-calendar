@@ -2,20 +2,23 @@ import { ActionIcon, Divider, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { z } from 'zod'
-import { DeadlineFormType, deadlineSchema } from '../../../types/zod'
+import { DeadlineFormType, IconType, deadlineSchema, formDataSchema } from '../../../types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faFloppyDisk,
     faPlus,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+import DropdownIcon from './DropdownIcon'
+
+const newEventType = deadlineSchema.merge(formDataSchema.pick({ icon: true }))
 
 const NewDeadline = ({
     deadline,
     onSave,
     onCancel,
 }: {
-    deadline?: DeadlineFormType
+    deadline?: z.infer<typeof newEventType>
     onSave: (deadline: DeadlineFormType) => void
     onCancel?: () => void
 }) => {
@@ -24,10 +27,11 @@ const NewDeadline = ({
         timestamp: '',
     })
     const [newDeadline, setNewDeadline] = useState<
-        z.infer<typeof deadlineSchema>
+        z.infer<typeof newEventType>
     >({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp as Date,
+        icon: deadline?.icon as IconType,
     })
 
     const addNewDeadline = () => {
@@ -39,6 +43,7 @@ const NewDeadline = ({
             setNewDeadline({
                 name: '',
                 timestamp: null,
+                icon: 'Bell Icon',
             })
         } else {
             const keys = ['name', 'timestamp']
@@ -51,6 +56,10 @@ const NewDeadline = ({
             })
             setNewErrors(tempErrors)
         }
+    }
+
+    const onDropdownUpdate = (option: IconType) => {
+        setNewDeadline({ ...newDeadline, icon: option })
     }
 
     return (
@@ -85,6 +94,7 @@ const NewDeadline = ({
                     {newErrors.timestamp !== '' && (
                         <Text c="red">{newErrors.timestamp}</Text>
                     )}
+                    <DropdownIcon selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)} />
                 </Flex>
                 {!!deadline ? (
                     <>

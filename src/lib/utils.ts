@@ -1,7 +1,12 @@
 import moment from 'moment'
 import { colorType } from './mantineConfig'
-import { EventTypeType } from '../types/zod'
+import { EventTypeType, IconType } from '../types/zod'
 import { EventType, Row } from '../types/types'
+import {
+    IconDefinition,
+    faBell,
+    faFile,
+} from '@fortawesome/free-solid-svg-icons'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -47,6 +52,17 @@ export const getColor = (type: EventTypeType): colorType => {
     }
 }
 
+export const getIcon = (type: IconType): IconDefinition => {
+    switch (type) {
+        case 'Bell Icon':
+            return faBell
+        case 'Paper Icon':
+            return faFile
+        default:
+            return faBell
+    }
+}
+
 export const sortEventsByFirstDeadlineTimestamp = (events: EventType[]) => {
     return events.sort((a, b) => {
         if (a.deadlines[0].timestamp && b.deadlines[0].timestamp) {
@@ -62,11 +78,7 @@ const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
 const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: moment.Moment, b: moment.Moment) => {
-    return (
-        a.year == b.year &&
-        a.month == b.month &&
-        a.day == b.day
-    )
+    return a.year == b.year && a.month == b.month && a.day == b.day
 }
 
 const eventsDontOverlap = (eventA: EventType, eventB: EventType) => {

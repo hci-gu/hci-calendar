@@ -38,6 +38,7 @@ const NewEventModal = ({
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
         type: editEvent?.type ?? null,
+        icon: editEvent?.icon ?? 'Bell Icon',
         deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({
@@ -100,6 +101,7 @@ const NewEventModal = ({
             const data = pocketbase.createEvent({
                 title: formData.title,
                 type: formData.type,
+                icon: formData.icon,
                 deadlines: formData.deadlines,
             })
             close
@@ -150,8 +152,6 @@ const NewEventModal = ({
                 >
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <Group w="100%" align="center" justify="space-between">
-                            <div></div>
-                            {/* hate this just let me felx end the actionicon */}
                             <Text size="36px" fw={400} c="grey">
                                 {!!editEvent ? 'Edit Event' : 'New Event'}
                             </Text>
