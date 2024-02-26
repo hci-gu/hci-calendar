@@ -1,7 +1,6 @@
 import { ActionIcon, Divider, Flex, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
-import { z } from 'zod'
 import { DeadlineFormType, IconType, deadlineSchema, formDataSchema } from '../../../types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -11,14 +10,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import DropdownIcon from './DropdownIcon'
 
-const newEventType = deadlineSchema.merge(formDataSchema.pick({ icon: true }))
-
 const NewDeadline = ({
     deadline,
     onSave,
     onCancel,
 }: {
-    deadline?: z.infer<typeof newEventType>
+    deadline?: DeadlineFormType
     onSave: (deadline: DeadlineFormType) => void
     onCancel?: () => void
 }) => {
@@ -27,7 +24,7 @@ const NewDeadline = ({
         timestamp: '',
     })
     const [newDeadline, setNewDeadline] = useState<
-        z.infer<typeof newEventType>
+        DeadlineFormType
     >({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp as Date,
