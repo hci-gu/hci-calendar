@@ -32,7 +32,7 @@ const DropdownIcon = ({
     })
     return (
         <Combobox
-            size="xl"
+            size="lg"
             store={combobox}
             onOptionSubmit={(val) => {
                 setDropDownValue(val)
@@ -42,7 +42,7 @@ const DropdownIcon = ({
         >
             <Combobox.Target>
                 <InputBase
-                    size="xl"
+                    size="lg"
                     component="button"
                     type="button"
                     pointer

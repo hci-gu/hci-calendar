@@ -1,7 +1,7 @@
-import { ActionIcon, Divider, Flex, Text, TextInput } from '@mantine/core'
+import { ActionIcon, Divider, Flex, SimpleGrid, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
-import { DeadlineFormType, IconType, deadlineSchema, formDataSchema } from '../../../types/zod'
+import { DeadlineFormType, IconType, deadlineSchema } from '../../../types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faFloppyDisk,
@@ -61,11 +61,10 @@ const NewDeadline = ({
 
     return (
         <Flex w="100%" direction="column">
-            <Flex align={'center'} w={'100%'}>
-                <Flex direction={'column'} gap={6} w={'100%'}>
+            <Flex align={'center'} justify="space-between" w={'100%'}>
+                <SimpleGrid cols={2} spacing="sm">
                     <TextInput
                         size="lg"
-                        w="310px"
                         placeholder="Deadline Name"
                         value={newDeadline.name}
                         onChange={(e) => {
@@ -76,9 +75,9 @@ const NewDeadline = ({
                         }}
                         error={newErrors.name !== '' ? newErrors.name : ''}
                     />
+                    <DropdownIcon selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)} />
                     <DateTimePicker
-                        w="310px"
-                        size="md"
+                        size="lg"
                         placeholder="2024/01/01 00:00"
                         value={newDeadline.timestamp}
                         onChange={(e) => {
@@ -91,8 +90,7 @@ const NewDeadline = ({
                     {newErrors.timestamp !== '' && (
                         <Text c="red">{newErrors.timestamp}</Text>
                     )}
-                    <DropdownIcon selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)} />
-                </Flex>
+                </SimpleGrid>
                 {!!deadline ? (
                     <>
                         <Flex gap={16}>
