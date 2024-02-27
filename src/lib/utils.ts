@@ -8,6 +8,7 @@ import {
     faFile,
     faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -53,7 +54,7 @@ export const getColor = (type: EventTypeType): colorType => {
     }
 }
 
-export const getIcon = (type: IconType): IconDefinition => {
+export const getIcon = (type: IconType): IconProp => {
     switch (type) {
         case 'Bell Icon':
             return faBell
