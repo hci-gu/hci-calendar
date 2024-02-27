@@ -1,6 +1,6 @@
 import { EventTypeType } from '../../../types/zod'
 import { getColor } from '../../../lib/utils'
-import { Combobox, Flex, Input, InputBase, useCombobox } from '@mantine/core'
+import { Combobox, Flex, Input, InputBase, Text, useCombobox } from '@mantine/core'
 import { useState } from 'react'
 
 const DropdownSelect = ({
@@ -10,7 +10,7 @@ const DropdownSelect = ({
     onUpdate: (option: string) => void
     selectedOption?: string | null
 }) => {
-    const category: EventTypeType[] = Object.values(EventTypeType.Values)
+    const optionValues = Object.values(EventTypeType.Values)
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
@@ -19,7 +19,7 @@ const DropdownSelect = ({
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const options = category.map((item) => {
+    const options = optionValues.map((item) => {
         if (!item) {
             return
         }
@@ -27,7 +27,7 @@ const DropdownSelect = ({
             <Combobox.Option value={item} key={item}>
                 <Flex align="center" gap="sm">
                     <div style={{ contain: '', width: '1.5rem', height: "1.5rem", borderRadius: "50%", backgroundColor: `var(--mantine-color-${getColor(item)}-4)` }}></div>
-                    {item}
+                    <Text>{item}</Text>
                 </Flex>
             </Combobox.Option>
         )
