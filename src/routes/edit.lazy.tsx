@@ -4,10 +4,10 @@ import Events from '../components/Events'
 import AddEventButton from '../components/AddEventButton/AddEventButton'
 
 export const Route = createLazyFileRoute('/edit')({
-  component: About,
+  component: Edit,
 })
 
-function About() {
+function Edit() {
   return (
     <>
       <Header />
