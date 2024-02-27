@@ -1,4 +1,4 @@
-import { ActionIcon, Divider, Flex, SimpleGrid, Text, TextInput } from '@mantine/core'
+import { ActionIcon, Combobox, Divider, Flex, SimpleGrid, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
 import { DeadlineFormType, IconType, deadlineSchema } from '../../../types/zod'
@@ -8,7 +8,8 @@ import {
     faPlus,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
-import DropdownIcon from './DropdownIcon'
+import DropdownSelect from './DropdownSelect'
+import { getIcon } from '../../../lib/utils'
 
 const NewDeadline = ({
     deadline,
@@ -59,6 +60,8 @@ const NewDeadline = ({
         setNewDeadline({ ...newDeadline, icon: option })
     }
 
+    const optionIconsValues = Object.values(IconType.Values)
+
     return (
         <Flex w="100%" direction="column">
             <Flex align={'center'} justify="space-between" w={'100%'}>
@@ -75,7 +78,20 @@ const NewDeadline = ({
                         }}
                         error={newErrors.name !== '' ? newErrors.name : ''}
                     />
-                    <DropdownIcon selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)} />
+                    <DropdownSelect selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)}>
+                        <Combobox.Options>
+                            {optionIconsValues.map((item) => {
+                                return (
+                                    <Combobox.Option value={item} key={item}>
+                                        <Flex align="center" gap="sm">
+                                            <FontAwesomeIcon color='var(--mantine-primary-color-filled)' icon={getIcon(item)} />
+                                            <Text>{item}</Text>
+                                        </Flex>
+                                    </Combobox.Option>
+                                )
+                            })}
+                        </Combobox.Options>
+                    </DropdownSelect>
                     <DateTimePicker
                         size="lg"
                         placeholder="2024/01/01 00:00"
