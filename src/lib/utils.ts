@@ -80,36 +80,36 @@ const isSameDay = (a: moment.Moment, b: moment.Moment) => {
 }
 
 const eventsDontOverlap = (
-    previousEvent: EventType,
-    currentEvent: EventType,
+    eventA: EventType,
+    eventB: EventType,
     viewportWidth: number
 ) => {
-    const [xPosPreviousEvent, widthPreviousEvent] = positionAndWidthForDates(
-        previousEvent.deadlines.map((deadline) => deadline.timestamp),
+    const [deadlineXCoordinateEventA, deadlineWidthEventA] = positionAndWidthForDates(
+        eventA.deadlines.map((deadline) => deadline.timestamp),
         viewportWidth
     )
     const previousEventWidth =
-        elementWidthOfDeadlineTitle(previousEvent.deadlines[0].name) >
-        elementWidthOfTitle(previousEvent.title)
-            ? elementWidthOfDeadlineTitle(previousEvent.deadlines[0].name)
-            : elementWidthOfTitle(previousEvent.title)
-    const startOfPreviousEvent = xPosPreviousEvent - previousEventWidth
-    const endOfPreviousEvent = startOfPreviousEvent + widthPreviousEvent + previousEventWidth
+        elementWidthOfDeadlineTitle(eventA.deadlines[0].name) >
+        elementWidthOfTitle(eventA.title)
+            ? elementWidthOfDeadlineTitle(eventA.deadlines[0].name)
+            : elementWidthOfTitle(eventA.title)
+    const startOfEventA = deadlineXCoordinateEventA - previousEventWidth
+    const endOfEventA = startOfEventA + deadlineWidthEventA + previousEventWidth
 
-    const [xPosCurrentEvent, widthCurrentEvent] = positionAndWidthForDates(
-        currentEvent.deadlines.map((deadline) => deadline.timestamp),
+    const [deadlineXCoordinateEventB, deadlineWidthEventB] = positionAndWidthForDates(
+        eventB.deadlines.map((deadline) => deadline.timestamp),
         viewportWidth
     )
     const currentEventWidth =
-        elementWidthOfDeadlineTitle(currentEvent.deadlines[0].name) >
-        elementWidthOfTitle(currentEvent.title)
-            ? elementWidthOfDeadlineTitle(currentEvent.deadlines[0].name)
-            : elementWidthOfTitle(currentEvent.title)
+        elementWidthOfDeadlineTitle(eventB.deadlines[0].name) >
+        elementWidthOfTitle(eventB.title)
+            ? elementWidthOfDeadlineTitle(eventB.deadlines[0].name)
+            : elementWidthOfTitle(eventB.title)
 
-    const startOfCurrentEvent = xPosCurrentEvent - currentEventWidth
-    const endOfCurrentEvent = startOfCurrentEvent + widthCurrentEvent + currentEventWidth
+    const startOfEventB = deadlineXCoordinateEventB - currentEventWidth
+    const endOfEventB = startOfEventB + deadlineWidthEventB + currentEventWidth
 
-    return startOfPreviousEvent > endOfCurrentEvent || startOfCurrentEvent > endOfPreviousEvent
+    return startOfEventA > endOfEventB || startOfEventB > endOfEventA
 }
 
 const ROW_HEIGHT = 200
