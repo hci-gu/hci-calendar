@@ -35,12 +35,17 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
-export const elementWidthOfDeadlineTitle = (title: string) => {
+const elementWidthOfDeadlineTitle = (title: string) => {
     const letterWidth = 12
     const padding = 9.5
     const iconGap = 24
 
     return title.length * letterWidth + padding + iconGap * 2
+}
+
+const elementWidthOfTitle = (title: string) => {
+    const letterWidth = 16
+    return title.length * letterWidth
 }
 
 export const getColor = (type: EventTypeType): colorType => {
@@ -83,21 +88,26 @@ const eventsDontOverlap = (
         eventA.deadlines.map((d) => d.timestamp),
         viewportWidth
     )
-    const deadlineWidthEventA = elementWidthOfDeadlineTitle(
-        eventA.deadlines[0].name
-    )
-    const startOfEventA = xPosEventA - deadlineWidthEventA
-    const endOfEventA = startOfEventA + widthEventA + deadlineWidthEventA
+    const EventAWidth =
+        elementWidthOfDeadlineTitle(eventA.deadlines[0].name) >
+        elementWidthOfTitle(eventA.title)
+            ? elementWidthOfDeadlineTitle(eventA.deadlines[0].name)
+            : elementWidthOfTitle(eventA.title)
+    const startOfEventA = xPosEventA - EventAWidth
+    const endOfEventA = startOfEventA + widthEventA + EventAWidth
 
     const [xPosB1, widthB1] = positionAndWidthForDates(
         eventB.deadlines.map((d) => d.timestamp),
         viewportWidth
     )
-    const deadlineWidthEventB = elementWidthOfDeadlineTitle(
-        eventB.deadlines[0].name
-    )
-    const startOfEventB = xPosB1 - deadlineWidthEventB
-    const endOfEventB = startOfEventB + widthB1 + deadlineWidthEventB
+    const EventBWidth =
+        elementWidthOfDeadlineTitle(eventB.deadlines[0].name) >
+        elementWidthOfTitle(eventB.title)
+            ? elementWidthOfDeadlineTitle(eventB.deadlines[0].name)
+            : elementWidthOfTitle(eventB.title)
+
+    const startOfEventB = xPosB1 - EventBWidth
+    const endOfEventB = startOfEventB + widthB1 + EventBWidth
 
     if (startOfEventA > endOfEventB || startOfEventB > endOfEventA) return true
 
