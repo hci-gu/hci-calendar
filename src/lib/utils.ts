@@ -40,6 +40,8 @@ export const getColor = (type: EventTypeType): colorType => {
             return 'HCI-Blue'
         case 'publication':
             return 'HCI-Green'
+        case 'conference':
+            return 'HCI-Purple'
         default:
             return 'HCI-Red'
     }
