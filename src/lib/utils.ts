@@ -2,6 +2,7 @@ import moment from 'moment'
 import { colorType } from './mantineConfig'
 import { EventTypeType } from '../types/zod'
 import { EventType, Row } from '../types/types'
+import { useViewportSize } from '@mantine/hooks'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -34,6 +35,14 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
+export const elementWidthOfDeadlineTitle = (title: string) => {
+    const letterWidth = 12
+    const padding = 9.5
+    const iconGap = 24
+
+    return title.length * letterWidth + padding + iconGap * 2
+}
+
 export const getColor = (type: EventTypeType): colorType => {
     switch (type) {
         case 'funding':
@@ -62,19 +71,37 @@ const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
 const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: moment.Moment, b: moment.Moment) => {
-    return (
-        a.year == b.year &&
-        a.month == b.month &&
-        a.day == b.day
-    )
+    return a.year == b.year && a.month == b.month && a.day == b.day
 }
 
-const eventsDontOverlap = (eventA: EventType, eventB: EventType) => {
-    const startA = moment(startOfEvent(eventA))
-    const startB = moment(startOfEvent(eventB))
-    const endB = moment(endOfEvent(eventB))
+const eventsDontOverlap = (
+    eventA: EventType,
+    eventB: EventType,
+    viewportWidth: number
+) => {
+    const [xPosEventA, widthEventA] = positionAndWidthForDates(
+        eventA.deadlines.map((d) => d.timestamp),
+        viewportWidth
+    )
+    const deadlineWidthEventA = elementWidthOfDeadlineTitle(
+        eventA.deadlines[0].name
+    )
+    const startOfEventA = xPosEventA - deadlineWidthEventA
+    const endOfEventA = startOfEventA + widthEventA + deadlineWidthEventA
 
-    return startA.isAfter(endB) && isSameDay(startA, startB)
+    const [xPosB1, widthB1] = positionAndWidthForDates(
+        eventB.deadlines.map((d) => d.timestamp),
+        viewportWidth
+    )
+    const deadlineWidthEventB = elementWidthOfDeadlineTitle(
+        eventB.deadlines[0].name
+    )
+    const startOfEventB = xPosB1 - deadlineWidthEventB
+    const endOfEventB = startOfEventB + widthB1 + deadlineWidthEventB
+
+    if (startOfEventA > endOfEventB || startOfEventB > endOfEventA) return true
+
+    return false
 }
 
 const ROW_HEIGHT = 200
@@ -92,9 +119,11 @@ const initializeRows = (viewportHeight: number) => {
 export const sortEventsIntoRows = ({
     events,
     viewportHeight,
+    viewportWidth,
 }: {
     events: EventType[]
     viewportHeight: number
+    viewportWidth: number
 }) => {
     const rows = initializeRows(viewportHeight)
 
@@ -102,8 +131,7 @@ export const sortEventsIntoRows = ({
 
     rows[0].eventsInRow.push(events[0])
 
-    for (let i = 1; i < events.length; i++) {
-        const event = events[i]
+    for (const event of events.slice(1)) {
         let eventPlaced = false
 
         for (const row of rows) {
@@ -113,7 +141,11 @@ export const sortEventsIntoRows = ({
                 break
             }
 
-            if (row.eventsInRow.every((e) => eventsDontOverlap(event, e))) {
+            const isEventOverlapping = row.eventsInRow.every((currentEvent) =>
+                eventsDontOverlap(currentEvent, event, viewportWidth)
+            )
+
+            if (isEventOverlapping) {
                 row.eventsInRow.push(event)
                 eventPlaced = true
                 break
