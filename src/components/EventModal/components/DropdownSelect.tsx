@@ -10,7 +10,7 @@ const DropdownIcon = ({
     selectedOption?: string | null,
     children: React.ReactNode
 }) => {
-    
+
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
@@ -42,7 +42,7 @@ const DropdownIcon = ({
                     onClick={() => combobox.toggleDropdown()}
                 >
                     {dropDownValue || (
-                        <Input.Placeholder>Icon</Input.Placeholder>
+                        <Input.Placeholder>{selectedOption}</Input.Placeholder>
                     )}
                 </InputBase>
             </Combobox.Target>

@@ -38,7 +38,7 @@ const NewEventModal = ({
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
-        type: editEvent?.type ?? null,
+        type: editEvent?.type ?? 'funding',
         deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({
@@ -184,7 +184,7 @@ const NewEventModal = ({
                                 />
                             </Grid.Col>
                             <Grid.Col span="auto">
-                                <DropdownSelect selectedOption={"Event type"} onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}>
+                                <DropdownSelect selectedOption={formData.type} onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}>
                                     <Combobox.Options>
                                         {optionTypeValues.map((item) => {
                                             return (
