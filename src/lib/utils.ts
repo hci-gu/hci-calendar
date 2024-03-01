@@ -84,30 +84,35 @@ const eventsDontOverlap = (
     eventB: EventType,
     viewportWidth: number
 ) => {
-    const [deadlineXCoordinateEventA, deadlineWidthEventA] = positionAndWidthForDates(
-        eventA.deadlines.map((deadline) => deadline.timestamp),
-        viewportWidth
-    )
-    const previousEventWidth =
+    /* Event A */
+    const [deadlineXCoordinateEventA, deadlineWidthEventA] =
+        positionAndWidthForDates(
+            eventA.deadlines.map((deadline) => deadline.timestamp),
+            viewportWidth
+        )
+    const eventAWidth =
         elementWidthOfDeadlineTitle(eventA.deadlines[0].name) >
         elementWidthOfTitle(eventA.title)
             ? elementWidthOfDeadlineTitle(eventA.deadlines[0].name)
             : elementWidthOfTitle(eventA.title)
-    const startOfEventA = deadlineXCoordinateEventA - previousEventWidth
-    const endOfEventA = startOfEventA + deadlineWidthEventA + previousEventWidth
 
-    const [deadlineXCoordinateEventB, deadlineWidthEventB] = positionAndWidthForDates(
-        eventB.deadlines.map((deadline) => deadline.timestamp),
-        viewportWidth
-    )
-    const currentEventWidth =
+    const startOfEventA = deadlineXCoordinateEventA - eventAWidth
+    const endOfEventA = startOfEventA + deadlineWidthEventA + eventAWidth
+
+    /* Event B */
+    const [deadlineXCoordinateEventB, deadlineWidthEventB] =
+        positionAndWidthForDates(
+            eventB.deadlines.map((deadline) => deadline.timestamp),
+            viewportWidth
+        )
+    const eventBWidth =
         elementWidthOfDeadlineTitle(eventB.deadlines[0].name) >
         elementWidthOfTitle(eventB.title)
             ? elementWidthOfDeadlineTitle(eventB.deadlines[0].name)
             : elementWidthOfTitle(eventB.title)
 
-    const startOfEventB = deadlineXCoordinateEventB - currentEventWidth
-    const endOfEventB = startOfEventB + deadlineWidthEventB + currentEventWidth
+    const startOfEventB = deadlineXCoordinateEventB - eventBWidth
+    const endOfEventB = startOfEventB + deadlineWidthEventB + eventBWidth
 
     return startOfEventA > endOfEventB || startOfEventB > endOfEventA
 }
