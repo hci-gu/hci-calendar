@@ -2,6 +2,7 @@ import moment from 'moment'
 import { colorType } from './mantineConfig'
 import { EventTypeType } from '../types/zod'
 import { EventType, Row } from '../types/types'
+import { useViewportSize } from '@mantine/hooks'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -34,6 +35,19 @@ export const positionAndWidthForDates = (
     return [xPos - width, width]
 }
 
+const elementWidthOfDeadlineTitle = (title: string) => {
+    const letterWidth = 12
+    const padding = 9.5
+    const iconGap = 24
+
+    return title.length * letterWidth + padding + iconGap * 2
+}
+
+const elementWidthOfTitle = (title: string) => {
+    const letterWidth = 16
+    return title.length * letterWidth
+}
+
 export const getColor = (type: EventTypeType): colorType => {
     switch (type) {
         case 'funding':
@@ -62,19 +76,45 @@ const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
 const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: moment.Moment, b: moment.Moment) => {
-    return (
-        a.year == b.year &&
-        a.month == b.month &&
-        a.day == b.day
-    )
+    return a.year == b.year && a.month == b.month && a.day == b.day
 }
 
-const eventsDontOverlap = (eventA: EventType, eventB: EventType) => {
-    const startA = moment(startOfEvent(eventA))
-    const startB = moment(startOfEvent(eventB))
-    const endB = moment(endOfEvent(eventB))
+const eventsDontOverlap = (
+    eventA: EventType,
+    eventB: EventType,
+    viewportWidth: number
+) => {
+    /* Event A */
+    const [deadlineXCoordinateEventA, deadlineWidthEventA] =
+        positionAndWidthForDates(
+            eventA.deadlines.map((deadline) => deadline.timestamp),
+            viewportWidth
+        )
+    const eventAWidth =
+        elementWidthOfDeadlineTitle(eventA.deadlines[0].name) >
+        elementWidthOfTitle(eventA.title)
+            ? elementWidthOfDeadlineTitle(eventA.deadlines[0].name)
+            : elementWidthOfTitle(eventA.title)
 
-    return startA.isAfter(endB) && isSameDay(startA, startB)
+    const startOfEventA = deadlineXCoordinateEventA - eventAWidth
+    const endOfEventA = startOfEventA + deadlineWidthEventA + eventAWidth
+
+    /* Event B */
+    const [deadlineXCoordinateEventB, deadlineWidthEventB] =
+        positionAndWidthForDates(
+            eventB.deadlines.map((deadline) => deadline.timestamp),
+            viewportWidth
+        )
+    const eventBWidth =
+        elementWidthOfDeadlineTitle(eventB.deadlines[0].name) >
+        elementWidthOfTitle(eventB.title)
+            ? elementWidthOfDeadlineTitle(eventB.deadlines[0].name)
+            : elementWidthOfTitle(eventB.title)
+
+    const startOfEventB = deadlineXCoordinateEventB - eventBWidth
+    const endOfEventB = startOfEventB + deadlineWidthEventB + eventBWidth
+
+    return startOfEventA > endOfEventB || startOfEventB > endOfEventA
 }
 
 const ROW_HEIGHT = 200
@@ -92,9 +132,11 @@ const initializeRows = (viewportHeight: number) => {
 export const sortEventsIntoRows = ({
     events,
     viewportHeight,
+    viewportWidth,
 }: {
     events: EventType[]
     viewportHeight: number
+    viewportWidth: number
 }) => {
     const rows = initializeRows(viewportHeight)
 
@@ -102,8 +144,7 @@ export const sortEventsIntoRows = ({
 
     rows[0].eventsInRow.push(events[0])
 
-    for (let i = 1; i < events.length; i++) {
-        const event = events[i]
+    for (const event of events.slice(1)) {
         let eventPlaced = false
 
         for (const row of rows) {
@@ -113,7 +154,11 @@ export const sortEventsIntoRows = ({
                 break
             }
 
-            if (row.eventsInRow.every((e) => eventsDontOverlap(event, e))) {
+            const isEventOverlapping = row.eventsInRow.every((currentEvent) =>
+                eventsDontOverlap(currentEvent, event, viewportWidth)
+            )
+
+            if (isEventOverlapping) {
                 row.eventsInRow.push(event)
                 eventPlaced = true
                 break
