@@ -37,7 +37,7 @@ const NewEventModal = ({
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
-        type: editEvent?.type ?? null,
+        type: editEvent?.type ?? 'funding',
         deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({
@@ -190,6 +190,7 @@ const NewEventModal = ({
                                         )
                                     }
                                     selectedOption={formData.type}
+                                    labelName='Type'
                                 />
                                 {errors.type !== '' && (
                                     <Text c={'red'}>{errors.type}</Text>
