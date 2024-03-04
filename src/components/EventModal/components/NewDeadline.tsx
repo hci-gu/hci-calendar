@@ -9,6 +9,7 @@ import {
     faPlus,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
+import moment from 'moment'
 
 const NewDeadline = ({
     deadline,
@@ -27,7 +28,7 @@ const NewDeadline = ({
         z.infer<typeof deadlineSchema>
     >({
         name: deadline ? deadline.name : '',
-        timestamp: deadline?.timestamp ?? new Date(),
+        timestamp: deadline?.timestamp ?? new Date,
     })
 
     const addNewDeadline = () => {
@@ -73,7 +74,7 @@ const NewDeadline = ({
                     <DateTimePicker
                         w="310px"
                         size="md"
-                        placeholder="2024/01/01 00:00"
+                        placeholder={moment(newDeadline.timestamp).format('YY/MM/DD HH:mm')}
                         value={newDeadline.timestamp}
                         onChange={(e) => {
                             setNewDeadline({
