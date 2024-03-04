@@ -8,7 +8,7 @@ export const deadlineSchema = z.object({
     icon: IconType,
 })
 
-const EventTypeType = z
+export const EventTypeType = z
     .enum(['Funding', 'Publication', 'Conference', 'Journal'])
 
 export const formDataSchema = z.object({
