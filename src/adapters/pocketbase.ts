@@ -11,6 +11,7 @@ const parseEvent = (event: any): EventType => {
         return {
             name: deadline.name,
             timestamp: moment(deadline.timestamp).toDate(),
+            icon: deadline.icon,
         }
     })
     const body = {
@@ -18,7 +19,7 @@ const parseEvent = (event: any): EventType => {
         title: event.title,
         type: event.type,
         deadlines: deadlines,
-    }
+    }    
 
     const parsedEvent: EventType = formDataSchema
         .extend({ id: z.string() })

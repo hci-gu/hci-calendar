@@ -1,11 +1,11 @@
 import {
     ActionIcon,
     Button,
+    Combobox,
     Flex,
     Grid,
     Group,
     Modal,
-    SimpleGrid,
     Stack,
     Text,
     TextInput,
@@ -13,7 +13,6 @@ import {
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import Deadline from './components/Deadline'
-import DropdownSelect from './components/DropdownSelect'
 import NewDeadline from './components/NewDeadline'
 import { FormEvent, useEffect, useState } from 'react'
 import {
@@ -26,6 +25,8 @@ import { EventType } from '../../types/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import * as pocketbase from '../../adapters/pocketbase'
+import DropdownSelect from './components/DropdownSelect'
+import { getColor } from '../../lib/utils'
 
 const NewEventModal = ({
     closeModal,
@@ -89,9 +90,9 @@ const NewEventModal = ({
             if (!!editEvent) {
                 const data = pocketbase.updateEvent({
                     ...editEvent,
-                    title: formData.title,
-                    type: formData.type,
-                    deadlines: formData.deadlines,
+                    title: parsedData.data.title,
+                    type: parsedData.data.type,
+                    deadlines: parsedData.data.deadlines,
                 })
                 close
                 closeModal()
@@ -132,6 +133,8 @@ const NewEventModal = ({
         }
     }, [opend])
 
+    const optionTypeValues = Object.values(EventTypeType.Values)
+
     return (
         <>
             <Modal
@@ -150,8 +153,6 @@ const NewEventModal = ({
                 >
                     <Flex align="center" direction="column" w="100%" gap={16}>
                         <Group w="100%" align="center" justify="space-between">
-                            <div></div>
-                            {/* hate this just let me felx end the actionicon */}
                             <Text size="36px" fw={400} c="grey">
                                 {!!editEvent ? 'Edit Event' : 'New Event'}
                             </Text>
@@ -183,15 +184,20 @@ const NewEventModal = ({
                                 />
                             </Grid.Col>
                             <Grid.Col span="auto">
-                                <DropdownSelect // cant find a way to turn the selector box red if error
-                                    onUpdate={(option) =>
-                                        onDropdownUpdate(
-                                            option as EventTypeType
-                                        )
-                                    }
-                                    selectedOption={formData.type}
-                                    labelName='Type'
-                                />
+                                <DropdownSelect selectedOption={formData.type} onUpdate={(option) => onDropdownUpdate(option as EventTypeType)} labelName='Type'>
+                                    <Combobox.Options>
+                                        {optionTypeValues.map((item) => {
+                                            return (
+                                                <Combobox.Option value={item} key={item}>
+                                                    <Flex align="center" gap="sm">
+                                                        <div style={{ contain: '', width: '1.5rem', height: "1.5rem", borderRadius: "50%", backgroundColor: `var(--mantine-color-${getColor(item)}-4)` }}></div>
+                                                        <Text>{item}</Text>
+                                                    </Flex>
+                                                </Combobox.Option>
+                                            )
+                                        })}
+                                    </Combobox.Options>
+                                </DropdownSelect>
                                 {errors.type !== '' && (
                                     <Text c={'red'}>{errors.type}</Text>
                                 )}

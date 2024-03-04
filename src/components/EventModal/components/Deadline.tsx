@@ -7,6 +7,7 @@ import {
     faPenToSquare,
     faTrash,
 } from '@fortawesome/free-solid-svg-icons'
+import { getIcon } from '../../../lib/utils'
 
 const Deadline = ({
     deadline,
@@ -52,6 +53,10 @@ const Deadline = ({
                         <Text pb={6} size="18px" fw={300} c="grey">
                             {deadline.timestamp?.toLocaleDateString()}
                         </Text>
+
+                        <ActionIcon variant='outline' size="lg">
+                            <FontAwesomeIcon icon={getIcon(deadline.icon)} />
+                        </ActionIcon>
                     </Flex>
                     <Flex gap={16}>
                         <ActionIcon

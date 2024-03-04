@@ -1,8 +1,7 @@
-import { ActionIcon, Divider, Flex, Text, TextInput } from '@mantine/core'
+import { ActionIcon, Combobox, Divider, Flex, SimpleGrid, Text, TextInput } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useState } from 'react'
-import { z } from 'zod'
-import { DeadlineFormType, deadlineSchema } from '../../../types/zod'
+import { DeadlineFormType, IconType, deadlineSchema } from '../../../types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faFloppyDisk,
@@ -10,6 +9,8 @@ import {
     faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
+import DropdownSelect from './DropdownSelect'
+import { getIcon } from '../../../lib/utils'
 
 const NewDeadline = ({
     deadline,
@@ -25,7 +26,7 @@ const NewDeadline = ({
         timestamp: '',
     })
     const [newDeadline, setNewDeadline] = useState<
-        z.infer<typeof deadlineSchema>
+        DeadlineFormType
     >({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp ?? new Date,
@@ -54,13 +55,18 @@ const NewDeadline = ({
         }
     }
 
+    const onDropdownUpdate = (option: IconType) => {
+        setNewDeadline({ ...newDeadline, icon: option })
+    }
+
+    const optionIconsValues = Object.values(IconType.Values)
+
     return (
         <Flex w="100%" direction="column">
-            <Flex align={'center'} w={'100%'}>
-                <Flex direction={'column'} gap={6} w={'100%'}>
+            <Flex align={'center'} justify="space-between" w={'100%'}>
+                <SimpleGrid cols={2} spacing="sm">
                     <TextInput
                         size="lg"
-                        w="310px"
                         placeholder="Deadline Name"
                         value={newDeadline.name}
                         onChange={(e) => {
@@ -71,9 +77,22 @@ const NewDeadline = ({
                         }}
                         error={newErrors.name !== '' ? newErrors.name : ''}
                     />
+                    <DropdownSelect selectedOption={newDeadline.icon} onUpdate={(option) => onDropdownUpdate(option as IconType)}>
+                        <Combobox.Options>
+                            {optionIconsValues.map((item) => {
+                                return (
+                                    <Combobox.Option value={item} key={item}>
+                                        <Flex align="center" gap="sm">
+                                            <FontAwesomeIcon color='var(--mantine-primary-color-filled)' icon={getIcon(item)} />
+                                            <Text>{item}</Text>
+                                        </Flex>
+                                    </Combobox.Option>
+                                )
+                            })}
+                        </Combobox.Options>
+                    </DropdownSelect>
                     <DateTimePicker
-                        w="310px"
-                        size="md"
+                        size="lg"
                         placeholder={moment(newDeadline.timestamp).format('YY/MM/DD HH:mm')}
                         value={newDeadline.timestamp}
                         onChange={(e) => {
@@ -86,7 +105,7 @@ const NewDeadline = ({
                     {newErrors.timestamp !== '' && (
                         <Text c="red">{newErrors.timestamp}</Text>
                     )}
-                </Flex>
+                </SimpleGrid>
                 {!!deadline ? (
                     <>
                         <Flex gap={16}>
