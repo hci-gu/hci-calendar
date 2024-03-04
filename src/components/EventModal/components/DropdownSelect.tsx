@@ -6,9 +6,11 @@ import { useState } from 'react'
 const DropdownSelect = ({
     onUpdate,
     selectedOption,
+    labelName
 }: {
     onUpdate: (option: string) => void
-    selectedOption?: string | null
+    selectedOption?: string | null,
+    labelName?: string
 }) => {
     const category: EventTypeType[] = ['funding', 'publication', 'conference']
 
@@ -33,34 +35,38 @@ const DropdownSelect = ({
         )
     })
     return (
-        <Combobox
-            size="xl"
-            store={combobox}
-            onOptionSubmit={(val) => {
-                setDropDownValue(val)
-                onUpdate(val)
-                combobox.closeDropdown()
-            }}
-        >
-            <Combobox.Target>
-                <InputBase
-                    size="xl"
-                    component="button"
-                    type="button"
-                    pointer
-                    rightSection={<Combobox.Chevron />}
-                    rightSectionPointerEvents="none"
-                    onClick={() => combobox.toggleDropdown()}
-                >
-                    {dropDownValue || (
-                        <Input.Placeholder>pick</Input.Placeholder>
-                    )}
-                </InputBase>
-            </Combobox.Target>
-            <Combobox.Dropdown>
-                <Combobox.Options>{options}</Combobox.Options>
-            </Combobox.Dropdown>
-        </Combobox>
+        <>
+            <Combobox
+                size="xl"
+                store={combobox}
+                onOptionSubmit={(val) => {
+                    setDropDownValue(val)
+                    onUpdate(val)
+                    combobox.closeDropdown()
+                }}
+            >
+                <Combobox.Target>
+                    <InputBase
+                        size="xl"
+                        component="button"
+                        type="button"
+                        pointer
+                        rightSection={<Combobox.Chevron />}
+                        rightSectionPointerEvents="none"
+                        onClick={() => combobox.toggleDropdown()}
+                        label={labelName}
+                    >
+                        {dropDownValue || (
+                            <Input.Placeholder>pick</Input.Placeholder>
+                        )}
+                    </InputBase>
+                </Combobox.Target>
+                <Combobox.Dropdown>
+                    <Combobox.Options>{options}</Combobox.Options>
+                </Combobox.Dropdown>
+            </Combobox>
+
+        </>
     )
 }
 

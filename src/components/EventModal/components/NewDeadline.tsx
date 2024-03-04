@@ -27,7 +27,7 @@ const NewDeadline = ({
         z.infer<typeof deadlineSchema>
     >({
         name: deadline ? deadline.name : '',
-        timestamp: deadline?.timestamp as Date,
+        timestamp: deadline?.timestamp ?? new Date(),
     })
 
     const addNewDeadline = () => {
@@ -38,7 +38,7 @@ const NewDeadline = ({
             onSave(newDeadline)
             setNewDeadline({
                 name: '',
-                timestamp: null,
+                timestamp: new Date(),
             })
         } else {
             const keys = ['name', 'timestamp']
