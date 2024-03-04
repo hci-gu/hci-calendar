@@ -1,7 +1,14 @@
 import moment from 'moment'
 import { colorType } from './mantineConfig'
-import { EventTypeType } from '../types/zod'
+import { EventTypeType, IconType } from '../types/zod'
 import { EventType, Row } from '../types/types'
+import {
+    IconDefinition,
+    faBell,
+    faFile,
+    faUserTie,
+} from '@fortawesome/free-solid-svg-icons'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { useViewportSize } from '@mantine/hooks'
 
 export const calendarStart = () =>
@@ -58,6 +65,19 @@ export const getColor = (type: EventTypeType): colorType => {
             return 'HCI-Purple'
         default:
             return 'HCI-Red'
+    }
+}
+
+export const getIcon = (type: IconType): IconProp => {
+    switch (type) {
+        case 'Bell Icon':
+            return faBell
+        case 'Paper Icon':
+            return faFile
+        case 'User In Tie Icon':
+            return faUserTie
+        default:
+            return faBell
     }
 }
 

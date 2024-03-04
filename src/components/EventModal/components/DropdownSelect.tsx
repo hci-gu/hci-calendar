@@ -1,16 +1,16 @@
-import { getColor } from '../../../lib/utils'
-import { EventTypeType } from '@/src/types/zod'
-import { Combobox, Flex, Input, InputBase, useCombobox } from '@mantine/core'
+import { Combobox, Input, InputBase, useCombobox } from '@mantine/core'
 import { useState } from 'react'
 
-const DropdownSelect = ({
+const DropdownIcon = ({
     onUpdate,
     selectedOption,
+    children,
 }: {
     onUpdate: (option: string) => void
-    selectedOption?: string | null
+    selectedOption?: string | null,
+    children: React.ReactNode
 }) => {
-    const category: EventTypeType[] = ['funding', 'publication', 'conference']
+
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption
@@ -19,22 +19,11 @@ const DropdownSelect = ({
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
-    const options = category.map((item) => {
-        if (!item) {
-            return
-        }
-        return (
-            <Combobox.Option value={item} key={item}>
-                <Flex align="center" gap="sm">
-                    <div style={{ contain: '', width: '1.5rem', height: "1.5rem", borderRadius: "50%", backgroundColor: `var(--mantine-color-${getColor(item)}-4)` }}></div>
-                    {item}
-                </Flex>
-            </Combobox.Option>
-        )
-    })
+
+    
     return (
         <Combobox
-            size="xl"
+            size="lg"
             store={combobox}
             onOptionSubmit={(val) => {
                 setDropDownValue(val)
@@ -44,7 +33,7 @@ const DropdownSelect = ({
         >
             <Combobox.Target>
                 <InputBase
-                    size="xl"
+                    size="lg"
                     component="button"
                     type="button"
                     pointer
@@ -53,15 +42,15 @@ const DropdownSelect = ({
                     onClick={() => combobox.toggleDropdown()}
                 >
                     {dropDownValue || (
-                        <Input.Placeholder>pick</Input.Placeholder>
+                        <Input.Placeholder>{selectedOption}</Input.Placeholder>
                     )}
                 </InputBase>
             </Combobox.Target>
             <Combobox.Dropdown>
-                <Combobox.Options>{options}</Combobox.Options>
+                {children}
             </Combobox.Dropdown>
         </Combobox>
     )
 }
 
-export default DropdownSelect
+export default DropdownIcon
