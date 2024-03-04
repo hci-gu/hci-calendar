@@ -30,6 +30,7 @@ const NewDeadline = ({
     >({
         name: deadline ? deadline.name : '',
         timestamp: deadline?.timestamp ?? new Date,
+        icon: deadline?.icon ?? 'Bell Icon'
     })
 
     const addNewDeadline = () => {
@@ -41,6 +42,7 @@ const NewDeadline = ({
             setNewDeadline({
                 name: '',
                 timestamp: new Date(),
+                icon: "Bell Icon"
             })
         } else {
             const keys = ['name', 'timestamp']
