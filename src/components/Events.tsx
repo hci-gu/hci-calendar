@@ -14,7 +14,7 @@ const Events = () => {
     const viewport = useViewportSize()
     const events = useEvents()    
 
-    const rows = sortEventsIntoRows({ events, viewportHeight: viewport.height })
+    const rows = sortEventsIntoRows({ events, viewportHeight: viewport.height, viewportWidth: viewport.width})
 
     return (
         <>
@@ -22,7 +22,7 @@ const Events = () => {
                 return row.eventsInRow.map((event: EventType) => {
                     const [x, width] = positionAndWidthForDates(
                         event.deadlines.map(
-                            (d: DeadlineFormType) => d.timestamp
+                            (deadline: DeadlineFormType) => deadline.timestamp
                         ),
                         viewport.width
                     )
