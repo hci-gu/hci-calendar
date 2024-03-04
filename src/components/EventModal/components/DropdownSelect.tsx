@@ -12,7 +12,7 @@ const DropdownSelect = ({
     selectedOption?: string | null,
     labelName?: string
 }) => {
-    const category: EventTypeType[] = ['funding', 'publication', 'conference']
+    const category: EventTypeType[] = ['Funding', 'Publication', 'Conference', 'Journal']
 
     const [dropDownValue, setDropDownValue] = useState(
         selectedOption

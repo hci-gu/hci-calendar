@@ -37,7 +37,7 @@ const NewEventModal = ({
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
-        type: editEvent?.type ?? 'funding',
+        type: editEvent?.type ?? 'Funding',
         deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({

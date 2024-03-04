@@ -6,7 +6,7 @@ export const deadlineSchema = z.object({
 })
 
 const EventTypeType = z
-    .enum(['funding', 'publication', 'conference'])
+    .enum(['Funding', 'Publication', 'Conference', 'Journal'])
 
 export const formDataSchema = z.object({
     title: z.string().min(1, { message: 'Title is required' }),

@@ -36,12 +36,14 @@ export const positionAndWidthForDates = (
 
 export const getColor = (type: EventTypeType): colorType => {
     switch (type) {
-        case 'funding':
+        case 'Funding':
             return 'HCI-Blue'
-        case 'publication':
+        case 'Publication':
             return 'HCI-Green'
-        case 'conference':
+        case 'Conference':
             return 'HCI-Purple'
+        case 'Journal':
+            return 'HCI-Red'
         default:
             return 'HCI-Red'
     }
@@ -62,11 +64,7 @@ const startOfEvent = (event: EventType) => event.deadlines[0].timestamp
 const endOfEvent = (event: EventType) =>
     event.deadlines[event.deadlines.length - 1].timestamp
 const isSameDay = (a: moment.Moment, b: moment.Moment) => {
-    return (
-        a.year == b.year &&
-        a.month == b.month &&
-        a.day == b.day
-    )
+    return a.year == b.year && a.month == b.month && a.day == b.day
 }
 
 const eventsDontOverlap = (eventA: EventType, eventB: EventType) => {
