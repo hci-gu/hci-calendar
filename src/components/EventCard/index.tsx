@@ -29,7 +29,7 @@ const EventCard = ({
                 gap="xs"
                 onClick={() => setModalOpen(true)}
             >
-                <Title order={2} c={color + '.8'}>
+                <Title order={2} c={color + '.8'} style={{textWrap: "nowrap"}}>
                     {event.title}
                 </Title>
                 <Flex w="100%" mih={80} pos="relative">
