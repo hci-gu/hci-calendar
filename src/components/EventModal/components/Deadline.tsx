@@ -3,10 +3,7 @@ import NewDeadline from './NewDeadline'
 import { useState } from 'react'
 import { DeadlineFormType } from '@/src/types/zod'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faPenToSquare,
-    faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { getIcon } from '../../../lib/utils'
 
 const Deadline = ({
@@ -54,7 +51,7 @@ const Deadline = ({
                             {deadline.timestamp?.toLocaleDateString()}
                         </Text>
 
-                        <ActionIcon variant='outline' size="lg">
+                        <ActionIcon variant="outline" size="lg">
                             <FontAwesomeIcon icon={getIcon(deadline.icon)} />
                         </ActionIcon>
                     </Flex>

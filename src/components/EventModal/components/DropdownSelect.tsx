@@ -19,35 +19,33 @@ const DropdownIcon = ({
     })
 
     return (
-            <Combobox
-                size="lg"
-                store={combobox}
-                onOptionSubmit={(val) => {
-                    setDropDownValue(val)
-                    onUpdate(val)
-                    combobox.closeDropdown()
-                }}
-            >
-                <Combobox.Target>
-                    <InputBase
-                        size="lg"
-                        component="button"
-                        type="button"
-                        pointer
-                        rightSection={<Combobox.Chevron />}
-                        rightSectionPointerEvents="none"
-                        onClick={() => combobox.toggleDropdown()}
-                        label={labelName}
-                    >
-                        {dropDownValue || (
-                            <Input.Placeholder>
-                                {selectedOption}
-                            </Input.Placeholder>
-                        )}
-                    </InputBase>
-                </Combobox.Target>
-                <Combobox.Dropdown>{children}</Combobox.Dropdown>
-            </Combobox>
+        <Combobox
+            size="lg"
+            store={combobox}
+            onOptionSubmit={(val) => {
+                setDropDownValue(val)
+                onUpdate(val)
+                combobox.closeDropdown()
+            }}
+        >
+            <Combobox.Target>
+                <InputBase
+                    size="lg"
+                    component="button"
+                    type="button"
+                    pointer
+                    rightSection={<Combobox.Chevron />}
+                    rightSectionPointerEvents="none"
+                    onClick={() => combobox.toggleDropdown()}
+                    label={labelName}
+                >
+                    {dropDownValue || (
+                        <Input.Placeholder>{selectedOption}</Input.Placeholder>
+                    )}
+                </InputBase>
+            </Combobox.Target>
+            <Combobox.Dropdown>{children}</Combobox.Dropdown>
+        </Combobox>
     )
 }
 

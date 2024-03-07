@@ -2,11 +2,7 @@ import moment from 'moment'
 import { colorType } from './mantineConfig'
 import { EventTypeType, IconType } from '../types/zod'
 import { EventType, Row } from '../types/types'
-import {
-    faBell,
-    faFile,
-    faUserTie,
-} from '@fortawesome/free-solid-svg-icons'
+import { faBell, faFile, faUserTie } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 
 export const calendarStart = () =>

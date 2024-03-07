@@ -19,7 +19,7 @@ const parseEvent = (event: any): EventType => {
         title: event.title,
         type: event.type,
         deadlines: deadlines,
-    }    
+    }
 
     const parsedEvent: EventType = formDataSchema
         .extend({ id: z.string() })
