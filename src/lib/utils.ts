@@ -2,14 +2,8 @@ import moment from 'moment'
 import { colorType } from './mantineConfig'
 import { EventTypeType, IconType } from '../types/zod'
 import { EventType, Row } from '../types/types'
-import {
-    IconDefinition,
-    faBell,
-    faFile,
-    faUserTie,
-} from '@fortawesome/free-solid-svg-icons'
+import { faBell, faFile, faUserTie } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { useViewportSize } from '@mantine/hooks'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
@@ -57,12 +51,14 @@ const elementWidthOfTitle = (title: string) => {
 
 export const getColor = (type: EventTypeType): colorType => {
     switch (type) {
-        case 'funding':
+        case 'Funding':
             return 'HCI-Blue'
-        case 'publication':
+        case 'Publication':
             return 'HCI-Green'
-        case 'conference':
+        case 'Conference':
             return 'HCI-Purple'
+        case 'Journal':
+            return 'HCI-Red'
         default:
             return 'HCI-Red'
     }

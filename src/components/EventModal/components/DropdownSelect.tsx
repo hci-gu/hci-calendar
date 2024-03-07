@@ -5,22 +5,19 @@ const DropdownIcon = ({
     onUpdate,
     selectedOption,
     children,
+    labelName,
 }: {
     onUpdate: (option: string) => void
-    selectedOption?: string | null,
+    selectedOption?: string | null
     children: React.ReactNode
+    labelName?: string
 }) => {
-
-
-    const [dropDownValue, setDropDownValue] = useState(
-        selectedOption
-    )
+    const [dropDownValue, setDropDownValue] = useState(selectedOption)
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
 
-    
     return (
         <Combobox
             size="lg"
@@ -40,15 +37,14 @@ const DropdownIcon = ({
                     rightSection={<Combobox.Chevron />}
                     rightSectionPointerEvents="none"
                     onClick={() => combobox.toggleDropdown()}
+                    label={labelName}
                 >
                     {dropDownValue || (
                         <Input.Placeholder>{selectedOption}</Input.Placeholder>
                     )}
                 </InputBase>
             </Combobox.Target>
-            <Combobox.Dropdown>
-                {children}
-            </Combobox.Dropdown>
+            <Combobox.Dropdown>{children}</Combobox.Dropdown>
         </Combobox>
     )
 }

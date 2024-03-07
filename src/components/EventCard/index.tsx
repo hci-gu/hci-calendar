@@ -21,7 +21,6 @@ const EventCard = ({
     }
     return (
         <>
-
             <Flex
                 w={width}
                 direction="column"
@@ -29,7 +28,11 @@ const EventCard = ({
                 gap="xs"
                 onClick={() => setModalOpen(true)}
             >
-                <Title order={2} c={color + '.8'} style={{textWrap: "nowrap"}}>
+                <Title
+                    order={2}
+                    c={color + '.8'}
+                    style={{ textWrap: 'nowrap' }}
+                >
                     {event.title}
                 </Title>
                 <Flex w="100%" mih={80} pos="relative">
@@ -54,7 +57,10 @@ const EventCard = ({
                                     key={(event.id + deadline.name) as string}
                                     flex={flexWidth}
                                 >
-                                    <DeadlineText event={deadline} color={color} />
+                                    <DeadlineText
+                                        event={deadline}
+                                        color={color}
+                                    />
                                     <Divider
                                         orientation="vertical"
                                         size="xl"
@@ -70,7 +76,10 @@ const EventCard = ({
                         h="100%"
                         justify="flex-end"
                     >
-                        <DeadlineText event={event.deadlines[0]} color={color} />
+                        <DeadlineText
+                            event={event.deadlines[0]}
+                            color={color}
+                        />
                         <Divider
                             orientation="vertical"
                             size="xl"
@@ -80,10 +89,7 @@ const EventCard = ({
                 </Flex>
             </Flex>
             {modalOpen && (
-                <NewEventModal
-                    closeModal={closeModal}
-                    editEvent={event}
-                />
+                <NewEventModal closeModal={closeModal} editEvent={event} />
             )}
         </>
     )

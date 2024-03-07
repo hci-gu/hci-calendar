@@ -38,7 +38,7 @@ const NewEventModal = ({
     const [opend, { open, close }] = useDisclosure(true)
     const [formData, setFormData] = useState<EventFormType>({
         title: editEvent?.title ?? '',
-        type: editEvent?.type ?? 'funding',
+        type: editEvent?.type ?? 'Funding',
         deadlines: editEvent?.deadlines ?? [],
     })
     const [errors, setErrors] = useState({
@@ -166,7 +166,7 @@ const NewEventModal = ({
                                 <FontAwesomeIcon color="black" icon={faXmark} />
                             </ActionIcon>
                         </Group>
-                        <Grid align='end' w="100%">
+                        <Grid align="end" w="100%">
                             <Grid.Col span={8}>
                                 <TextInput
                                     size="xl"
@@ -180,17 +180,42 @@ const NewEventModal = ({
                                             title: e.target.value,
                                         })
                                     }}
-                                    error={errors.title !== '' ? errors.title : ''}
+                                    error={
+                                        errors.title !== '' ? errors.title : ''
+                                    }
                                 />
                             </Grid.Col>
                             <Grid.Col span="auto">
-                                <DropdownSelect selectedOption={formData.type} onUpdate={(option) => onDropdownUpdate(option as EventTypeType)}>
+                                <DropdownSelect
+                                    selectedOption={formData.type}
+                                    onUpdate={(option) =>
+                                        onDropdownUpdate(
+                                            option as EventTypeType
+                                        )
+                                    }
+                                    labelName="Type"
+                                >
                                     <Combobox.Options>
                                         {optionTypeValues.map((item) => {
                                             return (
-                                                <Combobox.Option value={item} key={item}>
-                                                    <Flex align="center" gap="sm">
-                                                        <div style={{ contain: '', width: '1.5rem', height: "1.5rem", borderRadius: "50%", backgroundColor: `var(--mantine-color-${getColor(item)}-4)` }}></div>
+                                                <Combobox.Option
+                                                    value={item}
+                                                    key={item}
+                                                >
+                                                    <Flex
+                                                        align="center"
+                                                        gap="sm"
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                contain: '',
+                                                                width: '1.5rem',
+                                                                height: '1.5rem',
+                                                                borderRadius:
+                                                                    '50%',
+                                                                backgroundColor: `var(--mantine-color-${getColor(item)}-4)`,
+                                                            }}
+                                                        ></div>
                                                         <Text>{item}</Text>
                                                     </Flex>
                                                 </Combobox.Option>

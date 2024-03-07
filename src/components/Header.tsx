@@ -5,7 +5,6 @@ import moment from 'moment'
 import { useViewportSize } from '@mantine/hooks'
 import { dayWidth } from '../lib/utils'
 
-
 const Container = styled.div`
     height: 90px;
 
@@ -77,14 +76,10 @@ const Month = ({ monthIndex }: { monthIndex: number }) => {
     const year = moment(date).year()
     const firstDayOfMonth = moment().add(monthIndex, 'month').startOf('month')
     const lastDayOfMonth = moment().add(monthIndex, 'month').endOf('month')
-    const daysInMonth = moment(lastDayOfMonth).diff(
-        moment(firstDayOfMonth),
-        'days'
-    ) + 1
+    const daysInMonth =
+        moment(lastDayOfMonth).diff(moment(firstDayOfMonth), 'days') + 1
     const viewport = useViewportSize()
     const monthWidth = dayWidth(viewport.width) * daysInMonth
-
-
 
     return (
         <MonthContainer style={{ width: `${monthWidth}px` }}>

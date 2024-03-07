@@ -1,0 +1,9 @@
+deploy/*
+index.html
+next-env.d.ts
+package-lock.json
+pocketbase/**/*
+*.md
+src/routeTree.gen.ts
+tsconfig.json
+vite.config.ts
