@@ -24,7 +24,6 @@ const DropdownIcon = ({
 
     
     return (
-        <>
             <Combobox
                 size="lg"
                 store={combobox}
@@ -54,8 +53,6 @@ const DropdownIcon = ({
                     {children}
                 </Combobox.Dropdown>
             </Combobox>
-
-        </>
     )
 }
 
