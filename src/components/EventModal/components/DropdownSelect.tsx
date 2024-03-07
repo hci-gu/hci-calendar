@@ -5,24 +5,19 @@ const DropdownIcon = ({
     onUpdate,
     selectedOption,
     children,
-    labelName
+    labelName,
 }: {
     onUpdate: (option: string) => void
-    selectedOption?: string | null,
-    children: React.ReactNode,
+    selectedOption?: string | null
+    children: React.ReactNode
     labelName?: string
 }) => {
-
-
-    const [dropDownValue, setDropDownValue] = useState(
-        selectedOption
-    )
+    const [dropDownValue, setDropDownValue] = useState(selectedOption)
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     })
 
-    
     return (
         <>
             <Combobox
@@ -46,15 +41,14 @@ const DropdownIcon = ({
                         label={labelName}
                     >
                         {dropDownValue || (
-                            <Input.Placeholder>{selectedOption}</Input.Placeholder>
+                            <Input.Placeholder>
+                                {selectedOption}
+                            </Input.Placeholder>
                         )}
                     </InputBase>
                 </Combobox.Target>
-                <Combobox.Dropdown>
-                    {children}
-                </Combobox.Dropdown>
+                <Combobox.Dropdown>{children}</Combobox.Dropdown>
             </Combobox>
-
         </>
     )
 }
