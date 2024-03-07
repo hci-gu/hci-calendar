@@ -5,16 +5,16 @@ import AddEventButton from '../components/AddEventButton/AddEventButton'
 import { TodayIndicator } from '../components/TodayIndicator'
 
 export const Route = createLazyFileRoute('/edit')({
-  component: Edit,
+    component: Edit,
 })
 
 function Edit() {
-  return (
-    <>
-      <Header />
-      <Events />
-      <TodayIndicator />
-      <AddEventButton />
-    </>
-  )
+    return (
+        <>
+            <Header />
+            <Events />
+            <TodayIndicator />
+            <AddEventButton />
+        </>
+    )
 }
