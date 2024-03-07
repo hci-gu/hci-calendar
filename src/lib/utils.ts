@@ -3,13 +3,11 @@ import { colorType } from './mantineConfig'
 import { EventTypeType, IconType } from '../types/zod'
 import { EventType, Row } from '../types/types'
 import {
-    IconDefinition,
     faBell,
     faFile,
     faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { useViewportSize } from '@mantine/hooks'
 
 export const calendarStart = () =>
     moment().subtract(1, 'months').startOf('month').toDate()
